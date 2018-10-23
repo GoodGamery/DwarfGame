@@ -7,7 +7,7 @@ import flixel.FlxSprite;
 
 class CaveMap
 {
-    public var arrayCaveMap : Array<Dynamic>;
+    public var arrayCaveMap : Array<Array<Cave>>;
     
     public var upperleft : Point = new Point(0, 0);
     public var size : Point = new Point(0, 0);
@@ -31,17 +31,17 @@ class CaveMap
         size.x = (radius * 2) + 1;
         size.y = (radius * 2) + 1;
         
-        arrayCaveMap = new Array<Dynamic>();
+        arrayCaveMap = [[]];
         
-        var x : Int = as3hx.Compat.parseInt(cx - radius);
+        var x : Int = Math.floor(cx - radius);
         while (x <= cx + radius)
         {
-            arrayCaveMap.push(new Array<Dynamic>());
+            arrayCaveMap.push(new Array<Cave>());
             
-            var y : Int = as3hx.Compat.parseInt(cy - radius);
+            var y : Int = Math.floor(cy - radius);
             while (y <= cy + radius)
             {
-                (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array) catch(e:Dynamic) null).push(new Cave(x, y));
+                arrayCaveMap[arrayCaveMap.length - 1].push(new Cave(x, y));
                 y++;
             }
             x++;
@@ -58,20 +58,20 @@ class CaveMap
             {
                 if (arrayCaveMap[x][y] != null)
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).CreateSprite(centerpixelx, centerpixely, centercavex, centercavey);
+                    arrayCaveMap[x][y].CreateSprite(centerpixelx, centerpixely, centercavex, centercavey);
                     
-                    if ((try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).sprite != null)
+                    if (arrayCaveMap[x][y].sprite != null)
                     {
                         if (x + upperleft.x < centercavex - radius ||
                             x + upperleft.x > centercavex + radius ||
                             y + upperleft.y < centercavey - radius ||
                             y + upperleft.y > centercavey + radius)
                         {
-                            (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).sprite.visible = false;
+                            arrayCaveMap[x][y].sprite.visible = false;
                         }
                         else
                         {
-                            (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).sprite.visible = true;
+                            arrayCaveMap[x][y].sprite.visible = true;
                         }
                     }
                 }
@@ -83,7 +83,7 @@ class CaveMap
     
     public function AddSpritesToHUD(canvas : FlxSprite, centerx : Int, centery : Int, offsetx : Int, offsety : Int, positionx : Int, positiony : Int, cropx : Int, cropy : Int, mask : Bool) : Void
     {
-        canvas._pixels.fillRect(new Rectangle(0, 0, canvas._pixels.width, canvas._pixels.height), 0xFF5D5D5D);
+        canvas.pixels.fillRect(new Rectangle(0, 0, canvas.pixels.width, canvas.pixels.height), 0xFF5D5D5D);
         
         var xx : Int = upperleft.x;
         while (xx < upperleft.x + size.x)
@@ -98,9 +98,9 @@ class CaveMap
                 
                 if (cavesprite != null)
                 {
-                    canvas._pixels.copyPixels(cavesprite._pixels, 
+                    canvas.pixels.copyPixels(cavesprite.pixels, 
                             new Rectangle(0, 0, 
-                            cavesprite._pixels.width, cavesprite._pixels.height), 
+                            cavesprite.pixels.width, cavesprite.pixels.height), 
                             new Point(((xx - centerx) * 12) + offsetx, ((yy - centery) * 12) + offsety), 
                             null, 
                             null, 
@@ -109,7 +109,7 @@ class CaveMap
                     
                     if (xx == centerx && yy == centery)
                     {
-                        canvas._pixels.copyPixels(youarehere._pixels, 
+                        canvas.pixels.copyPixels(youarehere.pixels, 
                                 new Rectangle(0, 0, 
                                 12, 12), 
                                 new Point(((xx - centerx) * 12) + offsetx, ((yy - centery) * 12) + offsety), 
@@ -124,7 +124,7 @@ class CaveMap
             xx++;
         }
         
-        xx = upperleft.x;
+        xx = Math.floor(upperleft.x);
         while (xx < upperleft.x + size.x)
         {
             yy = upperleft.y;
@@ -135,7 +135,7 @@ class CaveMap
                     if (yy == upperleft.y ||
                         (Content.stats.cavemap.GetCave(xx, yy).exits.north == true && Content.stats.cavemap.GetCave(xx, yy - 1).visited == false))
                     {
-                        canvas._pixels.copyPixels(cavenew._pixels, 
+                        canvas.pixels.copyPixels(cavenew.pixels, 
                                 new Rectangle(0, 0, 
                                 4, 4), 
                                 new Point(((xx - centerx) * 12) + 6 - 2 + offsetx, ((yy - centery) * 12) + 0 - 3 + offsety), 
@@ -148,7 +148,7 @@ class CaveMap
                     if (xx == upperleft.x ||
                         (Content.stats.cavemap.GetCave(xx, yy).exits.west == true && Content.stats.cavemap.GetCave(xx - 1, yy).visited == false))
                     {
-                        canvas._pixels.copyPixels(cavenew._pixels, 
+                        canvas.pixels.copyPixels(cavenew.pixels, 
                                 new Rectangle(0, 0, 
                                 4, 4), 
                                 new Point(((xx - centerx) * 12) + 0 - 3 + offsetx, ((yy - centery) * 12) + 6 - 2 + offsety), 
@@ -161,7 +161,7 @@ class CaveMap
                     if (yy == upperleft.y + size.y - 1 ||
                         (Content.stats.cavemap.GetCave(xx, yy).exits.south == true && Content.stats.cavemap.GetCave(xx, yy + 1).visited == false))
                     {
-                        canvas._pixels.copyPixels(cavenew._pixels, 
+                        canvas.pixels.copyPixels(cavenew.pixels, 
                                 new Rectangle(0, 0, 
                                 4, 4), 
                                 new Point(((xx - centerx) * 12) + 6 - 2 + offsetx, ((yy - centery) * 12) + 12 - 1 + offsety), 
@@ -174,7 +174,7 @@ class CaveMap
                     if (xx == upperleft.x + size.x - 1 ||
                         (Content.stats.cavemap.GetCave(xx, yy).exits.east == true && Content.stats.cavemap.GetCave(xx + 1, yy).visited == false))
                     {
-                        canvas._pixels.copyPixels(cavenew._pixels, 
+                        canvas.pixels.copyPixels(cavenew.pixels, 
                                 new Rectangle(0, 0, 
                                 4, 4), 
                                 new Point(((xx - centerx) * 12) + 12 - 1 + offsetx, ((yy - centery) * 12) + 6 - 2 + offsety), 
@@ -207,14 +207,14 @@ class CaveMap
                         yy <= ((268 - cropy) / 2) ||
                         yy >= 268 - ((268 - cropy) / 2))
                     {
-                        canvas._pixels.setPixel32(xx, yy, 0x00000000);
+                        canvas.pixels.setPixel32(xx, yy, 0x00000000);
                     }
                 }
             }
         }
         else
         {
-            canvas._pixels.copyPixels(circlemask._pixels, 
+            canvas.pixels.copyPixels(circlemask.pixels, 
                     new Rectangle(0, 0, 
                     268, 268), 
                     new Point(0, 0), 
@@ -227,9 +227,9 @@ class CaveMap
             {
                 for (yy in 0...268)
                 {
-                    if (canvas._pixels.getPixel32(xx, yy) == 0xFFFF00FF)
+                    if (canvas.pixels.getPixel32(xx, yy) == 0xFFFF00FF)
                     {
-                        canvas._pixels.setPixel32(xx, yy, 0x00000000);
+                        canvas.pixels.setPixel32(xx, yy, 0x00000000);
                     }
                 }
             }
@@ -244,8 +244,8 @@ class CaveMap
             var y : Int = 0;
             while (y < size.y)
             {
-                var xworld : Int = as3hx.Compat.parseInt(x + upperleft.x);
-                var yworld : Int = as3hx.Compat.parseInt(y + upperleft.y);
+                var xworld : Int = Math.float(x + upperleft.x);
+                var yworld : Int = Math.float(y + upperleft.y);
                 
                 
                 
@@ -263,38 +263,38 @@ class CaveMap
                 
                 if (c != n)
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.north = true;
+                    arrayCaveMap[x][y].border.north = true;
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.north = false;
+                    arrayCaveMap[x][y].border.north = false;
                 }
                 
                 if (c != e)
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.east = true;
+                    arrayCaveMap[x][y].border.east = true;
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.east = false;
+                    arrayCaveMap[x][y].border.east = false;
                 }
                 
                 if (c != s)
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.south = true;
+                    arrayCaveMap[x][y].border.south = true;
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.south = false;
+                    arrayCaveMap[x][y].border.south = false;
                 }
                 
                 if (c != w)
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.west = true;
+                    arrayCaveMap[x][y].border.west = true;
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[x][y], Cave) catch(e:Dynamic) null).border.west = false;
+                    arrayCaveMap[x][y].border.west = false;
                 }
                 y++;
             }
@@ -383,7 +383,7 @@ class CaveMap
             return null;
         }
         
-        return try cast(arrayCaveMap[xget][yget], Cave) catch(e:Dynamic) null;
+        return arrayCaveMap[xget][yget];
     }
     
     function GetCaveRegion(xget : Int, yget : Int) : String
@@ -396,7 +396,7 @@ class CaveMap
             return "";
         }
         
-        return (try cast(arrayCaveMap[xget][yget], Cave) catch(e:Dynamic) null).strRegionName;
+        return arrayCaveMap[xget][yget].strRegionName;
     }
     
     public function ExploreCave(xadd : Int, yadd : Int) : Void
@@ -424,12 +424,12 @@ class CaveMap
                 { // just do it
                     
                     {
-                        (try cast(arrayCaveMap[0], Array) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
+                        arrayCaveMap[0].push(new Cave(xadd, yy + upperleft.y));
                     }
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[0], Array) catch(e:Dynamic) null).push(null);
+                    arrayCaveMap[0].push(null);
                 }
                 yy++;
             }
@@ -444,18 +444,7 @@ class CaveMap
             yy = 0;
             while (yy < size.y)
             {
-                if (yy == yadd - upperleft.y || true)
-                
-                { // just do it
-                    
-                    {
-                        (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
-                    }
-                }
-                else
-                {
-                    (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array) catch(e:Dynamic) null).push(null);
-                }
+                arrayCaveMap[arrayCaveMap.length - 1].push(new Cave(xadd, Math.floor(yy + upperleft.y)));
                 yy++;
             }
             
@@ -471,12 +460,12 @@ class CaveMap
                 { // just do it
                     
                     {
-                        (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).unshift(new Cave(xx + upperleft.x, yadd));
+                        arrayCaveMap[xx].unshift(new Cave(xx + upperleft.x, yadd));
                     }
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).unshift(null);
+                    arrayCaveMap[xx].unshift(null);
                 }
                 xx++;
             }
@@ -494,12 +483,12 @@ class CaveMap
                 { // just do it
                     
                     {
-                        (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).push(new Cave(xx + upperleft.x, yadd));
+                        arrayCaveMap[xx].push(new Cave(xx + upperleft.x, yadd));
                     }
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).push(null);
+                    arrayCaveMap[xx].push(null);
                 }
                 xx++;
             }

@@ -4,6 +4,7 @@ import flash.geom.ColorTransform;
 import flash.geom.Rectangle;
 import flixel.*;
 import flash.geom.Point;
+import flixel.math.FlxRandom;
 
 class Cave
 {
@@ -220,7 +221,7 @@ class Cave
     
     public function GetDirectionsForCoords(x : Int, y : Int) : DirectionSet
     {
-        var r : Rndm = new Rndm(Util.Seed(x, y));
+        var r : FlxRandom = new FlxRandom(Util.Seed(x, y));
         var dirs : DirectionSet = new DirectionSet();
         
         while (
@@ -288,8 +289,8 @@ class Cave
     
     public function SetMetaRole() : Void
     {
-        var x : Int = coords.x;
-        var y : Int = coords.y;
+        var x : Int = Math.floor(coords.x);
+        var y : Int = Math.floor(coords.y);
         
         if (
             //(x == -5 && y == -6) ||
@@ -302,12 +303,12 @@ class Cave
         
         var vacinity : Array<Dynamic> = new Array<Dynamic>();
         
-        var cx : Int = as3hx.Compat.parseInt(x - 1);
+        var cx : Int = (x - 1);
         while (cx <= x + 1)
         {
             vacinity.push(new Array<Dynamic>());
             
-            var cy : Int = as3hx.Compat.parseInt(y - 1);
+            var cy : Int = (y - 1);
             while (cy <= y + 1)
             {
                 (try cast(vacinity[vacinity.length - 1], Array) catch(e:Dynamic) null).push(NeighborlyDirections(cx, cy));
@@ -329,7 +330,7 @@ class Cave
 		  |_ _ 2 _ _|
 		*/
     
-        var straws : Rndm;
+        var straws : FlxRandom;
         var straw : Int;
         var seed : Int;
         
@@ -348,7 +349,7 @@ class Cave
                             x - 0, y - 0, 
                             x - 1, y - 0
                 );
-            straws = new Rndm(seed);
+            straws = new FlxRandom(seed);
             
             straw = straws.integer(0, 3);
             
@@ -371,13 +372,13 @@ class Cave
         { // Draw straws
             
             
-            seed = Util.QuadSeed(
+            seed = flixel.math.QuadSeed(
                             x - 0, y - 1, 
                             x + 1, y - 1, 
                             x + 1, y - 0, 
                             x - 0, y - 0
                 );
-            straws = new Rndm(seed);
+            straws = new FlxRandom(seed);
             
             straw = straws.integer(0, 3);
             
@@ -406,7 +407,7 @@ class Cave
                             x + 1, y + 1, 
                             x - 0, y + 1
                 );
-            straws = new Rndm(seed);
+            straws = new FlxRandom(seed);
             
             straw = straws.integer(0, 3);
             
@@ -435,7 +436,7 @@ class Cave
                             x - 0, y + 1, 
                             x - 1, y + 1
                 );
-            straws = new Rndm(seed);
+            straws = new FlxRandom(seed);
             
             straw = straws.integer(0, 3);
             
@@ -478,7 +479,7 @@ class Cave
         
         style = -1;
         
-        var r : Rndm = new Rndm(Util.Seed(x, y));
+        var r : FlxRandom = new FlxRandom(Util.Seed(x, y));
         var nexustest : Int = r.integer(0, 100);
         
         //trace("nexus threshold = " + (Content.nNexusChance * 100).toString() + " Roll = " + nexustest.toString());
@@ -505,13 +506,13 @@ class Cave
         {
             var nexi : Array<Dynamic> = new Array<Dynamic>();
             
-            var yy : Int = as3hx.Compat.parseInt(y - 10);
+            var yy : Int = (y - 10);
             while (yy < y + 10)
             {
-                var xx : Int = as3hx.Compat.parseInt(x - 10);
+                var xx : Int = Math.floor(x - 10);
                 while (xx < x + 10)
                 {
-                    var rr : Rndm = new Rndm(Util.Seed(xx, yy));
+                    var rr : FlxRandom = new FlxRandom(Util.Seed(xx, yy));
                     nexustest = rr.integer(0, 100);
                     
                     if (nexustest < Content.nNexusChance * 100)
@@ -557,7 +558,7 @@ class Cave
     
     public function CalculateColor() : Void
     {
-        var ran : Rndm = new Rndm(Util.Seed(mynexus.x, mynexus.y));
+        var ran : FlxRandom = new FlxRandom(Util.Seed(mynexus.x, mynexus.y));
         
         var testing : Int = ran.integer(0, 10);
         testing = ran.integer(0, 10);

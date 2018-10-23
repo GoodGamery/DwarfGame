@@ -6,14 +6,16 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
+import components.DwarfText;
 
 class Grunt extends FlxSpriteGroup
 {
-    public var text : FlxText;
+    public var text : DwarfText;
     public var lifetime : Int;
     public var progress : Float;
     public var orig : Point;
     public var sprite : FlxSprite = null;
+    public var doomed : Bool = false;
     
     public function new(x : Int, y : Int, str : String, col : Int, lt : Int)
     {
@@ -24,7 +26,7 @@ class Grunt extends FlxSpriteGroup
         progress = 0;
         lifetime = lt;
         
-        text = new FlxText(x - 240, y, 480, str);
+        text = new DwarfText(x - 240, y, 480, str);
         //text.scrollFactor.x = 0;
         //text.scrollFactor.y = 0;
         text.color = col;
@@ -37,12 +39,12 @@ class Grunt extends FlxSpriteGroup
     {
         sprite = new FlxSprite(0, 0);
         sprite.loadGraphic(Content.cGems, true, false, 30, 30, false);
-        sprite.addAnimation("d", [frame], 1, true);
-        sprite.play("d");
+        sprite.animation.add("d", [frame], 1, true);
+        sprite.animation.play("d");
         this.add(sprite);
     }
     
-    override public function update() : Void
+    override public function update(elapsed:Float) : Void
     {
         if (progress < lifetime)
         {

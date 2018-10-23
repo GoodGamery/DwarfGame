@@ -8,6 +8,7 @@ import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.FlxObject;
+import components.DwarfText;
 
 class HUD extends FlxGroup
 {
@@ -17,13 +18,13 @@ class HUD extends FlxGroup
     public var pausemenu : FlxSpriteGroup;
     public var statback : FlxSprite;
     //public var cornerbg:FlxSprite;
-    public var loadtext : FlxText;
-    public var progressbar : FlxText;
+    public var loadtext : DwarfText;
+    public var progressbar : DwarfText;
     
-    public var pipstext : FlxText;
-    public var reodstext : FlxText;
-    public var lytratstext : FlxText;
-    public var clocktext : FlxText;
+    public var pipstext : DwarfText;
+    public var reodstext : DwarfText;
+    public var lytratstext : DwarfText;
+    public var clocktext : DwarfText;
     
     public var loadmap : FlxSpriteGroup;
     
@@ -123,9 +124,9 @@ class HUD extends FlxGroup
         bottombar.scrollFactor.x = 0;
         bottombar.scrollFactor.y = 0;
         
-        cast((1), SetBars);
+        SetBars(1);
         
-        announcetext = new FlxText(0, 80, 480, "");
+        announcetext = new DwarfText(0, 80, 480, "");
         Util.AssignFont(announcetext);
         announcetext.scrollFactor.x = 0;
         announcetext.scrollFactor.y = 0;
@@ -153,12 +154,12 @@ class HUD extends FlxGroup
         chatgroup = new FlxSpriteGroup();
         
         
-        face.loadGraphic(Content.cFaces, false, false, 66, 66, false);
+        face.loadGraphic(Content.cFaces, null, null, 66, 66, false);
         face.scrollFactor.x = 0;
         face.scrollFactor.y = 0;
         chatgroup.add(face);
         
-        chatbox.loadGraphic(Content.cChatBubble, false, false, 395, 66, false);
+        chatbox.loadGraphic(Content.cChatBubble, null, null, 395, 66, false);
         chatbox.scrollFactor.x = 0;
         chatbox.scrollFactor.y = 0;
         chatgroup.add(chatbox);
@@ -247,10 +248,10 @@ class HUD extends FlxGroup
         
         runemap = new FlxSprite(188, 134);
         runemap.loadGraphic(Content.cRuneMaps, true, false, 106, 106, true);
-        runemap.addAnimation("n", [0], 1, true);
-        runemap.addAnimation("s", [1], 1, true);
-        runemap.addAnimation("w", [2], 1, true);
-        runemap.addAnimation("e", [3], 1, true);
+        runemap.animation.add("n", [0], 1, true);
+        runemap.animation.add("s", [1], 1, true);
+        runemap.animation.add("w", [2], 1, true);
+        runemap.animation.add("e", [3], 1, true);
         runemap.scrollFactor.x = 0;
         runemap.scrollFactor.y = 0;
         
@@ -263,12 +264,12 @@ class HUD extends FlxGroup
         
         walker = new FlxSprite((Content.screenwidth / 2) - 50, (Content.screenheight / 2) - 50 - 50);
         walker.loadGraphic(Content.cHeroInterim, true, false, 100, 100, true);
-        walker.addAnimation("w", [0, 1, 2, 3, 4, 5, 6, 7], 14, true);
-        walker.addAnimation("e", [8, 9, 10, 11, 12, 13, 14, 15], 14, true);
-        walker.addAnimation("n", [16, 17, 18, 19, 20, 21], 10, true);
-        walker.addAnimation("s", [24, 25, 26, 27, 28, 29], 10, true);
-        walker.addAnimation("ew", [22, 23], 1, true);
-        walker.addAnimation("ns", [30, 31], 1, true);
+        walker.animation.add("w", [0, 1, 2, 3, 4, 5, 6, 7], 14, true);
+        walker.animation.add("e", [8, 9, 10, 11, 12, 13, 14, 15], 14, true);
+        walker.animation.add("n", [16, 17, 18, 19, 20, 21], 10, true);
+        walker.animation.add("s", [24, 25, 26, 27, 28, 29], 10, true);
+        walker.animation.add("ew", [22, 23], 1, true);
+        walker.animation.add("ns", [30, 31], 1, true);
         walker.scrollFactor.x = 0;
         walker.scrollFactor.y = 0;
         
@@ -308,10 +309,10 @@ class HUD extends FlxGroup
             heartadd.loadGraphic(Content.cHearts, true, false, 14, 14, false);
             heartadd.scrollFactor.x = 0;
             heartadd.scrollFactor.y = 0;
-            heartadd.addAnimation("1", [0], 1, true);
-            heartadd.addAnimation("/", [1], 1, true);
-            heartadd.addAnimation("0", [2], 1, true);
-            heartadd.play("1");
+            heartadd.animation.add("1", [0], 1, true);
+            heartadd.animation.add("/", [1], 1, true);
+            heartadd.animation.add("0", [2], 1, true);
+            heartadd.animation.play("1");
             
             if (h >= Content.stats.iHearts)
             {
@@ -326,7 +327,7 @@ class HUD extends FlxGroup
         
         
         
-        pipstext = new FlxText(120, 0, 44, Std.string(Content.stats.ChangeItem("pip", 0)));
+        pipstext = new DwarfText(120, 0, 44, Std.string(Content.stats.ChangeItem("pip", 0)));
         Util.AssignFont(pipstext);
         pipstext.scrollFactor.x = 0;
         pipstext.scrollFactor.y = 0;
@@ -335,7 +336,7 @@ class HUD extends FlxGroup
         //add.pipstext;
         //statbar.add(pipstext);
         
-        reodstext = new FlxText(120 + 36, 0, 44, Std.string(Content.stats.ChangeItem("reod", 0)));
+        reodstext = new DwarfText(120 + 36, 0, 44, Std.string(Content.stats.ChangeItem("reod", 0)));
         Util.AssignFont(reodstext);
         reodstext.scrollFactor.x = 0;
         reodstext.scrollFactor.y = 0;
@@ -344,7 +345,7 @@ class HUD extends FlxGroup
         //add.reodstext;
         //statbar.add(reodstext);
         
-        lytratstext = new FlxText(120 + 36 + 36, 0, 44, Std.string(Content.stats.ChangeItem("lytrat", 0)));
+        lytratstext = new DwarfText(120 + 36 + 36, 0, 44, Std.string(Content.stats.ChangeItem("lytrat", 0)));
         Util.AssignFont(lytratstext);
         lytratstext.scrollFactor.x = 0;
         lytratstext.scrollFactor.y = 0;
@@ -353,7 +354,7 @@ class HUD extends FlxGroup
         //add.lytratstext;
         //statbar.add(lytratstext);
         
-        clocktext = try cast(add(new FlxText(404, 1, 44, "dael")), FlxText) catch(e:Dynamic) null;
+        clocktext = try cast(add(new DwarfText(404, 1, 44, "dael")), DwarfText) catch(e:Dynamic) null;
         Util.AssignFont(clocktext);
         clocktext.scrollFactor.x = 0;
         clocktext.scrollFactor.y = 0;
@@ -383,11 +384,11 @@ class HUD extends FlxGroup
             var an : Int = 0;
             while (an < Content.iWallpaperPieces)
             {
-                piece.addAnimation(Std.string(an), [an], 0, true);
+                piece.animation.add(Std.string(an), [an], 0, true);
                 an++;
             }
             
-            piece.play(Std.string(pc - 8));
+            piece.animation.play(Std.string(pc - 8));
             
             piece.scrollFactor.x = 0;
             piece.scrollFactor.y = 0;
@@ -480,15 +481,15 @@ class HUD extends FlxGroup
         {
             if (ratio == (h * 2) + 1)
             {
-                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).play("/");
+                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).animation.play("/");
             }
             else if (ratio < (h * 2) + 1)
             {
-                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).play("0");
+                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).animation.play("0");
             }
             else
             {
-                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).play("1");
+                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).animation.play("1");
             }
             h++;
         }
@@ -520,7 +521,7 @@ class HUD extends FlxGroup
                 animnum -= Content.iWallpaperPieces;
             }
             
-            (try cast(piecebar.members[n], FlxSprite) catch(e:Dynamic) null).play(Std.string(animnum));
+            (try cast(piecebar.members[n], FlxSprite) catch(e:Dynamic) null).animation.play(Std.string(animnum));
         }
     }
     
@@ -553,11 +554,11 @@ class HUD extends FlxGroup
             str = "w";
         }
         
-        runemap.play(str);
+        runemap.animation.play(str);
         
         if (!wasdead)
         {
-            walker.play(str);
+            walker.animation.play(str);
         }
         // Sleeping
         else
@@ -565,11 +566,11 @@ class HUD extends FlxGroup
             
             if (camefrom < 2)
             {
-                walker.play("ns");
+                walker.animation.play("ns");
             }
             else
             {
-                walker.play("ew");
+                walker.animation.play("ew");
             }
         }
     }
@@ -807,7 +808,7 @@ class HUD extends FlxGroup
                         !(chattext.text.charAt(chattext.text.length - 1) == " " &&
                         chattext.text.charAt(chattext.text.length - 2) == " "))
                     {
-                        FlxG.play(Content.soundChat, Content.volumeChat, false, false, Content.nDefaultSkip);
+                        FlxG.animation.play(Content.soundChat, Content.volumeChat, false, false, Content.nDefaultSkip);
                     }
                 }
             }
@@ -974,7 +975,7 @@ class HUD extends FlxGroup
 						{
 							var northbar:NodeSprite = new NodeSprite(center.x - (nodesize / 2) + (x * nodesize) + 0, center.y - (nodesize / 2) + (y * nodesize) - 6);
 							northbar.SetRigid(true);
-							northbar.play("v");
+							northbar.animation.play("v");
 							mappieces.add(northbar);
 						}
 						
@@ -982,7 +983,7 @@ class HUD extends FlxGroup
 						{
 							var westbar:NodeSprite = new NodeSprite(center.x - (nodesize / 2) + (x * nodesize) - 6, center.y - (nodesize / 2) + (y * nodesize) + 0);
 							westbar.SetRigid(true);
-							westbar.play("h");
+							westbar.animation.play("h");
 							mappieces.add(westbar);
 						}
 						
@@ -1000,7 +1001,7 @@ class HUD extends FlxGroup
 						{
 							var southbar:NodeSprite = new NodeSprite(center.x - (nodesize / 2) + (x * nodesize) + 0, center.y - (nodesize / 2) + (y * nodesize) + 6);
 							southbar.SetRigid(true);
-							southbar.play("v");
+							southbar.animation.play("v");
 							mappieces.add(southbar);
 						}
 						
@@ -1008,7 +1009,7 @@ class HUD extends FlxGroup
 						{
 							var eastbar:NodeSprite = new NodeSprite(center.x - (nodesize / 2) + (x * nodesize) + 6, center.y - (nodesize / 2) + (y * nodesize) + 0);
 							eastbar.SetRigid(true);
-							eastbar.play("h");
+							eastbar.animation.play("h");
 							mappieces.add(eastbar);
 						}
 					}
@@ -1017,7 +1018,7 @@ class HUD extends FlxGroup
 					{
 						var mainnode:NodeSprite = new NodeSprite(center.x - (nodesize / 2) + (x * nodesize), center.y - (nodesize / 2) + (y * nodesize));
 						mainnode.SetRigid(true);
-						mainnode.play("face"); 
+						mainnode.animation.play("face"); 
 						mappieces.add(mainnode);
 					}
 				}

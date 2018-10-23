@@ -1,10 +1,11 @@
 import haxe.Constraints.Function;
 import flash.utils.ByteArray;
 import map.Biome;
-import flixel.FlxSound;
+import flixel.system.FlxSound;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import flixel.Rndm;
+import flixel.math.FlxRandom;
+import Content;
 
 @:final class Util
 {
@@ -144,7 +145,7 @@ import flixel.Rndm;
         return toret;
     }
     
-    public static function ShuffleArray(array : Array<Dynamic>, ran : Rndm) : Array<Dynamic>
+    public static function ShuffleArray(array : Array<Dynamic>, ran : FlxRandom) : Array<Dynamic>
     {
         var temp : Array<Dynamic> = new Array<Dynamic>();
         var toret : Array<Dynamic> = new Array<Dynamic>();
@@ -158,7 +159,7 @@ import flixel.Rndm;
         i = 0;
         while (i < array.length)
         {
-            var r : Int = ran.integer(0, temp.length);
+            var r : Int = ran.int(0, temp.length);
             
             toret.push(temp[r]);
             
@@ -438,7 +439,7 @@ import flixel.Rndm;
     
     public static function MakeName(seed : Int, hard : Bool, soft : Bool) : String
     {
-        var r : Rndm = new Rndm(seed);
+        var r : FlxRandom = new FlxRandom(seed);
         
         var w : Int = -1;
         var front : String = "";
@@ -491,7 +492,7 @@ import flixel.Rndm;
     
     public static function MakeRegionName(seed : Int, biome : Int) : String
     {
-        var r : Rndm = new Rndm(seed);
+        var r : FlxRandom = new FlxRandom(seed);
         
         var name : String = MakeName(seed, false, false);
         

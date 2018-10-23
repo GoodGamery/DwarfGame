@@ -4,5 +4,8 @@
 		"export/**/*.hx": true
 	},
 	"lime.defaultBuildConfiguration": "Debug",
-	"lime.defaultTarget": "Neko"
+	"lime.defaultTarget": "Neko",
+	"haxe.displayServer": {
+        "arguments": ["-v"]
+	}
 }

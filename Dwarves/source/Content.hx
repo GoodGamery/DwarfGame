@@ -1,4 +1,5 @@
 import flash.utils.ByteArray;
+import flixel.system.FlxAssets;
 
 @:final class Content
 {
@@ -204,141 +205,141 @@ import flash.utils.ByteArray;
     
     @:meta(Embed(source="../content/statbar.png"))
 
-    public static var cStatBar : Class<Dynamic>;
+    public static var cStatBar : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/hearts.png"))
 
-    public static var cHearts : Class<Dynamic>;
+    public static var cHearts : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/mapcaves.png"))
 
-    public static var cMapCaves : Class<Dynamic>;
+    public static var cMapCaves : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/circlemask.png"))
 
-    public static var cCircleMask : Class<Dynamic>;
+    public static var cCircleMask : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/spotlight.png"))
 
-    public static var cSpotlight : Class<Dynamic>;
+    public static var cSpotlight : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/hover.png"))
 
-    public static var cHover : Class<Dynamic>;
+    public static var cHover : FlxGraphicAsset;
     
     
     
     @:meta(Embed(source="../content/clock.png"))
 
-    public static var cClock : Class<Dynamic>;
+    public static var cClock : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/choice.png"))
 
-    public static var cChoice : Class<Dynamic>;
+    public static var cChoice : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/npc.png"))
 
-    public static var cNPC : Class<Dynamic>;
+    public static var cNPC : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/npc_static.png"))
 
-    public static var cNPCStatic : Class<Dynamic>;
+    public static var cNPCStatic : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/npc_other.png"))
 
-    public static var cNPCOther : Class<Dynamic>;
+    public static var cNPCOther : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/gems.png"))
 
-    public static var cGems : Class<Dynamic>;
+    public static var cGems : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/heroreal.png"))
 
-    public static var cHero : Class<Dynamic>;
+    public static var cHero : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/herointerim.png"))
 
-    public static var cHeroInterim : Class<Dynamic>;
+    public static var cHeroInterim : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/maps.png"))
 
-    public static var cRuneMaps : Class<Dynamic>;
+    public static var cRuneMaps : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/runemap_background.png"))
 
-    public static var cRuneMapBackground : Class<Dynamic>;
+    public static var cRuneMapBackground : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/runemap_border.png"))
 
-    public static var cRuneMapBorder : Class<Dynamic>;
+    public static var cRuneMapBorder : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/youarehere.png"))
 
-    public static var cYouAreHere : Class<Dynamic>;
+    public static var cYouAreHere : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/cavenew.png"))
 
-    public static var cCaveNew : Class<Dynamic>;
+    public static var cCaveNew : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/cave.png"))
 
-    public static var cCave : Class<Dynamic>;
+    public static var cCave : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/lilcave.png"))
 
-    public static var cLilCave : Class<Dynamic>;
+    public static var cLilCave : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/arrow.png"))
 
-    public static var cArrow : Class<Dynamic>;
+    public static var cArrow : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/pellet.png"))
 
-    public static var cPellet : Class<Dynamic>;
+    public static var cPellet : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/items.png"))
 
-    public static var cItems : Class<Dynamic>;
+    public static var cItems : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/monsters.png"))
 
-    public static var cMonsters : Class<Dynamic>;
+    public static var cMonsters : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/monk.png"))
 
-    public static var cMonk : Class<Dynamic>;
+    public static var cMonk : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/mapnodes.png"))
 
-    public static var cMapNodes : Class<Dynamic>;
+    public static var cMapNodes : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/mapbars.png"))
 
-    public static var cMapBars : Class<Dynamic>;
+    public static var cMapBars : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/faces.png"))
 
-    public static var cFaces : Class<Dynamic>;
+    public static var cFaces : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/chatbox.png"))
 
-    public static var cChatBox : Class<Dynamic>;
+    public static var cChatBox : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/chatbubble.png"))
 
-    public static var cChatBubble : Class<Dynamic>;
+    public static var cChatBubble : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/particle.png"))
 
-    public static var cParticle : Class<Dynamic>;
+    public static var cParticle : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/twinkle.png"))
 
-    public static var cTwinkle : Class<Dynamic>;
+    public static var cTwinkle : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/splash.png"))
 
-    public static var cSplash : Class<Dynamic>;
+    public static var cSplash : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/dwarven.txt",mimeType="application/octet-stream"))
 
@@ -364,86 +365,86 @@ import flash.utils.ByteArray;
     
     @:meta(Embed(source="../content/filter.png"))
 
-    public static var cFilter : Class<Dynamic>;
+    public static var cFilter : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/alert.png"))
 
-    public static var cAlert : Class<Dynamic>;
+    public static var cAlert : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/doors.png"))
 
-    public static var cDoors : Class<Dynamic>;
+    public static var cDoors : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/walls2.png"))
 
-    public static var cWalls : Class<Dynamic>;
+    public static var cWalls : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/wallpaper.png"))
 
-    public static var cWallpaper : Class<Dynamic>;
+    public static var cWallpaper : FlxGraphicAsset;
     public static var iWallpaperPieces : Int = 8 * 30;
     
     
     @:meta(Embed(source="../content/peppers.png"))
 
-    public static var cPeppers : Class<Dynamic>;
+    public static var cPeppers : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/waterfall.png"))
 
-    public static var cWaterfall : Class<Dynamic>;
+    public static var cWaterfall : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/windmill.png"))
 
-    public static var cWindmill : Class<Dynamic>;
+    public static var cWindmill : FlxGraphicAsset;
     
     public static inline var iWallSheetWidth : Int = 24;
     
     @:meta(Embed(source="../content/fronts_thicker.png"))
 
-    public static var cFronts : Class<Dynamic>;
+    public static var cFronts : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/fronts_thicker.png"))
 
-    public static var cFacade : Class<Dynamic>;
+    public static var cFacade : FlxGraphicAsset;
     public static var iFacadePieces : Int = 8 * 30;
     
     public static inline var iFrontSheetWidth : Int = 21;
     
     @:meta(Embed(source="../content/back_columns.png"))
 
-    public static var cBackColumns : Class<Dynamic>;
+    public static var cBackColumns : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_forest.png"))
 
-    public static var cBackForest : Class<Dynamic>;
+    public static var cBackForest : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_swamp.png"))
 
-    public static var cBackSwamp : Class<Dynamic>;
+    public static var cBackSwamp : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_ice.png"))
 
-    public static var cBackIce : Class<Dynamic>;
+    public static var cBackIce : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_sand.png"))
 
-    public static var cBackSand : Class<Dynamic>;
+    public static var cBackSand : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_deadwater.png"))
 
-    public static var cBackDeadwater : Class<Dynamic>;
+    public static var cBackDeadwater : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_vents.png"))
 
-    public static var cBackVents : Class<Dynamic>;
+    public static var cBackVents : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_amber2.png"))
 
-    public static var cBackAmber : Class<Dynamic>;
+    public static var cBackAmber : FlxGraphicAsset;
     
     @:meta(Embed(source="../content/back_stone.png"))
 
-    public static var cBackStone : Class<Dynamic>;
+    public static var cBackStone : FlxGraphicAsset;
     
     @:meta(Embed(source="../sounds/arrow.mp3"))
 
