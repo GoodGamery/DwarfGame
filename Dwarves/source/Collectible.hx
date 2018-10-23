@@ -1,7 +1,7 @@
 import flash.geom.Point;
-import org.flixel.*;
+import flixel.*;
 import hud.Grunt;
-import org.flixel.plugin.photonstorm.FlxColor;
+import flixel.plugin.photonstorm.FlxColor;
 
 class Collectible extends FlxSprite
 {

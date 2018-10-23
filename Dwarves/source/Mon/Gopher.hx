@@ -2,7 +2,7 @@ package mon;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import org.flixel.*;
+import flixel.*;
 
 class Gopher extends Talker
 {

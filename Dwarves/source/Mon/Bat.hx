@@ -2,7 +2,7 @@ package mon;
 
 import flash.geom.ColorTransform;
 import flash.geom.Point;
-import org.flixel.*;
+import flixel.*;
 
 class Bat extends Monster
 {

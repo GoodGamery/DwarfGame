@@ -7,10 +7,11 @@ import hud.HUD;
 import hud.MapNode;
 import hud.Grunt;
 import map.*;
-import org.flixel.*;
+import flixel.*;
 import mon.*;
 import tasks.*;
 import particles.*;
+import flixel.text.FlxText;
 
 class PlayState extends FlxState
 {
@@ -65,7 +66,7 @@ class PlayState extends FlxState
     public var arrayGrunts : Array<Dynamic> = null;
     public var groupGrunts : FlxGroup = null;
     public var groupDoors : FlxGroup = null;
-    public var groupPeppers : FlxGroupXY = null;
+    public var groupPeppers : FlxSpriteGroup = null;
     
     
     public var hero : Player;
@@ -950,7 +951,7 @@ class PlayState extends FlxState
     
     public var back : FlxSprite;
     public var filter : FlxSprite;
-    public var groupNearBack : FlxGroupXY;
+    public var groupNearBack : FlxSpriteGroup;
     
     public function initiate() : Void
     {
@@ -975,7 +976,7 @@ class PlayState extends FlxState
         filter.scrollFactor.y = 0;
         add(filter);
         
-        groupNearBack = new FlxGroupXY();
+        groupNearBack = new FlxSpriteGroup();
         add(groupNearBack);
         
         
@@ -1229,7 +1230,7 @@ class PlayState extends FlxState
             iPeppers = as3hx.Compat.parseInt(arrayPeppers.length * (zone.rand.integer(20, 50) / 100));
         }
         
-        groupPeppers = new FlxGroupXY();
+        groupPeppers = new FlxSpriteGroup();
         
         for (i in 0...iPeppers)
         {
@@ -1701,7 +1702,7 @@ class PlayState extends FlxState
         
         this.add(hover);
         
-        groupGrunts = new FlxGroupXY();
+        groupGrunts = new FlxSpriteGroup();
         add(groupGrunts);
         
         

@@ -1,11 +1,10 @@
 import haxe.Constraints.Function;
 import flash.utils.ByteArray;
 import map.Biome;
-import org.flixel.FlxSound;
-import org.flixel.FlxSprite;
-import org.flixel.FlxText;
-import org.flixel.FlxTextPlus;
-import org.flixel.Rndm;
+import flixel.FlxSound;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
+import flixel.Rndm;
 
 @:final class Util
 {

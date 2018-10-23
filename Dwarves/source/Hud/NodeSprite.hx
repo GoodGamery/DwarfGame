@@ -1,6 +1,6 @@
 package hud;
 
-import org.flixel.*;
+import flixel.*;
 
 class NodeSprite extends FlxSprite
 {

@@ -1,4 +1,4 @@
-import org.flixel.*;
+import flixel.*;
 
 class Pellet extends FlxSprite
 {

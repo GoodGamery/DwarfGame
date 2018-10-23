@@ -3,7 +3,7 @@ package map;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import hud.HUD;
-import org.flixel.FlxSprite;
+import flixel.FlxSprite;
 
 class CaveMap
 {
@@ -41,7 +41,7 @@ class CaveMap
             var y : Int = as3hx.Compat.parseInt(cy - radius);
             while (y <= cy + radius)
             {
-                (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(new Cave(x, y));
+                (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array) catch(e:Dynamic) null).push(new Cave(x, y));
                 y++;
             }
             x++;
@@ -328,10 +328,6 @@ class CaveMap
             {
                 var tocheck : Point = try cast(oldcheckers[i], Point) catch(e:Dynamic) null;
                 
-                //if (tocheck.y > upperleft.y + 1)
-                { //
-                //if (GetCave(tocheck.x, tocheck.y).exits.north)
-                { //
                 AddCave(tocheck.x, tocheck.y - 1);
                 
                 if (GetCave(tocheck.x, tocheck.y - 1).strRegionName == orig &&
@@ -339,13 +335,7 @@ class CaveMap
                 {
                     checkers.push(new Point(tocheck.x, tocheck.y - 1));
                 }
-                //}
-                //}
                 
-                //if (tocheck.y < upperleft.y + size.y - 1)
-                { //
-                //if (GetCave(tocheck.x, tocheck.y).exits.south)
-                { //
                 AddCave(tocheck.x, tocheck.y + 1);
                 
                 if (GetCave(tocheck.x, tocheck.y + 1).strRegionName == orig &&
@@ -353,13 +343,7 @@ class CaveMap
                 {
                     checkers.push(new Point(tocheck.x, tocheck.y + 1));
                 }
-                //}
-                //}
                 
-                //if (tocheck.x > upperleft.x + 1)
-                { //
-                //if (GetCave(tocheck.x, tocheck.y).exits.west)
-                { //
                 AddCave(tocheck.x - 1, tocheck.y);
                 
                 if (GetCave(tocheck.x - 1, tocheck.y).strRegionName == orig &&
@@ -367,13 +351,7 @@ class CaveMap
                 {
                     checkers.push(new Point(tocheck.x - 1, tocheck.y));
                 }
-                //}
-                //}
                 
-                //if (tocheck.x < upperleft.x + size.x - 1)
-                { //
-                //if (GetCave(tocheck.x, tocheck.y).exits.east)
-                { //
                 AddCave(tocheck.x + 1, tocheck.y);
                 
                 if (GetCave(tocheck.x + 1, tocheck.y).strRegionName == orig &&
@@ -395,7 +373,7 @@ class CaveMap
         return;
     }
     
-    public function GetCave(xget : Int, yget : Int) : Cave
+    function GetCave(xget : Int, yget : Int) : Cave
     {
         xget -= upperleft.x;
         yget -= upperleft.y;
@@ -408,7 +386,7 @@ class CaveMap
         return try cast(arrayCaveMap[xget][yget], Cave) catch(e:Dynamic) null;
     }
     
-    public function GetCaveRegion(xget : Int, yget : Int) : String
+    function GetCaveRegion(xget : Int, yget : Int) : String
     {
         xget -= upperleft.x;
         yget -= upperleft.y;
@@ -446,12 +424,12 @@ class CaveMap
                 { // just do it
                     
                     {
-                        (try cast(arrayCaveMap[0], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
+                        (try cast(arrayCaveMap[0], Array) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
                     }
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[0], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(null);
+                    (try cast(arrayCaveMap[0], Array) catch(e:Dynamic) null).push(null);
                 }
                 yy++;
             }
@@ -471,12 +449,12 @@ class CaveMap
                 { // just do it
                     
                     {
-                        (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
+                        (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
                     }
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(null);
+                    (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array) catch(e:Dynamic) null).push(null);
                 }
                 yy++;
             }
@@ -493,12 +471,12 @@ class CaveMap
                 { // just do it
                     
                     {
-                        (try cast(arrayCaveMap[xx], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).unshift(new Cave(xx + upperleft.x, yadd));
+                        (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).unshift(new Cave(xx + upperleft.x, yadd));
                     }
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[xx], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).unshift(null);
+                    (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).unshift(null);
                 }
                 xx++;
             }
@@ -516,12 +494,12 @@ class CaveMap
                 { // just do it
                     
                     {
-                        (try cast(arrayCaveMap[xx], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(new Cave(xx + upperleft.x, yadd));
+                        (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).push(new Cave(xx + upperleft.x, yadd));
                     }
                 }
                 else
                 {
-                    (try cast(arrayCaveMap[xx], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(null);
+                    (try cast(arrayCaveMap[xx], Array) catch(e:Dynamic) null).push(null);
                 }
                 xx++;
             }

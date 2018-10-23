@@ -6,8 +6,7 @@ import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
-import flixel.FlxTextPlus;
-import flixel.FlxText;
+import flixel.text.FlxText;
 import flixel.FlxObject;
 
 class HUD extends FlxGroup
@@ -21,10 +20,10 @@ class HUD extends FlxGroup
     public var loadtext : FlxText;
     public var progressbar : FlxText;
     
-    public var pipstext : FlxTextPlus;
-    public var reodstext : FlxTextPlus;
-    public var lytratstext : FlxTextPlus;
-    public var clocktext : FlxTextPlus;
+    public var pipstext : FlxText;
+    public var reodstext : FlxText;
+    public var lytratstext : FlxText;
+    public var clocktext : FlxText;
     
     public var loadmap : FlxSpriteGroup;
     
@@ -70,10 +69,10 @@ class HUD extends FlxGroup
     public var task : Int = 0;
     
     public var piecebar : FlxSpriteGroup;
-    public var iCurrentPiece : Int = Content.iWallpaperPieces / 2;
+    public var iCurrentPiece : Int = Math.floor(Content.iWallpaperPieces / 2);
     
     public var maker : FlxSpriteGroup;
-    public var makerReport : FlxTextPlus;
+    public var makerReport : FlxText;
     public var makerBlocker : FlxSprite;
     public var makerMap : FlxSprite;
     public var backupMap : FlxSprite;
@@ -164,7 +163,7 @@ class HUD extends FlxGroup
         chatbox.scrollFactor.y = 0;
         chatgroup.add(chatbox);
         
-        chattext = new FlxTextPlus(chatbox.x + 10, chatbox.y + 10, 395 - 20, "");
+        chattext = new FlxText(chatbox.x + 10, chatbox.y + 10, 395 - 20, "");
         Util.AssignFont(chattext);
         chattext.color = 0xFF000000;
         chattext.scrollFactor.x = 0;
@@ -327,7 +326,7 @@ class HUD extends FlxGroup
         
         
         
-        pipstext = new FlxTextPlus(120, 0, 44, Std.string(Content.stats.ChangeItem("pip", 0)));
+        pipstext = new FlxText(120, 0, 44, Std.string(Content.stats.ChangeItem("pip", 0)));
         Util.AssignFont(pipstext);
         pipstext.scrollFactor.x = 0;
         pipstext.scrollFactor.y = 0;
@@ -336,7 +335,7 @@ class HUD extends FlxGroup
         //add.pipstext;
         //statbar.add(pipstext);
         
-        reodstext = new FlxTextPlus(120 + 36, 0, 44, Std.string(Content.stats.ChangeItem("reod", 0)));
+        reodstext = new FlxText(120 + 36, 0, 44, Std.string(Content.stats.ChangeItem("reod", 0)));
         Util.AssignFont(reodstext);
         reodstext.scrollFactor.x = 0;
         reodstext.scrollFactor.y = 0;
@@ -345,7 +344,7 @@ class HUD extends FlxGroup
         //add.reodstext;
         //statbar.add(reodstext);
         
-        lytratstext = new FlxTextPlus(120 + 36 + 36, 0, 44, Std.string(Content.stats.ChangeItem("lytrat", 0)));
+        lytratstext = new FlxText(120 + 36 + 36, 0, 44, Std.string(Content.stats.ChangeItem("lytrat", 0)));
         Util.AssignFont(lytratstext);
         lytratstext.scrollFactor.x = 0;
         lytratstext.scrollFactor.y = 0;
@@ -354,7 +353,7 @@ class HUD extends FlxGroup
         //add.lytratstext;
         //statbar.add(lytratstext);
         
-        clocktext = try cast(add(new FlxTextPlus(404, 1, 44, "dael")), FlxTextPlus) catch(e:Dynamic) null;
+        clocktext = try cast(add(new FlxText(404, 1, 44, "dael")), FlxText) catch(e:Dynamic) null;
         Util.AssignFont(clocktext);
         clocktext.scrollFactor.x = 0;
         clocktext.scrollFactor.y = 0;
@@ -432,7 +431,7 @@ class HUD extends FlxGroup
         backupMap.scrollFactor.y = 0;
         maker.add(backupMap);
         
-        makerReport = new FlxTextPlus(480 + 20, 20, 300, "test", true);
+        makerReport = new FlxText(480 + 20, 20, 300, "test", true);
         makerReport.color = 0xFFFFFFFF;
         makerReport.scrollFactor.x = 0;
         makerReport.scrollFactor.y = 0;

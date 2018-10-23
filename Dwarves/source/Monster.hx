@@ -1,7 +1,7 @@
 import flash.geom.ColorTransform;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import org.flixel.*;
+import flixel.*;
 
 class Monster extends FlxSprite
 {
@@ -28,7 +28,7 @@ class Monster extends FlxSprite
     public var iRunSpeed : Int = 30;
     public var bFriendly : Bool = false;
     public var nDamageDealt : Float = 20;
-    public var groupStuck : FlxGroupXY = new FlxGroupXY();
+    public var groupStuck : FlxSpriteGroup = new FlxSpriteGroup();
     public var rectVulnerable : FlxRect;
     public var bDiesInWater : Bool = true;
     public var bDiesInSpikes : Bool = true;

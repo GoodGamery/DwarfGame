@@ -1,14 +1,13 @@
 package hud;
 
 import flash.geom.Point;
-import org.flixel.FlxSprite;
-import org.flixel.FlxG;
-import org.flixel.FlxGroup;
-import org.flixel.FlxGroupXY;
-import org.flixel.FlxTextPlus;
-import org.flixel.FlxText;
+import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
 
-class Grunt extends FlxGroupXY
+class Grunt extends FlxSpriteGroup
 {
     public var text : FlxText;
     public var lifetime : Int;

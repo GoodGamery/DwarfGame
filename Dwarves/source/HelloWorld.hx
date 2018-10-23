@@ -6,7 +6,7 @@ import flash.display.StageScaleMode;
 import flash.geom.Matrix;
 import flash.text.TextField;
 import flash.text.TextFieldType;
-import org.flixel.*;
+import flixel.*;
 
 //Allows you to refer to flixel objects in your code
 //600 or 672

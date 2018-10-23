@@ -1,6 +1,6 @@
 package particles;
 
-import org.flixel.*;
+import flixel.*;
 
 class Splash extends FlxSprite
 {

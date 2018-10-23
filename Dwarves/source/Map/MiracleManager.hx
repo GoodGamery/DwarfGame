@@ -2,7 +2,7 @@ package map;
 
 import flash.utils.ByteArray;
 import map.Biome;
-import org.flixel.Rndm;
+import flixel.Rndm;
 import flash.net.FileReference;
 
 @:final class MiracleManager

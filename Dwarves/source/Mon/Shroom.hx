@@ -1,7 +1,7 @@
 package mon;
 
 import flash.geom.ColorTransform;
-import org.flixel.*;
+import flixel.*;
 
 class Shroom extends Monster
 {

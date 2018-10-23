@@ -4,11 +4,11 @@ import haxe.Constraints.Function;
 import flash.events.TimerEvent;
 import flash.geom.Point;
 import flash.utils.Timer;
-import org.flixel.*;
+import flixel.*;
 
 class GroupTask extends Task
 {
-    public var group : FlxGroupXY = null;
+    public var group : FlxSpriteGroup = null;
     public var sx : Int = 0;
     public var sy : Int = 0;
     public var tx : Int = 0;
@@ -16,7 +16,7 @@ class GroupTask extends Task
     public var fTypeX : Function;
     public var fTypeY : Function;
     public var bKill : Bool;
-    public function new(name : String, dataobject : Dynamic, seconds : Float, grp : FlxGroupXY, startx : Int, starty : Int, targetx : Int, targety : Int, xtype : Function, ytype : Function, kill : Bool, callback : Function = null)
+    public function new(name : String, dataobject : Dynamic, seconds : Float, grp : FlxSpriteGroup, startx : Int, starty : Int, targetx : Int, targety : Int, xtype : Function, ytype : Function, kill : Bool, callback : Function = null)
     {
         super(name, dataobject, seconds);
         

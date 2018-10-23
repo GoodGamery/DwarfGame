@@ -4,7 +4,7 @@ import haxe.Constraints.Function;
 import flash.events.TimerEvent;
 import flash.geom.Point;
 import flash.utils.Timer;
-import org.flixel.*;
+import flixel.*;
 
 class Task
 {

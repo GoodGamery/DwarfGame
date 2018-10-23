@@ -1,7 +1,7 @@
 package map;
 
 import haxe.Constraints.Function;
-import org.flixel.*;
+import flixel.*;
 import flash.geom.Point;
 
 class Zone

@@ -1,5 +1,5 @@
 import flash.geom.Rectangle;
-import org.flixel.*;
+import flixel.*;
 import particles.*;
 
 class Arrow extends FlxSprite

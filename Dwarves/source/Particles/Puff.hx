@@ -1,7 +1,7 @@
 package particles;
 
-import org.flixel.*;
-import org.flixel.system.FlxAnim;
+import flixel.*;
+import flixel.system.FlxAnim;
 
 class Puff extends FlxSprite
 {

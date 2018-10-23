@@ -1,7 +1,7 @@
 import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import org.flixel.*;
+import flixel.*;
 import particles.Splash;
 import hud.Grunt;
 

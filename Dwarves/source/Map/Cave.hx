@@ -2,7 +2,7 @@ package map;
 
 import flash.geom.ColorTransform;
 import flash.geom.Rectangle;
-import org.flixel.*;
+import flixel.*;
 import flash.geom.Point;
 
 class Cave
@@ -30,7 +30,7 @@ class Cave
         
         colorpieces = new FlxSprite(100 + (x * 12), 100 + (y * 12));
         colorpieces.loadGraphic(Content.cMapCaves, false, false, 96, 48, true);
-        colorpieces._pixels.colorTransform(new Rectangle(0, 0, 96, 48), levelColor);
+        colorpieces.pixels.colorTransform(new Rectangle(0, 0, 96, 48), levelColor);
         colorpieces.dirty = true;
         
         purepieces = new FlxSprite(100 + (x * 12), 100 + (y * 12));
@@ -61,20 +61,20 @@ class Cave
             {
                 if (!border.west)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (0 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (0 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
                 else
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (1 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (1 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
             }
             else if (border.west)
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (0 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (0 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             else
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (1 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (1 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             
             // Upper-right corner
@@ -82,20 +82,20 @@ class Cave
             {
                 if (!border.north)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (2 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (2 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
                 else
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (3 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (3 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
             }
             else if (border.north)
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (2 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (2 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             else
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (3 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (3 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             
             // Lower-right corner
@@ -103,20 +103,20 @@ class Cave
             {
                 if (!border.east)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (4 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (4 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
                 else
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (5 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (5 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
             }
             else if (border.east)
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (4 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (4 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             else
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (5 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (5 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             
             // Lower-left corner
@@ -124,71 +124,71 @@ class Cave
             {
                 if (!border.south)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (6 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (6 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
                 else
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (7 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (7 * 12), 0, 12, 12), new Point(0, 0), null, null, true);
                 }
             }
             else if (border.south)
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (6 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (6 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             else
             {
-                sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (7 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
+                sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (7 * 12), 12, 12, 12), new Point(0, 0), null, null, true);
             }
             
             if (visited)
             {
                 if (exits.north)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (1 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (1 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (exits.east)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (2 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (2 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (exits.south)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (3 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (3 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (exits.west)
                 {
-                    sprite._pixels.copyPixels(colorpieces._pixels, new Rectangle(0 + (4 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(colorpieces.pixels, new Rectangle(0 + (4 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (exits.north)
                 {
-                    sprite._pixels.copyPixels(purepieces._pixels, new Rectangle(0 + (1 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(purepieces.pixels, new Rectangle(0 + (1 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (exits.east)
                 {
-                    sprite._pixels.copyPixels(purepieces._pixels, new Rectangle(0 + (2 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(purepieces.pixels, new Rectangle(0 + (2 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (exits.south)
                 {
-                    sprite._pixels.copyPixels(purepieces._pixels, new Rectangle(0 + (3 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(purepieces.pixels, new Rectangle(0 + (3 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (exits.west)
                 {
-                    sprite._pixels.copyPixels(purepieces._pixels, new Rectangle(0 + (4 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(purepieces.pixels, new Rectangle(0 + (4 * 12), 36, 12, 12), new Point(0, 0), null, null, true);
                 }
                 
                 if (flag == Content.INTEREST)
                 {
-                    sprite._pixels.copyPixels(purepieces._pixels, new Rectangle(0 + (5 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(purepieces.pixels, new Rectangle(0 + (5 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
                 }
                 else if (flag == Content.CITY)
                 {
-                    sprite._pixels.copyPixels(purepieces._pixels, new Rectangle(0 + (6 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
+                    sprite.pixels.copyPixels(purepieces.pixels, new Rectangle(0 + (6 * 12), 24, 12, 12), new Point(0, 0), null, null, true);
                 }
             }
             
@@ -310,7 +310,7 @@ class Cave
             var cy : Int = as3hx.Compat.parseInt(y - 1);
             while (cy <= y + 1)
             {
-                (try cast(vacinity[vacinity.length - 1], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(NeighborlyDirections(cx, cy));
+                (try cast(vacinity[vacinity.length - 1], Array) catch(e:Dynamic) null).push(NeighborlyDirections(cx, cy));
                 cy++;
             }
             cx++;
@@ -322,13 +322,13 @@ class Cave
         exits.west = (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).west;
         
         /* _ _ _ _ _
-			  |    0    |
-			  |         |
-			  |3       1|   <- straws
-			  |         |
-			  |_ _ 2 _ _|
-			*/
-        
+		  |    0    |
+		  |         |
+		  |3       1|   <- straws
+		  |         |
+		  |_ _ 2 _ _|
+		*/
+    
         var straws : Rndm;
         var straw : Int;
         var seed : Int;

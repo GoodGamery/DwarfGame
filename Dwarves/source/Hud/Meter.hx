@@ -1,17 +1,17 @@
 package hud;
 
 import flash.geom.Point;
-import org.flixel.FlxSprite;
-import org.flixel.FlxG;
-import org.flixel.FlxGroupXY;
-import org.flixel.FlxTextPlus;
+import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
 
-class Meter extends FlxGroupXY
+class Meter extends FlxSpriteGroup
 {
     public var shadow : FlxSprite;
     public var bg : FlxSprite;
     public var fill : FlxSprite;
-    public var text : FlxTextPlus;
+    public var text : FlxText;
     public var meterwidth : Int = 0;
     public var meterheight : Int = 0;
     public var metercolor : Int = 0xFFFFFFFF;
@@ -44,10 +44,10 @@ class Meter extends FlxGroupXY
         fill.scrollFactor.y = 0;
         add(fill);
         
-        text = try cast(add(new FlxTextPlus(x - 1, y + (height / 2) - 7, width, "")), FlxTextPlus) catch(e:Dynamic) null;
+        text = try cast(add(new FlxText(x - 1, y + (height / 2) - 7, width, "")), FlxText) catch(e:Dynamic) null;
         text.scrollFactor.x = 0;
         text.scrollFactor.y = 0;
-        text.shadow = 0xFF000000;
+        // text.shadow = 0xFF000000;
         text.alignment = "center";
         add(text);
     }

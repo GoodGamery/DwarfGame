@@ -8,8 +8,8 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.utils.Timer;
 import flash.display.StageQuality;
-import org.flixel.*;
-import org.flixel.FlxGroupXY;
+import flixel.*;
+import flixel.group.FlxSpriteGroup;
 import spark.layouts.BasicLayout;
 
 class FadeSpriteTask extends SpriteTask
