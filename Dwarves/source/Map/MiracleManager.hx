@@ -55,7 +55,7 @@ import flash.net.FileReference;
         var i : Int = 0;
         while (i < arrayMiracles.length)
         
-        // TODO: Save in different places...{
+        { // TODO: Save in different places...
             
             
             /*

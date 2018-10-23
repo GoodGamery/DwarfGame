@@ -883,7 +883,7 @@ class HUD extends FlxGroup
         {
             if ((try cast(Content.stats.arrayMapNodes[i], MapNode) catch(e:Dynamic) null).where.x == x && (try cast(Content.stats.arrayMapNodes[i], MapNode) catch(e:Dynamic) null).where.y == y)
             
-            //trace("IN MAP HISTORY!");{
+            { //trace("IN MAP HISTORY!");
                 
                 return as3hx.Compat.parseInt(i);
             }

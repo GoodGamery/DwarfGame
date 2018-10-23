@@ -106,7 +106,7 @@ class Crawler extends Monster
             
             if (iDir == Content.RIGHT)
             
-            // Test front edge{
+            { // Test front edge
                 
                 curx = as3hx.Compat.parseInt((x + iWidth) / 30);
                 cury = as3hx.Compat.parseInt(y / 30);
@@ -119,7 +119,7 @@ class Crawler extends Monster
                 {
                     if (Util.IsBarrier(parent.level.getTile(newx, newy)) == true)
                     
-                    // +0degrees blocked{
+                    { // +0degrees blocked
                         
                         {
                             iDir = Content.UP;
@@ -139,7 +139,7 @@ class Crawler extends Monster
                     {
                         if (Util.IsBarrier(parent.level.getTile(newx, newy + 1)) == false)
                         
-                        // +90degrees open{
+                        { // +90degrees open
                             
                             {
                                 iDir = Content.DOWN;
@@ -152,7 +152,7 @@ class Crawler extends Monster
             }
             else if (iDir == Content.LEFT)
             
-            // Test front edge{
+            { // Test front edge
                 
                 curx = as3hx.Compat.parseInt((x) / 30);
                 cury = as3hx.Compat.parseInt(y / 30);
@@ -165,7 +165,7 @@ class Crawler extends Monster
                 {
                     if (Util.IsBarrier(parent.level.getTile(newx, newy)) == true)
                     
-                    // +0degrees blocked{
+                    { // +0degrees blocked
                         
                         {
                             iDir = Content.DOWN;
@@ -185,7 +185,7 @@ class Crawler extends Monster
                     {
                         if (Util.IsBarrier(parent.level.getTile(newx, newy - 1)) == false)
                         
-                        // +90degrees open{
+                        { // +90degrees open
                             
                             {
                                 iDir = Content.UP;
@@ -198,7 +198,7 @@ class Crawler extends Monster
             }
             else if (iDir == Content.DOWN)
             
-            // Test front edge{
+            { // Test front edge
                 
                 curx = as3hx.Compat.parseInt(x / 30);
                 cury = as3hx.Compat.parseInt((y + iWidth) / 30);
@@ -211,7 +211,7 @@ class Crawler extends Monster
                 {
                     if (Util.IsBarrier(parent.level.getTile(newx, newy)) == true)
                     
-                    // +0degrees blocked{
+                    { // +0degrees blocked
                         
                         {
                             iDir = Content.RIGHT;
@@ -231,7 +231,7 @@ class Crawler extends Monster
                     {
                         if (Util.IsBarrier(parent.level.getTile(newx - 1, newy)) == false)
                         
-                        // +90degrees open{
+                        { // +90degrees open
                             
                             {
                                 iDir = Content.LEFT;
@@ -244,7 +244,7 @@ class Crawler extends Monster
             }
             else if (iDir == Content.UP)
             
-            // Test front edge{
+            { // Test front edge
                 
                 curx = as3hx.Compat.parseInt(x / 30);
                 cury = as3hx.Compat.parseInt((y) / 30);
@@ -257,7 +257,7 @@ class Crawler extends Monster
                 {
                     if (Util.IsBarrier(parent.level.getTile(newx, newy)) == true)
                     
-                    // +0degrees blocked{
+                    { // +0degrees blocked
                         
                         {
                             iDir = Content.LEFT;
@@ -277,7 +277,7 @@ class Crawler extends Monster
                     {
                         if (Util.IsBarrier(parent.level.getTile(newx + 1, newy)) == false)
                         
-                        // +90degrees open{
+                        { // +90degrees open
                             
                             {
                                 iDir = Content.RIGHT;

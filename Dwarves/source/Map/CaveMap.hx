@@ -91,7 +91,7 @@ class CaveMap
             var yy : Int = upperleft.y;
             while (yy < upperleft.y + size.y)
             
-            //hud.cavepieces.add(Content.stats.cavemap.GetCave(xx, yy).sprite);{
+            { //hud.cavepieces.add(Content.stats.cavemap.GetCave(xx, yy).sprite);
                 
                 
                 var cavesprite : FlxSprite = Content.stats.cavemap.GetCave(xx, yy).sprite;
@@ -329,9 +329,9 @@ class CaveMap
                 var tocheck : Point = try cast(oldcheckers[i], Point) catch(e:Dynamic) null;
                 
                 //if (tocheck.y > upperleft.y + 1)
-                //{
+                { //
                 //if (GetCave(tocheck.x, tocheck.y).exits.north)
-                //{
+                { //
                 AddCave(tocheck.x, tocheck.y - 1);
                 
                 if (GetCave(tocheck.x, tocheck.y - 1).strRegionName == orig &&
@@ -343,9 +343,9 @@ class CaveMap
                 //}
                 
                 //if (tocheck.y < upperleft.y + size.y - 1)
-                //{
+                { //
                 //if (GetCave(tocheck.x, tocheck.y).exits.south)
-                //{
+                { //
                 AddCave(tocheck.x, tocheck.y + 1);
                 
                 if (GetCave(tocheck.x, tocheck.y + 1).strRegionName == orig &&
@@ -357,9 +357,9 @@ class CaveMap
                 //}
                 
                 //if (tocheck.x > upperleft.x + 1)
-                //{
+                { //
                 //if (GetCave(tocheck.x, tocheck.y).exits.west)
-                //{
+                { //
                 AddCave(tocheck.x - 1, tocheck.y);
                 
                 if (GetCave(tocheck.x - 1, tocheck.y).strRegionName == orig &&
@@ -371,9 +371,9 @@ class CaveMap
                 //}
                 
                 //if (tocheck.x < upperleft.x + size.x - 1)
-                //{
+                { //
                 //if (GetCave(tocheck.x, tocheck.y).exits.east)
-                //{
+                { //
                 AddCave(tocheck.x + 1, tocheck.y);
                 
                 if (GetCave(tocheck.x + 1, tocheck.y).strRegionName == orig &&
@@ -443,7 +443,7 @@ class CaveMap
             {
                 if (yy == yadd - upperleft.y || true)
                 
-                // just do it{
+                { // just do it
                     
                     {
                         (try cast(arrayCaveMap[0], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
@@ -468,7 +468,7 @@ class CaveMap
             {
                 if (yy == yadd - upperleft.y || true)
                 
-                // just do it{
+                { // just do it
                     
                     {
                         (try cast(arrayCaveMap[arrayCaveMap.length - 1], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(new Cave(xadd, yy + upperleft.y));
@@ -490,7 +490,7 @@ class CaveMap
             {
                 if (xx == xadd - upperleft.x || true)
                 
-                // just do it{
+                { // just do it
                     
                     {
                         (try cast(arrayCaveMap[xx], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).unshift(new Cave(xx + upperleft.x, yadd));
@@ -513,7 +513,7 @@ class CaveMap
             {
                 if (xx == xadd - upperleft.x || true)
                 
-                // just do it{
+                { // just do it
                     
                     {
                         (try cast(arrayCaveMap[xx], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(new Cave(xx + upperleft.x, yadd));

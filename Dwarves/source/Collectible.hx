@@ -66,7 +66,7 @@ class Collectible extends FlxSprite
                     this.x + 5, this.y + 5
             ) < Content.nCollectDistance)
         
-        //trace("Collected!");{
+        { //trace("Collected!");
             
             this.doomed = true;
             

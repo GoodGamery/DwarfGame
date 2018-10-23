@@ -317,7 +317,7 @@ class Arrow extends FlxSprite
         
         if (Util.Random(0, 3) == 0 && (velocity.x != 0 || velocity.y != 0))
         
-        // spawn a whoosh{
+        { // spawn a whoosh
             
             {
                 if (fluid == 0)

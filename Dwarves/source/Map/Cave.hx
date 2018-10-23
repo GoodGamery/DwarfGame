@@ -339,7 +339,7 @@ class Cave
             (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).west &&
             (try cast(vacinity[0][1], DirectionSet) catch(e:Dynamic) null).north)
         
-        // Draw straws{
+        { // Draw straws
             
             
             seed = Util.QuadSeed(
@@ -368,7 +368,7 @@ class Cave
             (try cast(vacinity[2][1], DirectionSet) catch(e:Dynamic) null).west &&
             (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).north)
         
-        // Draw straws{
+        { // Draw straws
             
             
             seed = Util.QuadSeed(
@@ -397,7 +397,7 @@ class Cave
             (try cast(vacinity[2][2], DirectionSet) catch(e:Dynamic) null).west &&
             (try cast(vacinity[1][2], DirectionSet) catch(e:Dynamic) null).north)
         
-        // Draw straws{
+        { // Draw straws
             
             
             seed = Util.QuadSeed(
@@ -426,7 +426,7 @@ class Cave
             (try cast(vacinity[1][2], DirectionSet) catch(e:Dynamic) null).west &&
             (try cast(vacinity[0][2], DirectionSet) catch(e:Dynamic) null).north)
         
-        // Draw straws{
+        { // Draw straws
             
             
             seed = Util.QuadSeed(
@@ -487,7 +487,7 @@ class Cave
         {
             do
             
-            // limit deadwater to Shar Surface and below{
+            { // limit deadwater to Shar Surface and below
                 
                 {
                     style = r.integer(0, Content.numbiomes);
@@ -520,7 +520,7 @@ class Cave
                         
                         do
                         
-                        // limit deadwater to Shar Surface and below{
+                        { // limit deadwater to Shar Surface and below
                             
                             {
                                 biomestyle = rr.integer(0, Content.numbiomes);

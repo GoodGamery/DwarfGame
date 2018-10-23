@@ -63,7 +63,7 @@ class Beetle extends Monster
     {
         if (arrow.iBounceLife > -1)
         
-        // Was spinning{
+        { // Was spinning
             
             {
                 return false;

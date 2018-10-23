@@ -1,4 +1,3 @@
-import adobe.utils.CustomActions;
 import flash.events.AsyncErrorEvent;
 import flash.geom.ColorTransform;
 import flash.geom.Point;
@@ -704,7 +703,7 @@ class PlayState extends FlxState
             
             if (fails > 15)
             
-            // okay F this command{
+            { // okay F this command
                 
                 {
                     fails = 0;
@@ -730,7 +729,7 @@ class PlayState extends FlxState
         
         if (commands.length == 0)
         
-        //hud.loading.SetValue(0, 100);{
+        { //hud.loading.SetValue(0, 100);
             
             hud.SetLoadProgress(100);
             
@@ -1132,9 +1131,9 @@ class PlayState extends FlxState
 			{
 				var monkpoint:Point = new Point((zone.secrets[0] as Point).x, (zone.secrets[0] as Point).y)
 				//for each (var monk:Point in monkpoints)
-				//{
+				{ //
 				//	if (monk.x == zone.meta.x && monk.y == zone.meta.y)
-				//	{
+				{ //	
 						var dude:Dude = new Dude(this, monkpoint.x * 30, monkpoint.y * 30);
 
 						for (var seek:int = 0; seek < 10; seek++)
@@ -1401,7 +1400,7 @@ class PlayState extends FlxState
         
         if (bMikeAndSally)
         
-        //mike = new Gopher(this, "Mike", 1, 1, 1, 0, 0);{
+        { //mike = new Gopher(this, "Mike", 1, 1, 1, 0, 0);
             
             mike = new Gopher(this, "Mike", 0, 0);
             sally = new Dude(this, "Sally", 3, 3, 0, 0, 0);
@@ -1740,7 +1739,7 @@ class PlayState extends FlxState
         {
             if (Util.strMusic == "")
             
-            //FlxG.music == null || FlxG.music.volume == 0){
+            { //FlxG.music == null || FlxG.music.volume == 0)
                 
                 {
                     Util.SetMusicName((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).song);
@@ -1934,7 +1933,7 @@ If 11 and water, 13
                     
                     if (wall_to_down == 0)
                     
-                    // bottom edge of wall section{
+                    { // bottom edge of wall section
                         
                         
                         if (qual_to_left > 0 && qual_to_right > 0)
@@ -2501,7 +2500,7 @@ If 11 and water, 13
                         interim_level.getTile(mxx, myy - 1) < Content.barriertile &&  // above is open  
                         zone.watermap[mxx][myy - 1] == 0)
                     
-                    // above isn't water{
+                    { // above isn't water
                         
                         {
                             code = code | Content.Code_Surface;
@@ -2623,7 +2622,7 @@ If 11 and water, 13
                     
                     for (kind in 0...kinds)
                     
-                    // Different kinds to do = 1{
+                    { // Different kinds to do = 1
                         
                         {
                             spotsforkinds = 0;
@@ -2758,7 +2757,7 @@ If 11 and water, 13
                     
                     if (spot == arrayMonsterSpotConsume.length - 1)
                     
-                    // Get rid of too-needy critters from the bestiary{
+                    { // Get rid of too-needy critters from the bestiary
                         
                         
                         var loser : Int = 0;
@@ -2766,18 +2765,18 @@ If 11 and water, 13
                         {
                             if ((try cast(arrayWinners[kind], MonsterCard) catch(e:Dynamic) null).iNeeded != 0)
                             
-                            // Too-needy{
+                            { // Too-needy
                                 
                                 {
                                     var kill : Int = 0;
                                     while (kill < arrayBestiary.length)
                                     
-                                    // Find it{
+                                    { // Find it
                                         
                                         {
                                             if ((try cast(arrayBestiary[which], MonsterCard) catch(e:Dynamic) null).strName == (try cast(arrayWinners[loser], MonsterCard) catch(e:Dynamic) null).strName)
                                             
-                                            // Found it{
+                                            { // Found it
                                                 
                                                 {
                                                     arrayBestiary.splice(which, 1);
@@ -2895,7 +2894,7 @@ If 11 and water, 13
                 
                 if (interim_level.getTile(spawnx, spawny + 1) >= Content.barriertile)
                 
-                // floor, so go right!{
+                { // floor, so go right!
                     
                     {
                         (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).y += (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iMagnet;
@@ -2904,7 +2903,7 @@ If 11 and water, 13
                 }
                 else if (interim_level.getTile(spawnx, spawny - 1) >= Content.barriertile)
                 
-                // ceiling, so go left!{
+                { // ceiling, so go left!
                     
                     {
                         (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).x += (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iMagnet;
@@ -2913,7 +2912,7 @@ If 11 and water, 13
                 }
                 else if (interim_level.getTile(spawnx + 1, spawny) >= Content.barriertile)
                 
-                // wallright, so go up!{
+                { // wallright, so go up!
                     
                     {
                         (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).x += (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iMagnet;
@@ -2923,7 +2922,7 @@ If 11 and water, 13
                 }
                 else if (interim_level.getTile(spawnx - 1, spawny) >= Content.barriertile)
                 
-                // wallleft, so go down!{
+                { // wallleft, so go down!
                     
                     {
                         (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iDir = Content.DOWN;
@@ -4303,7 +4302,7 @@ If 11 and water, 13
             var i : Int = 0;
             while (i < Content.iTwinkliness * (zone.waterlist.length / 150))
             
-            //(Content.iTwinkliness * zone.waterlist.length / 150){
+            { //(Content.iTwinkliness * zone.waterlist.length / 150)
                 
                 {
                     var r : Int = Util.Random(0, zone.waterlist.length - 1);
@@ -4353,7 +4352,7 @@ If 11 and water, 13
         {
             if (Util.Random(0, 40 - (40 * hero.nBubbliness)) == 0)
             
-            // bub{
+            { // bub
                 
                 {
                     x = as3hx.Compat.parseInt(hero.x + 8);
@@ -4406,7 +4405,7 @@ If 11 and water, 13
         {
             if (Util.Random(0, 20) == 0)
             
-            // bub{
+            { // bub
                 
                 {
                     if (zone.watermap[ex.x][ex.y] == 1 && zone.watermap[ex.x][ex.y - 1] == 1)
@@ -4435,7 +4434,7 @@ If 11 and water, 13
         var g : Int = 0;
         while (g < arrayAllGems.length)
         
-        //FlxG.collide(arrayAllGems[m] as Collectible, heo);{
+        { //FlxG.collide(arrayAllGems[m] as Collectible, heo);
             
             
             if ((try cast(arrayAllGems[g], Collectible) catch(e:Dynamic) null).doomed)
@@ -4554,7 +4553,7 @@ If 11 and water, 13
                         hero.fluid == 0 &&
                         !hero.bDownButton)
                     
-                    // && hero.bJumpButton == true){
+                    { // && hero.bJumpButton == true)
                         
                         FlxG.collide(hero, arrow, HeroArrowCollide);
                     }
@@ -4597,7 +4596,7 @@ If 11 and water, 13
                 
                 if (arrow.bBouncing)
                 
-                // Still spinning!{
+                { // Still spinning!
                     
                     {
                         // Pretend we're horizontal
@@ -4616,7 +4615,7 @@ If 11 and water, 13
                         
                         if (arrow.bBouncing)
                         
-                        // Still spinning!{
+                        { // Still spinning!
                             
                             {
                                 // Back to boxy
@@ -4715,7 +4714,7 @@ If 11 and water, 13
                     else if (Math.abs(hero.x - (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).x) <= iThresholdX &&
                         Math.abs(hero.y - (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).y) <= iThresholdY)
                     
-                    //trace((arrayFarMonsters[iFarCheck] as Monster).strName + " is now near");{
+                    { //trace((arrayFarMonsters[iFarCheck] as Monster).strName + " is now near");
                         
                         
                         (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).Pause(false);
@@ -4790,13 +4789,13 @@ If 11 and water, 13
             }
             else if (hero.facing == FlxObject.RIGHT)
             
-            //hero.velocity.x > 0){
+            { //hero.velocity.x > 0)
                 
                 ptTargetDeviation.x = 60;
             }
             else if (hero.facing == FlxObject.LEFT)
             
-            //hero.velocity.x < 0){
+            { //hero.velocity.x < 0)
                 
                 ptTargetDeviation.x = -60;
             }

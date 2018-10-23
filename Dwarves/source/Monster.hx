@@ -123,7 +123,7 @@ class Monster extends FlxSprite
         
         if (pause)
         
-        //play("ph");{
+        { //play("ph");
             
             
             remVelocity.x = this.velocity.x;
@@ -307,14 +307,14 @@ class Monster extends FlxSprite
                             (try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).y
                 ))
                 
-                // ((parent.arrayArrows[a] as Arrow).iBounceLife < Content.iArrowRebounce ||  // Not spinning (or spinning and allowed to rebounce){
+                { // ((parent.arrayArrows[a] as Arrow).iBounceLife < Content.iArrowRebounce ||  // Not spinning (or spinning and allowed to rebounce)
                     
                     //	(bKeepRebouncing && (parent.arrayArrows[a] as Arrow).iBounceLife < Content.iQuickRebounce)))
                     
                     if ((try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).iAlive > 0 &&  // Not in twang/dead state, AND  
                         (try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).iBounceLife == -1)
                     
-                    // never bounced{
+                    { // never bounced
                         
                         {
                             if ((try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).velocity.y > 0)
@@ -357,12 +357,12 @@ class Monster extends FlxSprite
                     {
                         if ((try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).velocity.x > 0)
                         
-                        // right{
+                        { // right
                             
                             {
                                 if (thisarrow.x + 7 < this.x + rectVulnerable.x + 5)
                                 
-                                // Hitting left face{
+                                { // Hitting left face
                                     
                                     hhit = Content.RIGHT;
                                 }
@@ -376,12 +376,12 @@ class Monster extends FlxSprite
                         }
                         else if ((try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).velocity.x < 0)
                         
-                        // left{
+                        { // left
                             
                             {
                                 if (thisarrow.x + 7 > this.x + rectVulnerable.x + rectVulnerable.width - 5)
                                 
-                                // Hitting right face{
+                                { // Hitting right face
                                     
                                     hhit = Content.LEFT;
                                 }
@@ -396,12 +396,12 @@ class Monster extends FlxSprite
                         
                         if ((try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).velocity.y > 0)
                         
-                        // down{
+                        { // down
                             
                             {
                                 if (thisarrow.y + 7 < this.y + rectVulnerable.y + 5)
                                 
-                                // Hitting top face{
+                                { // Hitting top face
                                     
                                     vhit = Content.DOWN;
                                 }
@@ -415,12 +415,12 @@ class Monster extends FlxSprite
                         }
                         else if ((try cast(parent.arrayArrows[a], Arrow) catch(e:Dynamic) null).velocity.y < 0)
                         
-                        // up{
+                        { // up
                             
                             {
                                 if (thisarrow.y + 7 > this.y + rectVulnerable.y + rectVulnerable.height - 5)
                                 
-                                // Hitting bottom face{
+                                { // Hitting bottom face
                                     
                                     vhit = Content.UP;
                                 }

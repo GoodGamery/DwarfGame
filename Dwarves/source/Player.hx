@@ -400,7 +400,7 @@ class Player extends FlxSprite
                     
                     if (bJumpButton && bSpurtRecharged)
                     
-                    // Swim 1{
+                    { // Swim 1
                         
                         {
                             if (fluid > 1)
@@ -421,7 +421,7 @@ class Player extends FlxSprite
                     
                     if (bJumpButton && bSpurtRecharged)
                     
-                    // Swim 2{
+                    { // Swim 2
                         
                         {
                             if (fluid > 1)
@@ -451,7 +451,7 @@ class Player extends FlxSprite
                     
                     if (bJumpButton && bSpurtRecharged)
                     
-                    // Swim 3{
+                    { // Swim 3
                         
                         {
                             if (fluid > 1)
@@ -467,7 +467,7 @@ class Player extends FlxSprite
                 }
                 else if (fluid == 2 && !bDiveButton && bUpButton && bJumpButton && bSpurtRecharged)
                 
-                // Swim 4{
+                { // Swim 4
                     
                     {
                         if (fluid > 1)
@@ -738,7 +738,7 @@ class Player extends FlxSprite
                     
                     if (parent.level.getTile(as3hx.Compat.parseInt((this.x + xoff) / 30), as3hx.Compat.parseInt((this.y - 7) / 30)) % Content.iFrontSheetWidth >= Content.barriertile)
                     
-                    //trace("up in ceiling");{
+                    { //trace("up in ceiling");
                         
                         yoff = 0;
                     }

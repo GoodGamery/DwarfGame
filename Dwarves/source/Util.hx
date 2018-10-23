@@ -242,7 +242,7 @@ import org.flixel.Rndm;
             
             if (i <= 5)
             
-            // monsters{
+            { // monsters
                 
                 {
                     w = 1;
@@ -255,7 +255,7 @@ import org.flixel.Rndm;
             }
             else if (i <= 15)
             
-            // overlays{
+            { // overlays
                 
                 {
                     w = 1;

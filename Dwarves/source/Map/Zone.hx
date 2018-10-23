@@ -409,7 +409,7 @@ class Zone
         
         if (description.exits.north)
         
-        //trace("a - " + ((1.0 / 3.0) * width).toString());{
+        { //trace("a - " + ((1.0 / 3.0) * width).toString());
             
             
             x = as3hx.Compat.parseInt(rand.integer(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
@@ -861,7 +861,7 @@ class Zone
                     
                     if (rand.integer(0, 100) <= Content.nRequireSpaceForSpikesChance * 100)
                     
-                    // Guarantee jump space{
+                    { // Guarantee jump space
                         
                         {
                             if (bValid)
@@ -1066,7 +1066,7 @@ class Zone
     //for (var i:int = 0; i < iterations; i++)   // PSH WHO DOES ITERATIONS ANYMORE
     {
         
-        //{
+        { //
         var failout : Int = 0;
         var keepgoing : Bool = false;
         
@@ -1087,7 +1087,7 @@ class Zone
         
         if (failout == 4)
         
-        //trace("FAILED OUT");{
+        { //trace("FAILED OUT");
             
             return true;
         }
@@ -2019,7 +2019,7 @@ class Zone
                             }
                             else if (intangmap[intangpoint.x][intangpoint.y] == 0)
                             
-                            // Don't set 2s to 1s{
+                            { // Don't set 2s to 1s
                                 
                                 {
                                     intangmap[intangpoint.x][intangpoint.y] = Content.INTANG_TUNNEL;
