@@ -2,20 +2,20 @@ package hud;
 
 import haxe.Constraints.Function;
 import flash.geom.Point;
-import org.flixel.FlxSprite;
-import org.flixel.FlxG;
-import org.flixel.FlxGroup;
-import org.flixel.FlxGroupXY;
-import org.flixel.FlxTextPlus;
-import org.flixel.FlxText;
-import org.flixel.FlxObject;
+import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup;
+import flixel.FlxTextPlus;
+import flixel.FlxText;
+import flixel.FlxObject;
 
 class HUD extends FlxGroup
 {
     public var parent : PlayState;
     public var bg : FlxSprite;
-    public var statbar : FlxGroupXY;
-    public var pausemenu : FlxGroupXY;
+    public var statbar : FlxSpriteGroup;
+    public var pausemenu : FlxSpriteGroup;
     public var statback : FlxSprite;
     //public var cornerbg:FlxSprite;
     public var loadtext : FlxText;
@@ -26,10 +26,10 @@ class HUD extends FlxGroup
     public var lytratstext : FlxTextPlus;
     public var clocktext : FlxTextPlus;
     
-    public var loadmap : FlxGroupXY;
+    public var loadmap : FlxSpriteGroup;
     
     public var runemap_background : FlxSprite;
-    public var cavepieces : FlxGroupXY;
+    public var cavepieces : FlxSpriteGroup;
     public var cavecanvas : FlxSprite;
     public var cavecanvasload : FlxSprite;
     public var cavecanvaspaused : FlxSprite;
@@ -41,13 +41,13 @@ class HUD extends FlxGroup
     public var walker : FlxSprite;
     public var mapcanvas : FlxSprite;
     
-    public var mappieces : FlxGroupXY;
+    public var mappieces : FlxSpriteGroup;
     //public var health:Meter;
     public var arrayHearts : Array<Dynamic>;
-    public var groupHearts : FlxGroupXY;
+    public var groupHearts : FlxSpriteGroup;
     
     public var loading : Meter;
-    public var chatgroup : FlxGroupXY;
+    public var chatgroup : FlxSpriteGroup;
     public var strState : String = "";
     public var clock : FlxSprite;
     
@@ -55,7 +55,7 @@ class HUD extends FlxGroup
     public var bottombar : FlxSprite = new FlxSprite(-1, -1);
     
     public var arrayAlerts : Array<Dynamic> = new Array<Dynamic>();
-    public var groupAlerts : FlxGroupXY = new FlxGroupXY();
+    public var groupAlerts : FlxSpriteGroup = new FlxSpriteGroup();
     
     public var character : FlxSprite = new FlxSprite(0, 0);
     public var face : FlxSprite = new FlxSprite(0);
@@ -69,10 +69,10 @@ class HUD extends FlxGroup
     public var choicecursor : FlxSprite;
     public var task : Int = 0;
     
-    public var piecebar : FlxGroupXY;
+    public var piecebar : FlxSpriteGroup;
     public var iCurrentPiece : Int = Content.iWallpaperPieces / 2;
     
-    public var maker : FlxGroupXY;
+    public var maker : FlxSpriteGroup;
     public var makerReport : FlxTextPlus;
     public var makerBlocker : FlxSprite;
     public var makerMap : FlxSprite;
@@ -151,7 +151,7 @@ class HUD extends FlxGroup
         add(groupAlerts);
         
         
-        chatgroup = new FlxGroupXY();
+        chatgroup = new FlxSpriteGroup();
         
         
         face.loadGraphic(Content.cFaces, false, false, 66, 66, false);
@@ -206,7 +206,7 @@ class HUD extends FlxGroup
         add(chatgroup);
         chatgroup.visible = false;
         
-        statbar = new FlxGroupXY();
+        statbar = new FlxSpriteGroup();
         add(statbar);
         
         statback = new FlxSprite(-1, -1, Content.cStatBar);
@@ -220,14 +220,14 @@ class HUD extends FlxGroup
         clock.scrollFactor.y = 0;
         add(clock);
         
-        loadmap = new FlxGroupXY();
+        loadmap = new FlxSpriteGroup();
         
         runemap_background = new FlxSprite(188, 134);
         runemap_background.loadGraphic(Content.cRuneMapBackground, true, false, 106, 106, true);
         runemap_background.scrollFactor.x = 0;
         runemap_background.scrollFactor.y = 0;
         
-        cavepieces = new FlxGroupXY();
+        cavepieces = new FlxSpriteGroup();
         
         
         cavecanvasload = new FlxSprite(16, 16);
@@ -283,12 +283,12 @@ class HUD extends FlxGroup
         
         add(loadmap);
         
-        pausemenu = new FlxGroupXY();
+        pausemenu = new FlxSpriteGroup();
         pausemenu.add(cavecanvaspaused);
         add(pausemenu);
         
         
-        mappieces = new FlxGroupXY();
+        mappieces = new FlxSpriteGroup();
         add(mappieces);
         /*
 			mapcanvas = new FlxSprite(0, 0);
@@ -302,7 +302,7 @@ class HUD extends FlxGroup
         //statbar.add(health);
         
         arrayHearts = new Array<Dynamic>();
-        groupHearts = new FlxGroupXY();
+        groupHearts = new FlxSpriteGroup();
         for (h in 0...6)
         {
             var heartadd : FlxSprite = new FlxSprite(44 + (15 * h), 1);
@@ -373,7 +373,7 @@ class HUD extends FlxGroup
         cast((false), StatBarVisible);
         
         
-        piecebar = new FlxGroupXY();
+        piecebar = new FlxSpriteGroup();
         
         for (pc in 0...16)
         {
@@ -411,7 +411,7 @@ class HUD extends FlxGroup
         cast((Content.iWallpaperPieces / 2), SetCurrentPiece);
         
         
-        maker = new FlxGroupXY();
+        maker = new FlxSpriteGroup();
         
         
         makerBlocker = new FlxSprite(480, 0);
