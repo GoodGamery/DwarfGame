@@ -38,7 +38,7 @@ class Grunt extends FlxSpriteGroup
     public function AddSprite(frame : Int) : Void
     {
         sprite = new FlxSprite(0, 0);
-        sprite.loadGraphic(Content.cGems, true, false, 30, 30, false);
+        sprite.loadGraphic(Content.cGems, true, 30, 30, false);
         sprite.animation.add("d", [frame], 1, true);
         sprite.animation.play("d");
         this.add(sprite);

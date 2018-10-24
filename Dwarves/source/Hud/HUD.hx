@@ -36,6 +36,7 @@ class HUD extends FlxGroup
     
     public var runemap_border : FlxSprite;
     public var runemap : FlxSprite;
+    private var runemapDir : String;
     
     public var fillup : FlxSprite;
     public var walker : FlxSprite;
@@ -62,10 +63,10 @@ class HUD extends FlxGroup
     public var chatbox : FlxSprite = new FlxSprite(66);
     public var barheight(default, never) : Int = 50;
     public var inout : Float = 1;
-    public var announcetext : FlxText;
-    public var chattext : FlxText;
-    public var choicelefttext : FlxText;
-    public var choicerighttext : FlxText;
+    public var announcetext : DwarfText;
+    public var chattext : DwarfText;
+    public var choicelefttext : DwarfText;
+    public var choicerighttext : DwarfText;
     public var choicecursor : FlxSprite;
     public var task : Int = 0;
     
@@ -73,7 +74,7 @@ class HUD extends FlxGroup
     public var iCurrentPiece : Int = Math.floor(Content.iWallpaperPieces / 2);
     
     public var maker : FlxSpriteGroup;
-    public var makerReport : FlxText;
+    public var makerReport : DwarfText;
     public var makerBlocker : FlxSprite;
     public var makerMap : FlxSprite;
     public var backupMap : FlxSprite;
@@ -102,7 +103,7 @@ class HUD extends FlxGroup
         
         
         
-        loadtext = try cast(add(new FlxText(0, 150, 200, "")), FlxText) catch(e:Dynamic) null;
+        loadtext = try cast(add(new DwarfText(0, 150, 200, "")), DwarfText) catch(e:Dynamic) null;
         Util.AssignFont(loadtext);
         loadtext.scrollFactor.x = 0;
         loadtext.scrollFactor.y = 0;
@@ -144,7 +145,6 @@ class HUD extends FlxGroup
             //alert.scrollFactor.x = 0;
             alert.scrollFactor.y = 0;
             alert.visible = false;
-            alert.strName = "alert";
             arrayAlerts.push(alert);
             groupAlerts.add(alert);
         }
@@ -154,17 +154,17 @@ class HUD extends FlxGroup
         chatgroup = new FlxSpriteGroup();
         
         
-        face.loadGraphic(Content.cFaces, null, null, 66, 66, false);
+        face.loadGraphic(Content.cFaces, false, 66, 66, false);
         face.scrollFactor.x = 0;
         face.scrollFactor.y = 0;
         chatgroup.add(face);
         
-        chatbox.loadGraphic(Content.cChatBubble, null, null, 395, 66, false);
+        chatbox.loadGraphic(Content.cChatBubble, false, 395, 66, false);
         chatbox.scrollFactor.x = 0;
         chatbox.scrollFactor.y = 0;
         chatgroup.add(chatbox);
         
-        chattext = new FlxText(chatbox.x + 10, chatbox.y + 10, 395 - 20, "");
+        chattext = new DwarfText(chatbox.x + 10, chatbox.y + 10, 395 - 20, "");
         Util.AssignFont(chattext);
         chattext.color = 0xFF000000;
         chattext.scrollFactor.x = 0;
@@ -175,7 +175,7 @@ class HUD extends FlxGroup
         
         var choicetextsize : Int = 100;
         
-        choicelefttext = new FlxText(chatbox.x + 98 - (choicetextsize / 2) + Content.iChoiceDistance, chatbox.y + 34, choicetextsize, "Left Choice");
+        choicelefttext = new DwarfText(chatbox.x + 98 - (choicetextsize / 2) + Content.iChoiceDistance, chatbox.y + 34, choicetextsize, "Left Choice");
         Util.AssignFont(choicelefttext);
         choicelefttext.color = 0xFF006A25;
         choicelefttext.scrollFactor.x = 0;
@@ -184,7 +184,7 @@ class HUD extends FlxGroup
         chatgroup.add(choicelefttext);
         choicelefttext.visible = false;
         
-        choicerighttext = new FlxText(chatbox.x + 98 + 98 + 98 - (choicetextsize / 2) - Content.iChoiceDistance, chatbox.y + 34, choicetextsize, "Right Choice");
+        choicerighttext = new DwarfText(chatbox.x + 98 + 98 + 98 - (choicetextsize / 2) - Content.iChoiceDistance, chatbox.y + 34, choicetextsize, "Right Choice");
         Util.AssignFont(choicerighttext);
         choicerighttext.color = 0xFF006A25;
         choicerighttext.scrollFactor.x = 0;
@@ -194,8 +194,7 @@ class HUD extends FlxGroup
         choicerighttext.visible = false;
         
         choicecursor = new FlxSprite(chatbox.x + 98 - 15 + Content.iChoiceDistance, chatbox.y + 25);
-        //choicecursor = new FlxSprite(chatbox.x + 98 + 98 + 98 - 15 - 25, chatbox.y + 25);
-        choicecursor.loadGraphic(Content.cChoice, false, true, 30, 34, false);
+        choicecursor.loadGraphic(Content.cChoice, false, 30, 34, false);    // TODO: REVERSE THIS
         choicecursor.scrollFactor.x = 0;
         choicecursor.scrollFactor.y = 0;
         
@@ -215,7 +214,7 @@ class HUD extends FlxGroup
         statbar.add(statback);
         
         clock = new FlxSprite(480 - 42, 0);
-        clock.loadGraphic(Content.cClock, true, false, 42, 42, false);
+        clock.loadGraphic(Content.cClock, true, 42, 42, false);
         clock.scrollFactor.x = 0;
         clock.scrollFactor.y = 0;
         add(clock);
@@ -223,7 +222,7 @@ class HUD extends FlxGroup
         loadmap = new FlxSpriteGroup();
         
         runemap_background = new FlxSprite(188, 134);
-        runemap_background.loadGraphic(Content.cRuneMapBackground, true, false, 106, 106, true);
+        runemap_background.loadGraphic(Content.cRuneMapBackground, true, 106, 106, true);
         runemap_background.scrollFactor.x = 0;
         runemap_background.scrollFactor.y = 0;
         
@@ -242,12 +241,12 @@ class HUD extends FlxGroup
         cavecanvaspaused.visible = false;
         
         runemap_border = new FlxSprite(188, 134);
-        runemap_border.loadGraphic(Content.cRuneMapBorder, true, false, 106, 106, true);
+        runemap_border.loadGraphic(Content.cRuneMapBorder, true, 106, 106, true);
         runemap_border.scrollFactor.x = 0;
         runemap_border.scrollFactor.y = 0;
         
         runemap = new FlxSprite(188, 134);
-        runemap.loadGraphic(Content.cRuneMaps, true, false, 106, 106, true);
+        runemap.loadGraphic(Content.cRuneMaps, true, 106, 106, true);
         runemap.animation.add("n", [0], 1, true);
         runemap.animation.add("s", [1], 1, true);
         runemap.animation.add("w", [2], 1, true);
@@ -263,7 +262,7 @@ class HUD extends FlxGroup
         fillup.scrollFactor.y = 0;
         
         walker = new FlxSprite((Content.screenwidth / 2) - 50, (Content.screenheight / 2) - 50 - 50);
-        walker.loadGraphic(Content.cHeroInterim, true, false, 100, 100, true);
+        walker.loadGraphic(Content.cHeroInterim, true, 100, 100, true);
         walker.animation.add("w", [0, 1, 2, 3, 4, 5, 6, 7], 14, true);
         walker.animation.add("e", [8, 9, 10, 11, 12, 13, 14, 15], 14, true);
         walker.animation.add("n", [16, 17, 18, 19, 20, 21], 10, true);
@@ -306,7 +305,7 @@ class HUD extends FlxGroup
         for (h in 0...6)
         {
             var heartadd : FlxSprite = new FlxSprite(44 + (15 * h), 1);
-            heartadd.loadGraphic(Content.cHearts, true, false, 14, 14, false);
+            heartadd.loadGraphic(Content.cHearts, true, 14, 14, false);
             heartadd.scrollFactor.x = 0;
             heartadd.scrollFactor.y = 0;
             heartadd.animation.add("1", [0], 1, true);
@@ -379,7 +378,7 @@ class HUD extends FlxGroup
         {
             var piece : FlxSprite = new FlxSprite(pc * 30, 300);
             
-            piece.loadGraphic(Content.cWallpaper, true, false, 30, 30, false);
+            piece.loadGraphic(Content.cWallpaper, true, 30, 30, false);
             
             var an : Int = 0;
             while (an < Content.iWallpaperPieces)
@@ -408,7 +407,7 @@ class HUD extends FlxGroup
             add(marker);
         }
         
-        cast((Content.iWallpaperPieces / 2), SetCurrentPiece);
+        SetCurrentPiece(Math.floor(Content.iWallpaperPieces / 2));
         
         
         maker = new FlxSpriteGroup();
@@ -432,7 +431,7 @@ class HUD extends FlxGroup
         backupMap.scrollFactor.y = 0;
         maker.add(backupMap);
         
-        makerReport = new FlxText(480 + 20, 20, 300, "test", true);
+        makerReport = new DwarfText(480 + 20, 20, 300, "test", true);
         makerReport.color = 0xFFFFFFFF;
         makerReport.scrollFactor.x = 0;
         makerReport.scrollFactor.y = 0;
@@ -473,7 +472,7 @@ class HUD extends FlxGroup
         
         if (ratio < Content.stats.iHearts * 2)
         {
-            ratio = as3hx.Compat.parseInt(ratio);
+            ratio = Math.float(ratio);
         }
         
         var h : Int = 0;
@@ -481,15 +480,15 @@ class HUD extends FlxGroup
         {
             if (ratio == (h * 2) + 1)
             {
-                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).animation.play("/");
+                arrayHearts[h].animation.play("/");
             }
             else if (ratio < (h * 2) + 1)
             {
-                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).animation.play("0");
+                arrayHearts[h].animation.play("0");
             }
             else
             {
-                (try cast(arrayHearts[h], FlxSprite) catch(e:Dynamic) null).animation.play("1");
+                arrayHearts[h].animation.play("1");
             }
             h++;
         }
@@ -554,7 +553,9 @@ class HUD extends FlxGroup
             str = "w";
         }
         
-        runemap.animation.play(str);
+        runemapDir = str;
+        runemap.animation.play(runemapDir);
+        
         
         if (!wasdead)
         {
@@ -593,25 +594,25 @@ class HUD extends FlxGroup
             var size : Int = Math.ceil(106 * (amount / 100));
             fillup.visible = true;
             
-            if (runemap.GetCurrentAnim() == "e")
+            if (runemapDir == "e")
             {
                 fillup.x = 188;
                 fillup.y = 134;
                 fillup.makeGraphic(size, 106, 0xFFFFDA47, false);
             }
-            else if (runemap.GetCurrentAnim() == "w")
+            else if (runemapDir == "w")
             {
                 fillup.x = 188 + 106 - size;
                 fillup.y = 134;
                 fillup.makeGraphic(size, 106, 0xFFC0BC9A, false);
             }
-            else if (runemap.GetCurrentAnim() == "n")
+            else if (runemapDir == "n")
             {
                 fillup.x = 188;
                 fillup.y = 134 + 106 - size;
                 fillup.makeGraphic(106, size, 0xFF30D050, false);
             }
-            else if (runemap.GetCurrentAnim() == "s")
+            else if (runemapDir == "s")
             {
                 fillup.x = 188;
                 fillup.y = 134;
@@ -657,7 +658,7 @@ class HUD extends FlxGroup
                                 (Std.string(arrayIntended[line])).charAt(track) == "-")
                             {
                                 arrayIntended[line] = Util.SetCharAt(arrayIntended[line], "\n", track);
-                                fromhere = as3hx.Compat.parseInt(chars - track);
+                                fromhere = (chars - track);
                                 
                                 break;
                             }
@@ -673,7 +674,7 @@ class HUD extends FlxGroup
                 line++;
             }
             
-            chatgroup.members.splice(0);
+            chatgroup.members.clear();
             chatgroup.add(face);
             chatgroup.add(chatbox);
             chatgroup.add(chattext);
@@ -695,7 +696,7 @@ class HUD extends FlxGroup
         }
         else
         {
-            chatgroup.members.splice(0);
+            chatgroup.members.clear();
             arrayIntended = null;
         }
         
@@ -744,7 +745,7 @@ class HUD extends FlxGroup
         countdown = 2;
         announcetext.text = str;
         announcetext.visible = true;
-        cast((1), SetBars);
+        SetBars(1);
         endfunction = StartSlideOut;
     }
     
@@ -752,9 +753,9 @@ class HUD extends FlxGroup
     public var endfunction : Function = null;
     public var eachframe : Function = null;
     public var bInterruptFlag : Bool = false;
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
         
         if (bInterruptFlag)
         {
@@ -767,7 +768,7 @@ class HUD extends FlxGroup
         
         if (countdown != 0)
         {
-            countdown -= FlxG.elapsed;
+            countdown -= elapsed;
             
             if (countdown <= 0)
             {
@@ -808,7 +809,7 @@ class HUD extends FlxGroup
                         !(chattext.text.charAt(chattext.text.length - 1) == " " &&
                         chattext.text.charAt(chattext.text.length - 2) == " "))
                     {
-                        FlxG.animation.play(Content.soundChat, Content.volumeChat, false, false, Content.nDefaultSkip);
+                        FlxG.sound.play(Content.soundChat, Content.volumeChat, false, false, Content.nDefaultSkip);
                     }
                 }
             }
@@ -829,7 +830,7 @@ class HUD extends FlxGroup
     //trace("SlideOut");
     {
         
-        cast((inout - (FlxG.elapsed / slideouttime)), SetBars);
+        SetBars(inout - (FlxG.elapsed / slideouttime));
         
         if (inout < Content.nEverBars / 50)
         {
@@ -857,10 +858,8 @@ class HUD extends FlxGroup
     }
     
     public function SlideIn() : Void
-    //trace("SlideIn");
-    {
-        
-        cast((inout + (FlxG.elapsed / slideintime)), SetBars);
+    {        
+        SetBars(inout + (elapsed / slideintime));
         
         if (inout > 1)
         {
@@ -869,10 +868,8 @@ class HUD extends FlxGroup
     }
     
     public function StopSlidingIn() : Void
-    //trace("StopSlidingIn");
     {
-        
-        eachframe = null;
+         eachframe = null;
         endfunction = null;
     }
     
@@ -881,11 +878,10 @@ class HUD extends FlxGroup
         var i : Int = 0;
         while (i < Content.stats.arrayMapNodes.length)
         {
-            if ((try cast(Content.stats.arrayMapNodes[i], MapNode) catch(e:Dynamic) null).where.x == x && (try cast(Content.stats.arrayMapNodes[i], MapNode) catch(e:Dynamic) null).where.y == y)
-            
-            { //trace("IN MAP HISTORY!");
-                
-                return as3hx.Compat.parseInt(i);
+            if (Content.stats.arrayMapNodes[i].where.x == x && Content.stats.arrayMapNodes[i].where.y == y)
+            {
+                //trace("IN MAP HISTORY!");
+                return i;
             }
             i++;
         }
@@ -922,8 +918,8 @@ class HUD extends FlxGroup
         mappieces.y = 0;
         //cornerbg.visible = false;
         
-        cast((false), StatBarVisible);
-        cast((true), PauseMenuVisible);
+        StatBarVisible(false);
+        PauseMenuVisible(true);
         
         center.x = Content.screenwidth / 2;
         center.y = (Content.screenheight / 2) + 36;
@@ -939,8 +935,8 @@ class HUD extends FlxGroup
     {
         mapincorner = true;
         //cornerbg.visible = true;
-        cast((true), StatBarVisible);
-        cast((false), PauseMenuVisible);
+        StatBarVisible(true);
+        PauseMenuVisible(false);
         
         center.x = 20 - 1;
         center.y = 20 - 1;
@@ -1023,7 +1019,7 @@ class HUD extends FlxGroup
 					}
 				}
 			}
-			*/
+		*/
         
     }
 }
