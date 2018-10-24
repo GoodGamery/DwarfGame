@@ -2,6 +2,8 @@ import flash.geom.ColorTransform;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flixel.*;
+import flixel.group.FlxSpriteGroup;
+import flixel.math.FlxRect;
 
 class Monster extends FlxSprite
 {
@@ -38,6 +40,8 @@ class Monster extends FlxSprite
     public var strID : String = "";
     public var bQuashed : Bool = false;
     public var strPrequashAnim : String = "";
+
+    public var doomed : Bool = false;
     
     public function Quash(quash : Bool) : Void
     {
@@ -69,8 +73,8 @@ class Monster extends FlxSprite
         _bPixelFix = false;
         parent = p;
         
-        loadGraphic(Content.cMonsters, true, true, 90, 90, true);
-        addAnimation("q", [2], 16, true);
+        loadGraphic(Content.cMonsters, true, 90, 90, true);
+        animation.add("q", [2], 16, true);
         
         if (colTrans != null)
         {
@@ -97,8 +101,8 @@ class Monster extends FlxSprite
         
         rectVulnerable = new FlxRect(0, 0, width, height);
         
-        addAnimation("ph", [0], 1, false);
-        addAnimation("ph2", [1], 1, false);
+        animation.add("ph", [0], 1, false);
+        animation.add("ph2", [1], 1, false);
         
         sBroom = new FlxSprite(X + (width / 2), Y + (height / 2));
         sBroom.width = 1;
@@ -114,8 +118,8 @@ class Monster extends FlxSprite
         this.health = 20;
     }
     
-    public var remVelocity : FlxPoint = new FlxPoint(0, 0);
-    public var remAcceleration : FlxPoint = new FlxPoint(0, 0);
+    public var remVelocity : Point = new Point(0, 0);
+    public var remAcceleration : Point = new Point(0, 0);
     public var bOncePaused : Bool = false;
     public function Pause(pause : Bool) : Void
     {
@@ -157,7 +161,7 @@ class Monster extends FlxSprite
     {
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (bPaused || visible == false || doomed == true || bQuashed == true)
         {

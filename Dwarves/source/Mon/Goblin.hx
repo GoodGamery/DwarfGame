@@ -5,7 +5,7 @@ import flixel.*;
 
 class Goblin extends Monster
 {
-    public var nHopForce : Float = Content.nForceTwo  //0.4;  ;
+    public var nHopForce : Float = Content.nForceTwo;  //0.4;
     public var bMoveOnlyWhenJumping : Bool = false;
     public var bTurnWhenWalking : Bool = false;
     public var bTurnWhenFalling : Bool = false;
@@ -25,12 +25,12 @@ class Goblin extends Monster
     {
         super(p, "Goblin", X, Y, colTrans, speedmod);
         
-        addAnimation("d", [50 + 0, 50 + 1, 50 + 0, 50 + 2], 16, true);
-        addAnimation("jump", [50 + 2], 11, true);
+        animation.add("d", [50 + 0, 50 + 1, 50 + 0, 50 + 2], 16, true);
+        animation.add("jump", [50 + 2], 11, true);
         
         
         
-        play("d");
+        animation.play("d");
         
         bAcrophobic = false;
         
@@ -131,19 +131,19 @@ class Goblin extends Monster
         
         if (Util.Random(0, 1000) == 0)
         {
-            iRetreatStrat = as3hx.Compat.parseInt((Util.Random(0, 1) * 2) - 1);
+            iRetreatStrat = Math.floor((Util.Random(0, 1) * 2) - 1);
             iRetreatDistance = Util.Random(63, 200);
         }
         
         if (iRetreatStrat < 0)
         {
             facing = LEFT;
-            iRetreatStrat -= as3hx.Compat.parseInt(iRunSpeed * FlxG.elapsed);
+            iRetreatStrat -= Math.floor(iRunSpeed * FlxG.elapsed);
         }
         else if (iRetreatStrat > 0)
         {
             facing = RIGHT;
-            iRetreatStrat += as3hx.Compat.parseInt(iRunSpeed * FlxG.elapsed);
+            iRetreatStrat += Math.floor(iRunSpeed * FlxG.elapsed);
         }
         
         if (Math.abs(iRetreatStrat) > iRetreatDistance)

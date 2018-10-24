@@ -42,15 +42,15 @@ class Dude extends Talker
     
     public function SetPaperdoll(sourceface : Int, sourceclothing : Int, sourcemale : Int) : Void
     {
-        loadGraphic(Content.cNPC, true, true, 30, 30, true);
+        loadGraphic(Content.cNPC, true, 30, 30, true);
         
         iFace = sourceface;
         iClothing = sourceclothing;
         iMale = sourcemale;
         
-        var clothing : Int = as3hx.Compat.parseInt(24 + (iClothing * 2));
-        var bigface : Int = (iFace);
-        var lilface : Int = as3hx.Compat.parseInt(bigface * 2);
+        var clothing : Int = 24 + (iClothing * 2);
+        var bigface : Int = iFace;
+        var lilface : Int = bigface * 2;
         
         
         
@@ -64,65 +64,66 @@ class Dude extends Talker
         bigface += 12;
         
         sprFace = new FlxSprite(3, 3, Content.cNPC);
-        sprFace.loadGraphic(Content.cNPC, true, false, 60, 60, true);
-        sprFace.addAnimation("", [bigface], 0, false);
+        sprFace.loadGraphic(Content.cNPC, true, 60, 60, true);
+        sprFace.animation.add("", [bigface], 0, false);
         sprFace.scrollFactor.x = 0;
         sprFace.scrollFactor.y = 0;
-        sprFace.play("");
+        sprFace.animation.play("");
         
-        _pixels.copyPixels(_pixels, new Rectangle(lilface * 30, 0, 30, 30), new Point((clothing - 24) * 30, 30), null, null, true);
-        _pixels.copyPixels(_pixels, new Rectangle((lilface + 1) * 30, 0, 30, 30), new Point(((clothing - 24) + 1) * 30, 30), null, null, true);
+        pixels.copyPixels(pixels, new Rectangle(lilface * 30, 0, 30, 30), new Point((clothing - 24) * 30, 30), null, null, true);
+        pixels.copyPixels(pixels, new Rectangle((lilface + 1) * 30, 0, 30, 30), new Point(((clothing - 24) + 1) * 30, 30), null, null, true);
         
-        _pixels.copyPixels(_pixels, new Rectangle(_pixels.width - 30 - (lilface * 30), 0, 30, 30), new Point(_pixels.width - 30 - ((clothing - 24) * 30), 30), null, null, true);
-        _pixels.copyPixels(_pixels, new Rectangle(_pixels.width - 30 - ((lilface + 1) * 30), 0, 30, 30), new Point(_pixels.width - 30 - (((clothing - 24) + 1) * 30), 30), null, null, true);
+        pixels.copyPixels(pixels, new Rectangle(pixels.width - 30 - (lilface * 30), 0, 30, 30), new Point(pixels.width - 30 - ((clothing - 24) * 30), 30), null, null, true);
+        pixels.copyPixels(pixels, new Rectangle(pixels.width - 30 - ((lilface + 1) * 30), 0, 30, 30), new Point(pixels.width - 30 - (((clothing - 24) + 1) * 30), 30), null, null, true);
         
-        addAnimation("s", [clothing], 0, false);
-        addAnimation("w", [clothing, clothing + 1], 3, true);
+        animation.add("s", [clothing], 0, false);
+        animation.add("w", [clothing, clothing + 1], 3, true);
         
-        play("w");
+        animation.play("w");
     }
     
     
     
     public function SetColors(newcolEye : Int, newcolSkin : Int, newcolDarkSkin : Int, newcolSwirl : Int, newcolHair : Int, newcolDarkHair : Int, newcolDress : Int, newcolShirt : Int) : Void
     {
+        var i : Int = 0;
         var j : Int = 0;
-        while (j < _pixels.height)
+        while (j < pixels.height)
         {
-            var i : Int = 0;
-            while (i < _pixels.width)
+            i = 0;
+            while (i < pixels.width)
             {
-                if (newcolEye > 0 && _pixels.getPixel(i, j) == colEye)
+                if (newcolEye > 0 && pixels.getPixel(i, j) == colEye)
                 {
-                    _pixels.setPixel(i, j, newcolEye);
+                    pixels.setPixel(i, j, newcolEye);
                 }
-                else if (newcolSkin > 0 && _pixels.getPixel(i, j) == colSkin)
+                else if (newcolSkin > 0 && pixels.getPixel(i, j) == colSkin)
                 {
-                    _pixels.setPixel(i, j, newcolSkin);
+                    pixels.setPixel(i, j, newcolSkin);
                 }
-                else if (newcolDarkSkin > 0 && _pixels.getPixel(i, j) == colDarkSkin)
+                else if (newcolDarkSkin > 0 && pixels.getPixel(i, j) == colDarkSkin)
                 {
-                    _pixels.setPixel(i, j, newcolDarkSkin);
+                    pixels.setPixel(i, j, newcolDarkSkin);
                 }
-                else if (newcolSwirl > 0 && _pixels.getPixel(i, j) == colSwirl)
+                else if (newcolSwirl > 0 && pixels.getPixel(i, j) == colSwirl)
                 {
-                    _pixels.setPixel(i, j, newcolSwirl);
+                    pixels.setPixel(i, j, newcolSwirl);
                 }
-                else if (newcolHair > 0 && _pixels.getPixel(i, j) == colHair)
+                else if (newcolHair > 0 && pixels.getPixel(i, j) == colHair)
                 {
-                    _pixels.setPixel(i, j, newcolHair);
+                    pixels.setPixel(i, j, newcolHair);
                 }
-                else if (newcolDarkHair > 0 && _pixels.getPixel(i, j) == colDarkHair)
+                else if (newcolDarkHair > 0 && pixels.getPixel(i, j) == colDarkHair)
                 {
-                    _pixels.setPixel(i, j, newcolDarkHair);
+                    pixels.setPixel(i, j, newcolDarkHair);
                 }
-                else if (newcolDress > 0 && _pixels.getPixel(i, j) == colDress)
+                else if (newcolDress > 0 && pixels.getPixel(i, j) == colDress)
                 {
-                    _pixels.setPixel(i, j, newcolDress);
+                    pixels.setPixel(i, j, newcolDress);
                 }
-                else if (newcolShirt > 0 && _pixels.getPixel(i, j) == colShirt)
+                else if (newcolShirt > 0 && pixels.getPixel(i, j) == colShirt)
                 {
-                    _pixels.setPixel(i, j, newcolShirt);
+                    pixels.setPixel(i, j, newcolShirt);
                 }
                 i++;
             }
@@ -130,42 +131,42 @@ class Dude extends Talker
         }
         
         j = 0;
-        while (j < sprFace._pixels.height)
+        while (j < sprFace.pixels.height)
         {
             i = 0;
-            while (i < sprFace._pixels.width)
+            while (i < sprFace.pixels.width)
             {
-                if (newcolEye > 0 && sprFace._pixels.getPixel(i, j) == colEye)
+                if (newcolEye > 0 && sprFace.pixels.getPixel(i, j) == colEye)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolEye);
+                    sprFace.pixels.setPixel(i, j, newcolEye);
                 }
-                else if (newcolSkin > 0 && sprFace._pixels.getPixel(i, j) == colSkin)
+                else if (newcolSkin > 0 && sprFace.pixels.getPixel(i, j) == colSkin)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolSkin);
+                    sprFace.pixels.setPixel(i, j, newcolSkin);
                 }
-                else if (newcolDarkSkin > 0 && sprFace._pixels.getPixel(i, j) == colDarkSkin)
+                else if (newcolDarkSkin > 0 && sprFace.pixels.getPixel(i, j) == colDarkSkin)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolDarkSkin);
+                    sprFace.pixels.setPixel(i, j, newcolDarkSkin);
                 }
-                else if (newcolSwirl > 0 && sprFace._pixels.getPixel(i, j) == colSwirl)
+                else if (newcolSwirl > 0 && sprFace.pixels.getPixel(i, j) == colSwirl)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolSwirl);
+                    sprFace.pixels.setPixel(i, j, newcolSwirl);
                 }
-                else if (newcolHair > 0 && sprFace._pixels.getPixel(i, j) == colHair)
+                else if (newcolHair > 0 && sprFace.pixels.getPixel(i, j) == colHair)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolHair);
+                    sprFace.pixels.setPixel(i, j, newcolHair);
                 }
-                else if (newcolDarkHair > 0 && sprFace._pixels.getPixel(i, j) == colDarkHair)
+                else if (newcolDarkHair > 0 && sprFace.pixels.getPixel(i, j) == colDarkHair)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolDarkHair);
+                    sprFace.pixels.setPixel(i, j, newcolDarkHair);
                 }
-                else if (newcolDress > 0 && sprFace._pixels.getPixel(i, j) == colDress)
+                else if (newcolDress > 0 && sprFace.pixels.getPixel(i, j) == colDress)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolDress);
+                    sprFace.pixels.setPixel(i, j, newcolDress);
                 }
-                else if (newcolShirt > 0 && sprFace._pixels.getPixel(i, j) == colShirt)
+                else if (newcolShirt > 0 && sprFace.pixels.getPixel(i, j) == colShirt)
                 {
-                    sprFace._pixels.setPixel(i, j, newcolShirt);
+                    sprFace.pixels.setPixel(i, j, newcolShirt);
                 }
                 i++;
             }

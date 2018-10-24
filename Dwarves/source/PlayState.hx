@@ -13,6 +13,8 @@ import tasks.*;
 import particles.*;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
+import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup;
 
 class PlayState extends FlxState
 {
@@ -76,7 +78,6 @@ class PlayState extends FlxState
     public var bow : FlxSprite;
     public var dolly : FlxObject;
     public var dollyoffset : Float = 0;
-    public var camera : FlxCamera;
     public var starring : Talker = null;
     public var iSPC : Int = 0;
     public var iLineState : Int = Content.NEWLINE;
@@ -181,16 +182,16 @@ class PlayState extends FlxState
         var radius : Int = 0;
         if (hud == null)
         {
-            hud = try cast(add(new HUD(this)), HUD) catch(e:Dynamic) null;
+            hud = add(new HUD(this));
             
             
             Content.stats.cavemap.RefreshBorders();
-            Content.stats.cavemap.UpdateSprites((Content.screenwidth / 2) - 6 + 1, (Content.screenheight / 2) - 6 + 36 + 1, x, y, 
+            Content.stats.cavemap.UpdateSprites(Math.floor(Content.screenwidth / 2) - 6 + 1, (Content.screenheight / 2) - 6 + 36 + 1, x, y, 
                     3
             );
             Content.stats.cavemap.AddSpritesToHUD(hud.cavecanvasload, x, y, 
-                    (268 / 2) - 6, 
-                    (268 / 2) - 6, 
+                    Math.floor(268 / 2) - 6, 
+                    Math.floor(268 / 2) - 6, 
                     188 + 9, 
                     134 + 9, 
                     88, 
@@ -298,7 +299,7 @@ class PlayState extends FlxState
         var i : Int = 0;
         while (i < zonehistory.length)
         {
-            if ((try cast(zonehistory[i], Zone) catch(e:Dynamic) null).description.coords.x == x && (try cast(zonehistory[i], Zone) catch(e:Dynamic) null).description.coords.y == y)
+            if (zonehistory[i].description.coords.x == x && zonehistory[i].description.coords.y == y)
             {
                 trace("IN HISTORY!");
                 return i;
@@ -328,43 +329,43 @@ class PlayState extends FlxState
         var i : Int = 0;
         var v : Int = 0;
         
-        var size : Int = as3hx.Compat.parseInt(zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[0], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[1]) * 1);
+        var size : Int = Math.floor(zone.rand.integer(Content.biomes[zone.description.style].bounds[0], Content.biomes[zone.description.style].bounds[1]));
         
         if (x % 2 != y % 2)
         {
-            size *= as3hx.Compat.parseInt(1.5);
+            size *= Math.floor(1.5);
         }
         
-        var cinch : Float = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[2], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[3]) / 15;  // /10  
-        var wiggle : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[4], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[5]);
+        var cinch : Float = zone.rand.integer(Content.biomes[zone.description.style].bounds[2], Content.biomes[zone.description.style].bounds[3]) / 15;  // /10  
+        var wiggle : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[4], Content.biomes[zone.description.style].bounds[5]);
         
-        var plats : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[7], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[8]);
-        if (zone.rand.integer(0, 100) > (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[6])
+        var plats : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[7], Content.biomes[zone.description.style].bounds[8]);
+        if (zone.rand.integer(0, 100) > Content.biomes[zone.description.style].bounds[6])
         {
             plats = 0;
         }
-        var platlength : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[9], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[10]);
+        var platlength : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[9], Content.biomes[zone.description.style].bounds[10]);
         
         if (x % 2 != y % 2)
         {
             plats /= 2;
         }
         
-        var pillars : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[12], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[13]);
-        if (zone.rand.integer(0, 100) > (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[11])
+        var pillars : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[12], Content.biomes[zone.description.style].bounds[13]);
+        if (zone.rand.integer(0, 100) > Content.biomes[zone.description.style].bounds[11])
         {
             pillars = 0;
         }
-        var pillarlength : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[14], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[15]);
+        var pillarlength : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[14], Content.biomes[zone.description.style].bounds[15]);
         pillarlength /= 3;
         pillars /= 3;
         
-        var clumps : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[19], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[20]);
-        var clumpsize : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[17], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[18]);
+        var clumps : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[19], Content.biomes[zone.description.style].bounds[20]);
+        var clumpsize : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[17], Content.biomes[zone.description.style].bounds[18]);
         
         if (plats > 5)
         {
-            clumpsize /= as3hx.Compat.parseInt(plats - 5);
+            clumpsize /= Math.floor(plats - 5);
         }
         
         
@@ -383,8 +384,8 @@ class PlayState extends FlxState
         
         var poolroll : Int = zone.rand.integer(0, 100);
         //trace ("wtf = " + poolroll.toString());
-        var pools : Int = zone.rand.integer((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[22], (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[23]);
-        if (poolroll > (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bounds[21])
+        var pools : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[22], Content.biomes[zone.description.style].bounds[23]);
+        if (poolroll > Content.biomes[zone.description.style].bounds[21])
         {
             pools = 0;
         }
@@ -413,17 +414,17 @@ class PlayState extends FlxState
             if (zone.description.exits.north == false && zone.description.exits.south == false &&
                 zone.rand.integer(0, 100) < Content.nOpenChance * 100)
             {
-                plats *= as3hx.Compat.parseInt(0.7);
-                pillars *= as3hx.Compat.parseInt(0.6);
-                clumps *= as3hx.Compat.parseInt(0.3);
+                plats *= Math.floor(0.7);
+                pillars *= Math.floor(0.6);
+                clumps *= Math.floor(0.3);
                 trace("forced open!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
             
             if (zone.description.exits.north == true && zone.description.exits.south == true &&
                 (zone.description.exits.west == false || zone.description.exits.east == false))
             {
-                plats *= as3hx.Compat.parseInt(0.2);
-                clumps *= as3hx.Compat.parseInt(0.3);
+                plats *= Math.floor(0.2);
+                clumps *= Math.floor(0.3);
                 size = zone.rand.integer(3, 4);
                 Content.nCurrentVerticalCinchCoefficient = Content.nShaftCoefficient;
                 trace("forced vert!!!!!!!!!!!!!!!!!!!!!!!!!! size = " + Std.string(size));
@@ -504,7 +505,7 @@ class PlayState extends FlxState
         commands.push(new GenCommand("Finish", 0, 0, 0));
         
         
-        totalgen = as3hx.Compat.parseInt(1 + plats + clumps + pools + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1);
+        totalgen = Math.floor(1 + plats + clumps + pools + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1);
         
         for (garbage in 0...30)
         {
@@ -618,47 +619,47 @@ class PlayState extends FlxState
         }
         else if (command.name == "LineCave")
         {
-            zone.LineCave(as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseFloat(command.p2), as3hx.Compat.parseInt(command.p3));
+            zone.LineCave(Math.floor(command.p1), as3hx.Compat.parseFloat(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Plats")
         {
-            failure = zone.ApplyFilter(zone.Plats, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.Plats, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Clumps")
         {
-            failure = zone.ApplyFilter(zone.Clumps, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.Clumps, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Rounds")
         {
-            failure = zone.ApplyFilter(zone.Rounds, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.Rounds, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Pixels")
         {
-            failure = zone.ApplyFilter(zone.Pixels, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.Pixels, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "ChewCave")
         {
-            failure = zone.ApplyFilter(zone.ChewCave, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.ChewCave, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Plateaus")
         {
-            failure = zone.ApplyFilter(zone.Plateaus, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.Plateaus, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "PurgeOnes")
         {
-            failure = zone.ApplyFilter(zone.PurgeOnes, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.PurgeOnes, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Pools")
         {
-            failure = zone.ApplyFilter(zone.Pools, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.Pools, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Pillars")
         {
-            failure = zone.ApplyFilter(zone.Pillars, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.Pillars, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "MakeIntangibles")
         {
-            failure = zone.ApplyFilter(zone.MakeIntangibles, as3hx.Compat.parseInt(command.p1), as3hx.Compat.parseInt(command.p2), as3hx.Compat.parseInt(command.p3));
+            failure = zone.ApplyFilter(zone.MakeIntangibles, Math.floor(command.p1), Math.floor(command.p2), Math.floor(command.p3));
         }
         else if (command.name == "DropExits")
         {
@@ -678,7 +679,7 @@ class PlayState extends FlxState
         }
         else if (command.name == "MakeWall")
         {
-            zone.MakeWall(as3hx.Compat.parseInt(command.p1));
+            zone.MakeWall(Math.floor(command.p1));
         }
         else if (command.name == "FillAccessible")
         {
@@ -709,7 +710,7 @@ class PlayState extends FlxState
                 
                 {
                     fails = 0;
-                    while (commands.length > 0 && (try cast(commands[0], GenCommand) catch(e:Dynamic) null).name == lastcommand)
+                    while (commands.length > 0 && commands[0].name == lastcommand)
                     {
                         commands.splice(0, 1);
                     }
@@ -967,7 +968,7 @@ class PlayState extends FlxState
         var mapheight : Int = 256;
         var mapwidth : Int = 256;
         
-        back = new FlxSprite(0, 0, (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).back);
+        back = new FlxSprite(0, 0, Content.biomes[zone.description.style].back);
         back.scrollFactor.x = 0;
         back.scrollFactor.y = 0;
         add(back);
@@ -1088,10 +1089,10 @@ class PlayState extends FlxState
         e = 0;
         while (e < zone.exits.length)
         {
-            groupDoors.add(new FlxSprite((try cast(zone.exits[e], Exit) catch(e:Dynamic) null).x * 30, ((try cast(zone.exits[e], Exit) catch(e:Dynamic) null).y * 30) - 30));
-            (try cast(groupDoors.members[e], FlxSprite) catch(e:Dynamic) null).loadGraphic(Content.cDoors, true, false, 30, 60, false);
-            (try cast(groupDoors.members[e], FlxSprite) catch(e:Dynamic) null).addAnimation("d", [(try cast(zone.exits[e], Exit) catch(e:Dynamic) null).id], 1, true);
-            (try cast(groupDoors.members[e], FlxSprite) catch(e:Dynamic) null).play("d");
+            groupDoors.add(new FlxSprite(zone.exits[e].x * 30, (zone.exits[e].y * 30) - 30));
+            groupDoors.members[e].loadGraphic(Content.cDoors, true, false, 30, 60, false);
+            groupDoors.members[e].addAnimation("d", [zone.exits[e].id], 1, true);
+            groupDoors.members[e].play("d");
             e++;
         }
         this.add(groupDoors);
@@ -1111,14 +1112,14 @@ class PlayState extends FlxState
                 var gem : Int = zone.gemmap[xx][yy];
                 if (gem != 0)
                 {
-                    var xwig : Int = as3hx.Compat.parseInt(gemrandom.integer(0, 12) - 6);
-                    var ywig : Int = as3hx.Compat.parseInt(gemrandom.integer(0, 12) - 6);
+                    var xwig : Int = Math.floor(gemrandom.integer(0, 12) - 6);
+                    var ywig : Int = Math.floor(gemrandom.integer(0, 12) - 6);
                     
                     arrayAllGems.push(new Collectible(this, gem - 1, (xx * 30) + 10 + xwig, (yy * 30) + 10 + ywig));
-                    this.add(try cast(arrayAllGems[arrayAllGems.length - 1], Collectible) catch(e:Dynamic) null);
+                    this.addarrayAllGems[arrayAllGems.length - 1];
                     lillevel.setTile(xx, yy, 5, true);
                     
-                    (try cast(arrayAllGems[arrayAllGems.length - 1], Collectible) catch(e:Dynamic) null).play("d");
+                    arrayAllGems[arrayAllGems.length - 1].play("d");
                 }
                 yy++;
             }
@@ -1224,11 +1225,11 @@ class PlayState extends FlxState
         
         if (variant == 0)
         {
-            iPeppers = as3hx.Compat.parseInt(arrayPeppers.length * (zone.rand.integer(10, 30) / 100));
+            iPeppers = Math.floor(arrayPeppers.length * (zone.rand.integer(10, 30) / 100));
         }
         else if (variant == 1)
         {
-            iPeppers = as3hx.Compat.parseInt(arrayPeppers.length * (zone.rand.integer(20, 50) / 100));
+            iPeppers = Math.floor(arrayPeppers.length * (zone.rand.integer(20, 50) / 100));
         }
         
         groupPeppers = new FlxSpriteGroup();
@@ -1243,9 +1244,9 @@ class PlayState extends FlxState
             
             if (zone.description.style == Content.MEADOW)
             {
-                if (Std.string((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).obj) != "w")
+                if (Std.string(arrayPeppers[spot].obj) != "w")
                 {
-                    toadd = new FlxSprite((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).x * 30, (try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).y * 30);
+                    toadd = new FlxSprite(arrayPeppers[spot].x * 30, arrayPeppers[spot].y * 30);
                     toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
@@ -1260,9 +1261,9 @@ class PlayState extends FlxState
             {
                 if (variant == 1)
                 {
-                    if (Std.string((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).obj) != "w")
+                    if (Std.string(arrayPeppers[spot].obj) != "w")
                     {
-                        toadd = new FlxSprite((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).x * 30, ((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).y * 30) + 25);
+                        toadd = new FlxSprite(arrayPeppers[spot].x * 30, (arrayPeppers[spot].y * 30) + 25);
                         toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                         toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                         
@@ -1274,7 +1275,7 @@ class PlayState extends FlxState
                 }
                 else
                 {
-                    toadd = new FlxSprite((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).x * 30, ((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).y * 30));
+                    toadd = new FlxSprite(arrayPeppers[spot].x * 30, (arrayPeppers[spot].y * 30));
                     toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
@@ -1286,7 +1287,7 @@ class PlayState extends FlxState
             }
             else if (zone.description.style == Content.SWAMP)
             {
-                toadd = new FlxSprite((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).x * 30, (try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).y * 30);
+                toadd = new FlxSprite(arrayPeppers[spot].x * 30, arrayPeppers[spot].y * 30);
                 toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                 toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                 
@@ -1294,30 +1295,30 @@ class PlayState extends FlxState
                 
                 if (variant == 0)
                 {
-                    if (Std.string((try cast(arrayPeppers[spot], PointPlus) catch(e:Dynamic) null).obj) == "w")
+                    if (Std.string(arrayPeppers[spot].obj) == "w")
                     {
-                        which = as3hx.Compat.parseInt((zone.description.style * 10) + 3 + zone.rand.integer(0, 2));
+                        which = Math.floor((zone.description.style * 10) + 3 + zone.rand.integer(0, 2));
                     }
                     else
                     {
                         roll = zone.rand.integer(0, 10);
                         if (roll == 1)
                         {
-                            which = as3hx.Compat.parseInt((zone.description.style * 10) + 5);
+                            which = Math.floor((zone.description.style * 10) + 5);
                         }
                         else if (roll == 2)
                         {
-                            which = as3hx.Compat.parseInt((zone.description.style * 10) + 2);
+                            which = Math.floor((zone.description.style * 10) + 2);
                         }
                         else
                         {
-                            which = as3hx.Compat.parseInt((zone.description.style * 10) + 0 + zone.rand.integer(0, 2));
+                            which = Math.floor((zone.description.style * 10) + 0 + zone.rand.integer(0, 2));
                         }
                     }
                 }
                 else
                 {
-                    which = as3hx.Compat.parseInt((zone.description.style * 10) + 6 + zone.rand.integer(0, 3));
+                    which = Math.floor((zone.description.style * 10) + 6 + zone.rand.integer(0, 3));
                 }
                 
                 toadd.addAnimation("", [which], 0, true);
@@ -1347,14 +1348,14 @@ class PlayState extends FlxState
             {
                 which = zone.rand.integer(0, xs.length);
                 
-                x = (as3hx.Compat.parseInt(xs[which]));
+                x = (Math.floor(xs[which]));
                 
                 var weight : Int = 0;
                 
                 i = 0;
                 while (i < xs.length)
                 {
-                    if ((as3hx.Compat.parseInt(xs[which])) == x)
+                    if ((Math.floor(xs[which])) == x)
                     {
                         weight++;
                     }
@@ -1434,16 +1435,16 @@ class PlayState extends FlxState
                 {
                     dudelines = m.strData.split("^");
                     
-                    var newdude : Dude = new Dude(this, Std.string(dudelines[0]), as3hx.Compat.parseInt(dudelines[1]), as3hx.Compat.parseInt(dudelines[2]), as3hx.Compat.parseInt(dudelines[3]), m.x * 30, m.y * 30);
+                    var newdude : Dude = new Dude(this, Std.string(dudelines[0]), Math.floor(dudelines[1]), Math.floor(dudelines[2]), Math.floor(dudelines[3]), m.x * 30, m.y * 30);
                     
-                    newdude.SetColors(as3hx.Compat.parseInt(dudelines[4]), 
-                            as3hx.Compat.parseInt(dudelines[5]), 
-                            Util.DarkSkin(as3hx.Compat.parseInt(dudelines[5])), 
-                            Util.Swirl(as3hx.Compat.parseInt(dudelines[5])), 
-                            as3hx.Compat.parseInt(dudelines[6]), 
-                            Util.DarkHair(as3hx.Compat.parseInt(dudelines[6])), 
-                            as3hx.Compat.parseInt(dudelines[7]), 
-                            as3hx.Compat.parseInt(dudelines[8])
+                    newdude.SetColors(Math.floor(dudelines[4]), 
+                            Math.floor(dudelines[5]), 
+                            Util.DarkSkin(Math.floor(dudelines[5])), 
+                            Util.Swirl(Math.floor(dudelines[5])), 
+                            Math.floor(dudelines[6]), 
+                            Util.DarkHair(Math.floor(dudelines[6])), 
+                            Math.floor(dudelines[7]), 
+                            Math.floor(dudelines[8])
                 );
                     
                     d = 9;
@@ -1512,7 +1513,7 @@ class PlayState extends FlxState
         groupFrontMonsters = new FlxGroup();
         if (bMonsters)
         {
-            cast((nSaturation), MakeMonsters);
+            MakeMonsters(nSaturation);
         }
         if (zone.description.style == Content.ICE)
         {
@@ -1527,7 +1528,7 @@ class PlayState extends FlxState
                 {
                     for (mon/* AS3HX WARNING could not determine type for var: mon exp: EIdent(arrayAllMonsters) type: null */ in arrayAllMonsters)
                     {
-                        if (Util.Distance((try cast(icepoints[ip], Point) catch(e:Dynamic) null).x * 30, (try cast(icepoints[ip], Point) catch(e:Dynamic) null).y * 30, mon.x, mon.y) < 30)
+                        if (Util.Distance(icepoints[ip].x * 30, icepoints[ip].y * 30, mon.x, mon.y) < 30)
                         {
                             icepoints.splice(ip, 1);
                             ip--;
@@ -1547,10 +1548,10 @@ class PlayState extends FlxState
                     
                     for (icegem/* AS3HX WARNING could not determine type for var: icegem exp: EIdent(arrayAllGems) type: null */ in arrayAllGems)
                     {
-                        if (as3hx.Compat.parseInt(icegem.x / 30) == pt.x && as3hx.Compat.parseInt(icegem.y / 30) == pt.y)
+                        if (Math.floor(icegem.x / 30) == pt.x && Math.floor(icegem.y / 30) == pt.y)
                         {
-                            icegem.x = (as3hx.Compat.parseInt(icegem.x / 30) * 30) + 10;
-                            icegem.y = (as3hx.Compat.parseInt(icegem.y / 30) * 30) + 10;
+                            icegem.x = (Math.floor(icegem.x / 30) * 30) + 10;
+                            icegem.y = (Math.floor(icegem.y / 30) * 30) + 10;
                         }
                     }
                 }
@@ -1576,10 +1577,10 @@ class PlayState extends FlxState
         e = 0;
         while (e < zone.exits.length)
         {
-            if ((try cast(zone.exits[e], Exit) catch(e:Dynamic) null).id == camefrom)
+            if (zone.exits[e].id == camefrom)
             {
-                hero.x = ((try cast(zone.exits[e], Exit) catch(e:Dynamic) null).x * 30) + 6;
-                hero.y = ((try cast(zone.exits[e], Exit) catch(e:Dynamic) null).y * 30) + 9;  // 7  
+                hero.x = (zone.exits[e].x * 30) + 6;
+                hero.y = (zone.exits[e].y * 30) + 9;  // 7  
                 
                 break;
             }
@@ -1588,10 +1589,10 @@ class PlayState extends FlxState
         
         if (hero.x == 0)
         {
-            hero.x = ((try cast(zone.exits[0], Exit) catch(e:Dynamic) null).x * 30) + 6;
-            hero.y = ((try cast(zone.exits[0], Exit) catch(e:Dynamic) null).y * 30) + 9;  // 7  
+            hero.x = (zone.exits[0].x * 30) + 6;
+            hero.y = (zone.exits[0].y * 30) + 9;  // 7  
             
-            camefrom = (try cast(zone.exits[0], Exit) catch(e:Dynamic) null).id;
+            camefrom = zone.exits[0].id;
         }
         
         if (bMikeAndSally)
@@ -1689,13 +1690,13 @@ class PlayState extends FlxState
         
         
         
-        debugtext = try cast(add(new FlxText(3, 180, 200, "")), FlxText) catch(e:Dynamic) null;  //adds a 100px wide text field at position 0,0 (upper left)  
+        debugtext = add(new FlxText(3, 180, 200, ""));  //adds a 100px wide text field at position 0,0 (upper left)  
         Util.AssignFont(debugtext);
         debugtext.scrollFactor.x = 0;
         debugtext.scrollFactor.y = 0;
         debugtext.visible = Content.debugtexton;
         
-        distext = try cast(add(new FlxText(3, 150, 220, "")), FlxText) catch(e:Dynamic) null;  //adds a 100px wide text field at position 0,0 (upper left)  
+        distext = add(new FlxText(3, 150, 220, ""));  //adds a 100px wide text field at position 0,0 (upper left)  
         Util.AssignFont(distext);
         distext.scrollFactor.x = 0;
         distext.scrollFactor.y = 0;
@@ -1744,7 +1745,7 @@ class PlayState extends FlxState
             { //FlxG.music == null || FlxG.music.volume == 0)
                 
                 {
-                    Util.SetMusicName((try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).song);
+                    Util.SetMusicName(Content.biomes[zone.description.style].song);
                     Util.PlayIntroMusic();
                 }
             }
@@ -1787,11 +1788,11 @@ class PlayState extends FlxState
         }
         if (xstart + xrange > zone.width - 3)
         {
-            xrange = as3hx.Compat.parseInt(zone.width - 3);
+            xrange = Math.floor(zone.width - 3);
         }
         if (ystart + yrange > zone.height - 3)
         {
-            yrange = as3hx.Compat.parseInt(zone.height - 3);
+            yrange = Math.floor(zone.height - 3);
         }
         
         for (xx in xstart...xrange)
@@ -2083,10 +2084,10 @@ If 11 and water, 13
                 {
                     var bOuter : Bool = true;
                     
-                    var xxx : Int = as3hx.Compat.parseInt(xx - 5);
+                    var xxx : Int = Math.floor(xx - 5);
                     while (xxx < xx + 5 && bOuter == true)
                     {
-                        var yyy : Int = as3hx.Compat.parseInt(yy - 5);
+                        var yyy : Int = Math.floor(yy - 5);
                         while (yyy < yy + 5 && bOuter == true)
                         {
                             if (xxx >= xstart && xxx < xrange && yyy >= ystart && yyy < yrange)
@@ -2300,18 +2301,18 @@ If 11 and water, 13
                         blockadebump = 0;
                         if (zone.intangmap[xx][yy] == 0)
                         {
-                            blockadebump = as3hx.Compat.parseInt(Content.iTotalBiomes * Content.iFrontSheetWidth);
+                            blockadebump = Math.floor(Content.iTotalBiomes * Content.iFrontSheetWidth);
                         }
                         
                         level.setTile(xx, yy, (biome * Content.iFrontSheetWidth) + blockadebump + Content.iBonus2, true);
                         
-                        var pillary : Int = as3hx.Compat.parseInt(yy - 1);
+                        var pillary : Int = Math.floor(yy - 1);
                         while (pillary > 1)
                         {
                             blockadebump = 0;
                             if (zone.intangmap[xx][pillary] == 0)
                             {
-                                blockadebump = as3hx.Compat.parseInt(Content.iTotalBiomes * Content.iFrontSheetWidth);
+                                blockadebump = Math.floor(Content.iTotalBiomes * Content.iFrontSheetWidth);
                             }
                             
                             level.setTile(xx, pillary, (biome * Content.iFrontSheetWidth) + blockadebump + Content.iBonus3, true);
@@ -2323,7 +2324,7 @@ If 11 and water, 13
                                 blockadebump = 0;
                                 if (zone.intangmap[xx][pillary - 1] == 0)
                                 {
-                                    blockadebump = as3hx.Compat.parseInt(Content.iTotalBiomes * Content.iFrontSheetWidth);
+                                    blockadebump = Math.floor(Content.iTotalBiomes * Content.iFrontSheetWidth);
                                 }
                                 
                                 level.setTile(xx, pillary - 1, (biome * Content.iFrontSheetWidth) + blockadebump + Content.iBonus1, true);
@@ -2341,7 +2342,7 @@ If 11 and water, 13
         {
             for (s/* AS3HX WARNING could not determine type for var: s exp: EField(EIdent(groupPeppers),members) type: null */ in groupPeppers.members)
             {
-                if (wallpaper.getTile(as3hx.Compat.parseInt(s.x / 30), as3hx.Compat.parseInt(s.y / 30)) >= Content.iWallpaperPieces / 2)
+                if (wallpaper.getTile(Math.floor(s.x / 30), Math.floor(s.y / 30)) >= Content.iWallpaperPieces / 2)
                 {
                     s.visible = false;
                 }
@@ -2349,9 +2350,9 @@ If 11 and water, 13
                 {
                     s.visible = true;
                     
-                    var tiletoclear : Int = level.getTile(as3hx.Compat.parseInt(s.x / 30), as3hx.Compat.parseInt(s.y / 30));
+                    var tiletoclear : Int = level.getTile(Math.floor(s.x / 30), Math.floor(s.y / 30));
                     
-                    tiletoclear -= as3hx.Compat.parseInt(biome * Content.iFrontSheetWidth);
+                    tiletoclear -= Math.floor(biome * Content.iFrontSheetWidth);
                     
                     if (tiletoclear >= Content.iGrass && tiletoclear <= Content.iSpikes)
                     {
@@ -2366,7 +2367,7 @@ If 11 and water, 13
                         tiletoclear = Content.iShallow;
                     }
                     
-                    level.setTile(as3hx.Compat.parseInt(s.x / 30), as3hx.Compat.parseInt(s.y / 30), tiletoclear += as3hx.Compat.parseInt(biome * Content.iFrontSheetWidth), true);
+                    level.setTile(Math.floor(s.x / 30), Math.floor(s.y / 30), tiletoclear += Math.floor(biome * Content.iFrontSheetWidth), true);
                 }
             }
         }
@@ -2380,7 +2381,7 @@ If 11 and water, 13
         var arrayBestiary : Array<Dynamic> = new Array<Dynamic>();  // One each of the possible cards for this zone  
         var arrayBestiaryCards : Array<Dynamic> = new Array<Dynamic>();  // The deck of monster cards after duplicating according to weight * 100  
         
-        for (line/* AS3HX WARNING could not determine type for var: line exp: EField(EParent(EBinop(as,EArray(EField(EIdent(Content),biomes),EField(EField(EIdent(zone),description),style)),EIdent(Biome),false)),bestiary) type: null */ in (try cast(Content.biomes[zone.description.style], Biome) catch(e:Dynamic) null).bestiary)
+        for (line in Content.biomes[zone.description.style].bestiary)
         {
             if (line != "")
             {
@@ -2418,7 +2419,7 @@ If 11 and water, 13
                                 resists = Content.Code_Up | Content.Code_Water;  // can't be in water, can't have tile above spawn point  
                                 break;
                         }
-                        needsone = as3hx.Compat.parseInt(Content.Code_Up | Content.Code_Right | Content.Code_Down) | Content.Code_Left;  // needs one wall  
+                        needsone = Math.floor(Content.Code_Up | Content.Code_Right | Content.Code_Down) | Content.Code_Left;  // needs one wall  
                         needsall = 0x00000000;
                         resists = 0x00000000;
                     
@@ -2457,7 +2458,7 @@ If 11 and water, 13
             {
                 var nearexit : Bool = false;
                 
-                for (ex/* AS3HX WARNING could not determine type for var: ex exp: EField(EIdent(zone),exits) type: null */ in zone.exits)
+                for (ex in zone.exits)
                 {
                     if (Util.Distance(ex.x, ex.y, mxx, myy) < Content.nMonstersTooCloseToExit)
                     {
@@ -2513,7 +2514,7 @@ If 11 and water, 13
                     
                     arrayMonsterSpots.push(new PointPlus(mxx, myy, code));
                     
-                    if ((try cast((try cast(arrayMonsterSpots[arrayMonsterSpots.length - 1], PointPlus) catch(e:Dynamic) null).obj, Int) catch(e:Dynamic) null & Content.Code_Down) > 0)
+                    if (arrayMonsterSpots[arrayMonsterSpots.length - 1].obj & Content.Code_Down > 0)
                     {
                         postgrounds++;
                     }
@@ -2532,7 +2533,7 @@ If 11 and water, 13
         var mm : Int = 0;
         while (mm < arrayMonsterSpots.length)
         {
-            var u : Int = try cast((try cast(arrayMonsterSpots[mm], PointPlus) catch(e:Dynamic) null).obj, Int) catch(e:Dynamic) null;
+            var u : Int = arrayMonsterSpots[mm].obj;
             if ((u & Content.Code_Down) > 0)
             {
                 postgrounds++;
@@ -2614,7 +2615,7 @@ If 11 and water, 13
                     while (b < arrayBestiary.length)
                     {
                         var bb : Int = 0;
-                        while (bb < (try cast(arrayBestiary[b], MonsterCard) catch(e:Dynamic) null).nWeight * 100)
+                        while (bb < arrayBestiary[b].nWeight * 100)
                         {
                             arrayBestiaryCards.push(arrayBestiary[b]);
                             bb++;
@@ -2633,14 +2634,14 @@ If 11 and water, 13
                             var unique : Bool = true;
                             
                             which = ran.integer(arrayBestiaryCards.length);
-                            winner = (try cast(arrayBestiaryCards[which], MonsterCard) catch(e:Dynamic) null);
+                            winner = arrayBestiaryCards[which];
                             
                             kindreport += winner.strName + " ";
                             
                             var spottest : Int = 0;
                             while (spottest < arrayMonsterSpotConsume.length)
                             {
-                                testcode = try cast((try cast(arrayMonsterSpotConsume[spottest], PointPlus) catch(e:Dynamic) null).obj, Int) catch(e:Dynamic) null;
+                                testcode = arrayMonsterSpotConsume[spottest].obj;
                                 
                                 if ((winner.uNeedsOne & testcode) > 0 &&
                                     ((winner.uNeedsAll & testcode) == winner.uNeedsAll &&
@@ -2655,7 +2656,7 @@ If 11 and water, 13
                             var card : Int = 0;
                             while (card < arrayBestiaryCards.length)
                             {
-                                if ((try cast(arrayBestiaryCards[card], MonsterCard) catch(e:Dynamic) null).strName == winner.strName)
+                                if (arrayBestiaryCards[card].strName == winner.strName)
                                 {
                                     arrayBestiaryCards.splice(card, 1);
                                     card--;
@@ -2665,7 +2666,7 @@ If 11 and water, 13
                             var beast : Int = 0;
                             while (beast < arrayBestiary.length)
                             {
-                                if ((try cast(arrayBestiary[beast], MonsterCard) catch(e:Dynamic) null).strName == winner.strName)
+                                if (arrayBestiary[beast].strName == winner.strName)
                                 {
                                     arrayBestiary.splice(beast, 1);
                                     beast--;
@@ -2712,7 +2713,7 @@ If 11 and water, 13
             kind = 0;
             while (kind < arrayWinners.length)
             {
-                if ((try cast(arrayWinners[kind], MonsterCard) catch(e:Dynamic) null).iNeeded != 0)
+                if (arrayWinners[kind].iNeeded != 0)
                 {
                     bStillNeeded = true;
                     break;
@@ -2736,14 +2737,14 @@ If 11 and water, 13
                 var spot : Int = 0;
                 while (spot < arrayMonsterSpotConsume.length)
                 {
-                    testcode = try cast((try cast(arrayMonsterSpotConsume[spot], PointPlus) catch(e:Dynamic) null).obj, Int) catch(e:Dynamic) null;
+                    testcode = arrayMonsterSpotConsume[spot].obj;
                     
                     if ((winner.uNeedsOne & testcode) > 0 &&
                         ((winner.uNeedsAll & testcode) == winner.uNeedsAll &&
                         !((winner.uResists & testcode) > 0)))
                     {
-                        var spawnx : Int = (try cast(arrayMonsterSpotConsume[spot], PointPlus) catch(e:Dynamic) null).x;
-                        var spawny : Int = (try cast(arrayMonsterSpotConsume[spot], PointPlus) catch(e:Dynamic) null).y;
+                        var spawnx : Int = arrayMonsterSpotConsume[spot].x;
+                        var spawny : Int = arrayMonsterSpotConsume[spot].y;
                         
                         arrayMonsterSpawns.push(new PointPlus(spawnx, spawny, winner.strName));
                         
@@ -2765,7 +2766,7 @@ If 11 and water, 13
                         var loser : Int = 0;
                         while (loser < arrayWinners.length)
                         {
-                            if ((try cast(arrayWinners[kind], MonsterCard) catch(e:Dynamic) null).iNeeded != 0)
+                            if (arrayWinners[kind].iNeeded != 0)
                             
                             { // Too-needy
                                 
@@ -2776,7 +2777,7 @@ If 11 and water, 13
                                     { // Find it
                                         
                                         {
-                                            if ((try cast(arrayBestiary[which], MonsterCard) catch(e:Dynamic) null).strName == (try cast(arrayWinners[loser], MonsterCard) catch(e:Dynamic) null).strName)
+                                            if (arrayBestiary[which].strName == arrayWinners[loser].strName)
                                             
                                             { // Found it
                                                 
@@ -2805,9 +2806,9 @@ If 11 and water, 13
         var spawn : Int = 0;
         while (spawn < arrayMonsterSpawns.length)
         {
-            spawnx = (try cast(arrayMonsterSpawns[spawn], PointPlus) catch(e:Dynamic) null).x;
-            spawny = (try cast(arrayMonsterSpawns[spawn], PointPlus) catch(e:Dynamic) null).y;
-            var spawnname : String = Std.string((try cast(arrayMonsterSpawns[spawn], PointPlus) catch(e:Dynamic) null).obj);
+            spawnx = arrayMonsterSpawns[spawn].x;
+            spawny = arrayMonsterSpawns[spawn].y;
+            var spawnname : String = Std.string(arrayMonsterSpawns[spawn].obj);
             
             var left : Bool;
             var right : Bool;
@@ -2866,7 +2867,7 @@ If 11 and water, 13
                     spawns.push(new FaceShoot(this, (spawnx * 30) + 20, spawny * 30, new ColorTransform(1, 1, 1, 1, roff, goff, boff, 0), 
                             speedmod));
                     
-                    (try cast(spawns[spawns.length - 1], FaceShoot) catch(e:Dynamic) null).facing = FlxObject.LEFT;
+                    spawns[spawns.length - 1].facing = FlxObject.LEFT;
                 }
             }
             else if (spawnname == "Goblin")
@@ -2899,8 +2900,8 @@ If 11 and water, 13
                 { // floor, so go right!
                     
                     {
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).y += (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iMagnet;
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iDir = Content.RIGHT;
+                        spawns[spawns.length - 1].y += spawns[spawns.length - 1].iMagnet;
+                        spawns[spawns.length - 1].iDir = Content.RIGHT;
                     }
                 }
                 else if (interim_level.getTile(spawnx, spawny - 1) >= Content.barriertile)
@@ -2908,8 +2909,8 @@ If 11 and water, 13
                 { // ceiling, so go left!
                     
                     {
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).x += (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iMagnet;
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iDir = Content.LEFT;
+                        spawns[spawns.length - 1].x += spawns[spawns.length - 1].iMagnet;
+                        spawns[spawns.length - 1].iDir = Content.LEFT;
                     }
                 }
                 else if (interim_level.getTile(spawnx + 1, spawny) >= Content.barriertile)
@@ -2917,9 +2918,9 @@ If 11 and water, 13
                 { // wallright, so go up!
                     
                     {
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).x += (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iMagnet;
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).y += (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iMagnet;
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iDir = Content.UP;
+                        spawns[spawns.length - 1].x += spawns[spawns.length - 1].iMagnet;
+                        spawns[spawns.length - 1].y += spawns[spawns.length - 1].iMagnet;
+                        spawns[spawns.length - 1].iDir = Content.UP;
                     }
                 }
                 else if (interim_level.getTile(spawnx - 1, spawny) >= Content.barriertile)
@@ -2927,7 +2928,7 @@ If 11 and water, 13
                 { // wallleft, so go down!
                     
                     {
-                        (try cast(spawns[spawns.length - 1], Crawler) catch(e:Dynamic) null).iDir = Content.DOWN;
+                        spawns[spawns.length - 1].iDir = Content.DOWN;
                     }
                 }
             }
@@ -3092,8 +3093,8 @@ If 11 and water, 13
         
         var mouseX : Float = FlxG.mouse.x;  //Get the X position of the mouse in the game world  
         var mouseY : Float = FlxG.mouse.y;  //Get the Y position of the mouse in the game world  
-        var mousetileX : Int = as3hx.Compat.parseInt(mouseX / 30);
-        var mousetileY : Int = as3hx.Compat.parseInt(mouseY / 30);
+        var mousetileX : Int = Math.floor(mouseX / 30);
+        var mousetileY : Int = Math.floor(mouseY / 30);
         var screenX : Float = FlxG.mouse.screenX;  //Get the X position of the mouse in screen space  
         var pressed : Bool = FlxG.mouse.pressed();  //Check whether the mouse is currently pressed  
         var justPressed : Bool = FlxG.mouse.justPressed();
@@ -3129,7 +3130,7 @@ If 11 and water, 13
                     
                     if (bDoorPan)
                     {
-                        cast((Content.DOORENTERING), StartCameraPan);
+                        StartCameraPan(Content.DOORENTERING);
                         
                         ptToCamera.x = ptPlayerCamera.x;
                         ptToCamera.y = ptPlayerCamera.y;
@@ -3157,7 +3158,7 @@ If 11 and water, 13
                     }
                     else
                     {
-                        cast((Content.DEFAULT), StartCameraPan);
+                        StartCameraPan(Content.DEFAULT);
                         
                         ptFromCamera.x = ptPlayerCamera.x;
                         ptFromCamera.y = ptPlayerCamera.y;
@@ -3200,8 +3201,8 @@ If 11 and water, 13
                         xdiff = 1;
                     }
                     
-                    xdest = as3hx.Compat.parseInt(zone.description.coords.x + xdiff);
-                    ydest = as3hx.Compat.parseInt(zone.description.coords.y + ydiff);
+                    xdest = Math.floor(zone.description.coords.x + xdiff);
+                    ydest = Math.floor(zone.description.coords.y + ydiff);
                     
                     
                     
@@ -3249,8 +3250,8 @@ If 11 and water, 13
                     {
                         FlxG.play(Content.soundDreamCoin, Content.volumeDreamCoin, false, false, Content.nDefaultSkip);
                         arrayGrunts.push(new Grunt(hero.x + (hero.width / 2), hero.y + (hero.height / 2) - 10, "+1 Dream Coin", 0xFF888888, 120));
-                        (try cast(arrayGrunts[arrayGrunts.length - 1], Grunt) catch(e:Dynamic) null).AddSprite(18);
-                        groupGrunts.add(try cast(arrayGrunts[arrayGrunts.length - 1], Grunt) catch(e:Dynamic) null);
+                        arrayGrunts[arrayGrunts.length - 1].AddSprite(18);
+                        groupGrunts.addarrayGrunts[arrayGrunts.length - 1];
                         
                         iDeadState = Content.COINGIVEN;
                     }
@@ -3325,7 +3326,7 @@ If 11 and water, 13
                     if (command == "vent")
                     {
                         var ventname : String = contentpieces[0];
-                        var venttarget : Monster = try cast(Util.GetSpriteByName(arrayAllMonsters, ventname), Monster) catch(e:Dynamic) null;
+                        var venttarget : Monster = Util.GetSpriteByName(arrayAllMonsters, ventname);
                         
                         /*
 							if (venttarget == null)
@@ -3335,11 +3336,11 @@ If 11 and water, 13
                         
                         if (venttarget != null)
                         {
-                            cast((Content.DEFAULT), StartCameraPan);
+                            StartCameraPan(Content.DEFAULT);
                             ptToCamera.x = venttarget.x;
                             ptToCamera.y = venttarget.y;
                             
-                            hud.Chat(true, (try cast(venttarget, Talker) catch(e:Dynamic) null).sprFace, contentpieces[1]);
+                            hud.Chat(true, venttarget.sprFace, contentpieces[1]);
                             iLineState = Content.PROCESSING;
                             
                             hover.visible = true;
@@ -3356,7 +3357,7 @@ If 11 and water, 13
                     }
                     else if (command == "say")
                     {
-                        cast((Content.DEFAULT), StartCameraPan);
+                        StartCameraPan(Content.DEFAULT);
                         ptToCamera.x = starring.x;
                         ptToCamera.y = starring.y;
                         
@@ -3371,7 +3372,7 @@ If 11 and water, 13
                     }
                     else if (command == "ask")
                     {
-                        cast((Content.DEFAULT), StartCameraPan);
+                        StartCameraPan(Content.DEFAULT);
                         ptToCamera.x = starring.x;
                         ptToCamera.y = starring.y;
                         
@@ -3397,7 +3398,7 @@ If 11 and water, 13
                         hero.bJumpRecharged = false;
                         hero.nShootRecharged = 0;
                         state = Content.ACTION;
-                        cast((Content.DEFAULT), StartCameraPan);
+                        StartCameraPan(Content.DEFAULT);
                         
                         return;
                     }
@@ -3412,7 +3413,7 @@ If 11 and water, 13
                         expressionpieces = (Std.string(contentpieces[0])).split(" ");
                         itemname = expressionpieces[0];
                         comparator = expressionpieces[1];
-                        value = as3hx.Compat.parseInt(expressionpieces[2]);
+                        value = Math.floor(expressionpieces[2]);
                         
                         truth = false;
                         
@@ -3458,7 +3459,7 @@ If 11 and water, 13
                         }
                         else
                         {
-                            iSPC = as3hx.Compat.parseInt(destinationline + 1);
+                            iSPC = Math.floor(destinationline + 1);
                             iLineState = Content.NEWLINE;
                             return;
                         }
@@ -3467,7 +3468,7 @@ If 11 and water, 13
                     {
                         expressionpieces = content.split(" ");
                         itemname = expressionpieces[0];
-                        value = as3hx.Compat.parseInt(expressionpieces[1]);
+                        value = Math.floor(expressionpieces[1]);
                         
                         Content.stats.ChangeItem(itemname, value);
                         
@@ -3524,7 +3525,7 @@ If 11 and water, 13
                                 }
                                 else
                                 {
-                                    iSPC = as3hx.Compat.parseInt(destinationline + 1);
+                                    iSPC = Math.floor(destinationline + 1);
                                     iLineState = Content.NEWLINE;
                                     return;
                                 }
@@ -3593,8 +3594,8 @@ If 11 and water, 13
                     }
                     
                     Content.stats.cavemap.AddSpritesToHUD(hud.cavecanvas, zone.description.coords.x, zone.description.coords.y, 
-                            (268 / 2) - 6 + as3hx.Compat.parseInt(Content.stats.nCaveOffsetX), 
-                            (268 / 2) - 6 + as3hx.Compat.parseInt(Content.stats.nCaveOffsetY), 
+                            (268 / 2) - 6 + Math.floor(Content.stats.nCaveOffsetX), 
+                            (268 / 2) - 6 + Math.floor(Content.stats.nCaveOffsetY), 
                             16, 
                             16, 
                             268, 
@@ -3610,7 +3611,7 @@ If 11 and water, 13
                         bMovedOnce = true;
                     }
                     
-                    distext.text = Std.string(as3hx.Compat.parseInt(mouseX / 30)) + "," + Std.string(as3hx.Compat.parseInt(mouseY / 30));  //(hero.x / 30).toString() + "," + (hero.y / 30).toString();  
+                    distext.text = Std.string(Math.floor(mouseX / 30)) + "," + Std.string(Math.floor(mouseY / 30));  //(hero.x / 30).toString() + "," + (hero.y / 30).toString();  
                     if (zone != null)
                     {
                         coordstext.text = "(" + Std.string(zone.description.coords.x) + "," + Std.string(zone.description.coords.y) + ")";
@@ -3755,7 +3756,7 @@ If 11 and water, 13
                     var atexit : Exit = null;
                     for (ex/* AS3HX WARNING could not determine type for var: ex exp: EField(EIdent(zone),exits) type: null */ in zone.exits)
                     {
-                        if (ex.x == as3hx.Compat.parseInt((hero.x + (hero.width / 2)) / 30) && ex.y == as3hx.Compat.parseInt((hero.y + (hero.height / 2)) / 30))
+                        if (ex.x == Math.floor((hero.x + (hero.width / 2)) / 30) && ex.y == Math.floor((hero.y + (hero.height / 2)) / 30))
                         {
                             atexit = ex;
                             
@@ -3784,7 +3785,7 @@ If 11 and water, 13
                             {
                                 if ((Std.is(mon, Talker)) &&
                                     Util.Distance(mon.x, mon.y + (mon.height - 30), hero.x, hero.y) <= 30 &&
-                                    (try cast(mon, Talker) catch(e:Dynamic) null).arrayScript.length > 0)
+                                    mon.arrayScript.length > 0)
                                 {
                                     candidates.push(mon);
                                 }
@@ -3794,7 +3795,7 @@ If 11 and water, 13
                             {
                                 if (candidates.length == 1)
                                 {
-                                    totalk = try cast(candidates[0], Talker) catch(e:Dynamic) null;
+                                    totalk = candidates[0];
                                 }
                                 else
                                 {
@@ -3874,8 +3875,8 @@ If 11 and water, 13
                                 xdiff = 1;
                             }
                             
-                            xdest = as3hx.Compat.parseInt(zone.description.coords.x + xdiff);
-                            ydest = as3hx.Compat.parseInt(zone.description.coords.y + ydiff);
+                            xdest = Math.floor(zone.description.coords.x + xdiff);
+                            ydest = Math.floor(zone.description.coords.y + ydiff);
                             
                             Content.stats.cavemap.ExploreCave(xdest, ydest);
                             
@@ -3906,13 +3907,13 @@ If 11 and water, 13
                                 hud.UpdateHearts();
                                 FlxG.play(Content.soundRefresh, Content.volumeRefresh, false, false, Content.nDefaultSkip);
                                 arrayGrunts.push(new Grunt(hero.x + (hero.width / 2), hero.y + (hero.height / 2) - 20, "Refreshed!", 0xFFff9d9d, 120));
-                                (try cast(arrayGrunts[arrayGrunts.length - 1], Grunt) catch(e:Dynamic) null).AddSprite(19);
-                                groupGrunts.add(try cast(arrayGrunts[arrayGrunts.length - 1], Grunt) catch(e:Dynamic) null);
+                                arrayGrunts[arrayGrunts.length - 1].AddSprite(19);
+                                groupGrunts.addarrayGrunts[arrayGrunts.length - 1];
                             }
                             
                             if (bDoorPan)
                             {
-                                cast((Content.DOORLEAVING), StartCameraPan);
+                                StartCameraPan(Content.DOORLEAVING);
                                 
                                 if (atexit.id == 0)
                                 {
@@ -3937,7 +3938,7 @@ If 11 and water, 13
                             }
                             else
                             {
-                                cast((Content.DEFAULT), StartCameraPan);
+                                StartCameraPan(Content.DEFAULT);
                                 
                                 ptToCamera.x = hero.x - 6;
                                 ptToCamera.y = hero.y + 15;
@@ -4036,39 +4037,39 @@ If 11 and water, 13
         var m : Int = 0;
         while (m < arrayNearMonsters.length)
         {
-            (try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bOnMonster = false;
+            arrayNearMonsters[m].bOnMonster = false;
             
-            if ((try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bLevelCollision && !(try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bBlockade && !(try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bForceImmovable)
+            if (arrayNearMonsters[m].bLevelCollision && !arrayNearMonsters[m].bBlockade && !arrayNearMonsters[m].bForceImmovable)
             {
                 collidetests++;
-                FlxG.collide(try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null, level);
+                MonsterMonsterCollide(FlxG.collidearrayNearMonsters[m], level);
             }
             
-            if ((try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bHeroCollision)
+            if (arrayNearMonsters[m].bHeroCollision)
             {
                 collidetests++;
-                FlxG.collide(try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null, hero);
+                MonsterMonsterCollide(FlxG.collidearrayNearMonsters[m], hero);
             }
             
-            if ((try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bMonsterCollision || (try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bBlockade)
+            if (arrayNearMonsters[m].bMonsterCollision || arrayNearMonsters[m].bBlockade)
             {
-                var n : Int = as3hx.Compat.parseInt(m + 1);
+                var n : Int = Math.floor(m + 1);
                 while (n < arrayNearMonsters.length)
                 {
                     if (
-                        (try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bBlockade
+                        arrayNearMonsters[m].bBlockade
                         &&
-                        (try cast(arrayNearMonsters[n], Monster) catch(e:Dynamic) null).bBlockade
+                        arrayNearMonsters[n].bBlockade
                         == false)
                     {
                         if (
-                            ((try cast(arrayNearMonsters[n], Monster) catch(e:Dynamic) null).bMonsterCollision &&
-                            (try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bMonsterCollision)
+                            (arrayNearMonsters[n].bMonsterCollision &&
+                            arrayNearMonsters[m].bMonsterCollision)
                             ||
-                            ((try cast(arrayNearMonsters[n], Monster) catch(e:Dynamic) null).bBlockade ||
-                            (try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null).bBlockade))
+                            (arrayNearMonsters[n].bBlockade ||
+                            arrayNearMonsters[m].bBlockade))
                         {
-                            FlxG.collide(try cast(arrayNearMonsters[n], Monster) catch(e:Dynamic) null, try cast(arrayNearMonsters[m], Monster) catch(e:Dynamic) null, MonsterMonsterCollide);
+                            MonsterMonsterCollide(FlxG.collidearrayNearMonsters[n], arrayNearMonsters[m]);
                             collidetests++;
                         }
                     }
@@ -4090,7 +4091,7 @@ If 11 and water, 13
             Content.stats.iTime = 0;
         }
         
-        var frame : Int = as3hx.Compat.parseInt((Content.stats.iTime / (300 * 60)) * 30);
+        var frame : Int = Math.floor((Content.stats.iTime / (300 * 60)) * 30);
         
         if (frame >= 8 && frame <= 22)
         {
@@ -4145,7 +4146,7 @@ If 11 and water, 13
     
     public function ArrowLevelCollide(arrow : Arrow, lvl : FlxTilemap) : Void
     {
-        cast((arrow), Twang);
+        Twang(arrow);
     }
     
     public function Twang(arrow : Arrow) : Void
@@ -4184,7 +4185,7 @@ If 11 and water, 13
             arrow.SetDirection(1, false);
             arrow.bBouncing = false;
             
-            cast((arrow), Twang);
+            Twang(arrow);
         }
     }
     
@@ -4198,7 +4199,7 @@ If 11 and water, 13
             arrow.bBouncing = false;
             
             
-            cast((arrow), Twang);
+            Twang(arrow);
         }
         
         if (arrow.isTouching(FlxObject.RIGHT) && arrow.iBounceLife < Content.iArrowBounceStick)
@@ -4206,16 +4207,16 @@ If 11 and water, 13
             arrow.SetDirection(0, true);
             arrow.bBouncing = false;
             
-            cast((arrow), Twang);
+            Twang(arrow);
         }
     }
     
     public function MonsterMonsterCollide(m1 : Monster, m2 : Monster) : Void
     {
-        var m1midx : Int = as3hx.Compat.parseInt(m1.x + (m1.width / 2));
-        var m1midy : Int = as3hx.Compat.parseInt(m1.y + (m1.height / 2));
-        var m2midx : Int = as3hx.Compat.parseInt(m2.x + (m2.width / 2));
-        var m2midy : Int = as3hx.Compat.parseInt(m2.y + (m2.height / 2));
+        var m1midx : Int = Math.floor(m1.x + (m1.width / 2));
+        var m1midy : Int = Math.floor(m1.y + (m1.height / 2));
+        var m2midx : Int = Math.floor(m2.x + (m2.width / 2));
+        var m2midy : Int = Math.floor(m2.y + (m2.height / 2));
         
         var bigwidth : Int = Math.max(m1.width, m2.width);
         
@@ -4253,16 +4254,16 @@ If 11 and water, 13
         var a : Int = 0;
         while (a < hud.arrayAlerts.length)
         {
-            (try cast(hud.arrayAlerts[a], FlxSprite) catch(e:Dynamic) null).visible = false;
+            hud.arrayAlerts[a].visible = false;
             a++;
         }
         
-        var xx : Int = as3hx.Compat.parseInt((hero.x / 30) - 15);
+        var xx : Int = Math.floor((hero.x / 30) - 15);
         while (xx <= hero.x / 30 + 15)
         {
             if (xx >= 0 && xx < level.width)
             {
-                var yy : Int = as3hx.Compat.parseInt((hero.y / 30) + 5);
+                var yy : Int = Math.floor((hero.y / 30) + 5);
                 while (yy < level.height)
                 {
                     if (zone.accessiblemap[xx][yy] != 1)
@@ -4271,7 +4272,7 @@ If 11 and water, 13
                     }
                     else if (zone.spikemap[xx][yy] == 1 && Math.abs(yy * 30 - dolly.y) > 120)
                     {
-                        var alert : FlxSprite = try cast(Util.GetInvisibleSpriteByName(hud.arrayAlerts, "alert"), FlxSprite) catch(e:Dynamic) null;
+                        var alert : FlxSprite = Util.GetInvisibleSpriteByName(hud.arrayAlerts, "alert");
                         if (alert != null)
                         {
                             alert.x = xx * 30;
@@ -4308,14 +4309,14 @@ If 11 and water, 13
                 
                 {
                     var r : Int = Util.Random(0, zone.waterlist.length - 1);
-                    x = as3hx.Compat.parseInt((try cast(zone.waterlist[r], PointPlus) catch(e:Dynamic) null).x * 30);
-                    y = as3hx.Compat.parseInt((try cast(zone.waterlist[r], PointPlus) catch(e:Dynamic) null).y * 30);
+                    x = Math.floor(zone.waterlist[r].x * 30);
+                    y = Math.floor(zone.waterlist[r].y * 30);
                     
                     if (Math.abs(hero.x - x) < iThresholdX && Math.abs(hero.y - y) < iThresholdY)
                     {
                         x += Util.Random(0, 29);
                         
-                        if (Std.string((try cast(zone.waterlist[r], PointPlus) catch(e:Dynamic) null).obj) == "s")
+                        if (Std.string(zone.waterlist[r].obj) == "s")
                         {
                             y += Util.Random(11, 29);
                         }
@@ -4327,7 +4328,7 @@ If 11 and water, 13
                     
                     var toadd : Twinkle = null;
                     
-                    toadd = try cast(Util.GetInvisibleSpriteByName(arrayParticles, "Twinkle"), Twinkle) catch(e:Dynamic) null;
+                    toadd = Util.GetInvisibleSpriteByName(arrayParticles, "Twinkle");
                     
                     if (toadd == null)
                     {
@@ -4357,7 +4358,7 @@ If 11 and water, 13
             { // bub
                 
                 {
-                    x = as3hx.Compat.parseInt(hero.x + 8);
+                    x = Math.floor(hero.x + 8);
                     y = hero.y;
                     
                     var dir : Int = 270;
@@ -4384,7 +4385,7 @@ If 11 and water, 13
     {
         var toadd : Bub = null;
         
-        toadd = try cast(Util.GetInvisibleSpriteByName(arrayParticles, "Bub"), Bub) catch(e:Dynamic) null;
+        toadd = Util.GetInvisibleSpriteByName(arrayParticles, "Bub");
         
         if (toadd == null)
         {
@@ -4439,10 +4440,10 @@ If 11 and water, 13
         { //FlxG.collide(arrayAllGems[m] as Collectible, heo);
             
             
-            if ((try cast(arrayAllGems[g], Collectible) catch(e:Dynamic) null).doomed)
+            if (arrayAllGems[g].doomed)
             {
-                var tilex : Int = as3hx.Compat.parseInt(((try cast(arrayAllGems[g], Collectible) catch(e:Dynamic) null).x - 10) / 30);
-                var tiley : Int = as3hx.Compat.parseInt(((try cast(arrayAllGems[g], Collectible) catch(e:Dynamic) null).y - 10) / 30);
+                var tilex : Int = Math.floor((arrayAllGems[g].x - 10) / 30);
+                var tiley : Int = Math.floor((arrayAllGems[g].y - 10) / 30);
                 
                 lillevel.setTile(tilex, tiley, 1);
                 
@@ -4451,7 +4452,7 @@ If 11 and water, 13
                         0));
                 
                 
-                var name : String = (try cast(arrayAllGems[g], Collectible) catch(e:Dynamic) null).name;
+                var name : String = arrayAllGems[g].name;
                 
                 if (name == "+1 Pip")
                 {
@@ -4498,7 +4499,7 @@ If 11 and water, 13
         var a : Int = 0;
         while (a < arrayGrunts.length)
         {
-            if ((try cast(arrayGrunts[a], Grunt) catch(e:Dynamic) null).doomed == true)
+            if (arrayGrunts[a].doomed == true)
             {
                 groupGrunts.remove(arrayGrunts[a]);
                 arrayGrunts.splice(a, 1);
@@ -4513,7 +4514,7 @@ If 11 and water, 13
         var a : Int = 0;
         while (a < arrayPellets.length)
         {
-            if ((try cast(arrayPellets[a], Pellet) catch(e:Dynamic) null).GetCurrentFrame() == 40)
+            if (arrayPellets[a].GetCurrentFrame() == 40)
             {
                 groupPellets.remove(arrayPellets[a]);
                 arrayPellets.splice(a, 1);
@@ -4521,7 +4522,7 @@ If 11 and water, 13
             }
             else
             {
-                FlxG.collide(try cast(arrayPellets[a], Pellet) catch(e:Dynamic) null, level);
+                MonsterMonsterCollide(FlxG.collidearrayPellets[a], level);
             }
             a++;
         }
@@ -4563,7 +4564,7 @@ If 11 and water, 13
                     arrow.immovable = false;
                     arrow.allowCollisions = iCollisions;
                     
-                    if (arrow.GetCurrentFrame() == as3hx.Compat.parseInt(78 * 0.75))
+                    if (arrow.GetCurrentFrame() == Math.floor(78 * 0.75))
                     {
                         arrow.flicker(100);
                     }
@@ -4679,12 +4680,12 @@ If 11 and water, 13
             
             if (arrayFarMonsters.length > 0)
             {
-                if ((try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).visible)
+                if (arrayFarMonsters[iFarCheck].visible)
                 {
-                    if ((try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).doomed || (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).bKillIfFar ||
-                        (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).y > level.height + 400)
+                    if (arrayFarMonsters[iFarCheck].doomed || arrayFarMonsters[iFarCheck].bKillIfFar ||
+                        arrayFarMonsters[iFarCheck].y > level.height + 400)
                     {
-                        if ((try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).bFrontMonster)
+                        if (arrayFarMonsters[iFarCheck].bFrontMonster)
                         {
                             groupFrontMonsters.remove(arrayFarMonsters[iFarCheck]);
                         }
@@ -4694,32 +4695,32 @@ If 11 and water, 13
                         }
                         
                         var why : String = "";
-                        if ((try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).doomed)
+                        if (arrayFarMonsters[iFarCheck].doomed)
                         {
                             why += " doomed";
                         }
-                        if ((try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).bKillIfFar)
+                        if (arrayFarMonsters[iFarCheck].bKillIfFar)
                         {
                             why += " killiffar";
                         }
-                        if ((try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).y > level.height + 400)
+                        if (arrayFarMonsters[iFarCheck].y > level.height + 400)
                         {
                             why += " oow";
                         }
                         
                         //trace((arrayFarMonsters[iFarCheck] as Monster).strName + " removed (was far) " + why);
                         
-                        (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).visible = false;
+                        arrayFarMonsters[iFarCheck].visible = false;
                         //arrayFarMonsters[iFarCheck] = null;
                         arrayFarMonsters.splice(iFarCheck, 1);
                     }
-                    else if (Math.abs(hero.x - (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).x) <= iThresholdX &&
-                        Math.abs(hero.y - (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).y) <= iThresholdY)
+                    else if (Math.abs(hero.x - arrayFarMonsters[iFarCheck].x) <= iThresholdX &&
+                        Math.abs(hero.y - arrayFarMonsters[iFarCheck].y) <= iThresholdY)
                     
                     { //trace((arrayFarMonsters[iFarCheck] as Monster).strName + " is now near");
                         
                         
-                        (try cast(arrayFarMonsters[iFarCheck], Monster) catch(e:Dynamic) null).Pause(false);
+                        arrayFarMonsters[iFarCheck].Pause(false);
                         
                         arrayNearMonsters.push(arrayFarMonsters[iFarCheck]);
                         arrayFarMonsters.splice(iFarCheck, 1);
@@ -4733,11 +4734,11 @@ If 11 and water, 13
             
             if (arrayNearMonsters.length > 0)
             {
-                if ((try cast(arrayNearMonsters[iNearCheck], Monster) catch(e:Dynamic) null).visible)
+                if (arrayNearMonsters[iNearCheck].visible)
                 {
-                    if ((try cast(arrayNearMonsters[iNearCheck], Monster) catch(e:Dynamic) null).doomed)
+                    if (arrayNearMonsters[iNearCheck].doomed)
                     {
-                        if ((try cast(arrayNearMonsters[iNearCheck], Monster) catch(e:Dynamic) null).bFrontMonster)
+                        if (arrayNearMonsters[iNearCheck].bFrontMonster)
                         {
                             groupFrontMonsters.remove(arrayNearMonsters[iNearCheck]);
                         }
@@ -4748,16 +4749,16 @@ If 11 and water, 13
                         
                         //trace((arrayNearMonsters[iNearCheck] as Monster).strName + " removed (was near)");
                         
-                        (try cast(arrayNearMonsters[iNearCheck], Monster) catch(e:Dynamic) null).visible = false;
+                        arrayNearMonsters[iNearCheck].visible = false;
                         //arrayNearMonsters[iNearCheck] = null;
                         arrayNearMonsters.splice(iNearCheck, 1);
                     }
-                    else if (Math.abs(hero.x - (try cast(arrayNearMonsters[iNearCheck], Monster) catch(e:Dynamic) null).x) > iThresholdX ||
-                        Math.abs(hero.y - (try cast(arrayNearMonsters[iNearCheck], Monster) catch(e:Dynamic) null).y) > iThresholdY)
+                    else if (Math.abs(hero.x - arrayNearMonsters[iNearCheck].x) > iThresholdX ||
+                        Math.abs(hero.y - arrayNearMonsters[iNearCheck].y) > iThresholdY)
                     {
                         if (bPauseFarMonsters)
                         {
-                            (try cast(arrayNearMonsters[iNearCheck], Monster) catch(e:Dynamic) null).Pause(true);
+                            arrayNearMonsters[iNearCheck].Pause(true);
                         }
                         
                         //trace((arrayNearMonsters[iNearCheck] as Monster).strName + " is now far");
@@ -4771,14 +4772,14 @@ If 11 and water, 13
         }
     }
     
-    public var ptDeviation : FlxPoint = new FlxPoint(0, 60);
-    public var ptTargetDeviation : FlxPoint = new FlxPoint(0, 60);
+    public var ptDeviation : Point = new Point(0, 60);
+    public var ptTargetDeviation : Point = new Point(0, 60);
     public var nCamSpeed : Float = 50;
     
     public var nCamTransfer : Float = 1;
-    public var ptFromCamera : FlxPoint = new FlxPoint(0, 0);
-    public var ptToCamera : FlxPoint = new FlxPoint(0, 0);
-    public var ptPlayerCamera : FlxPoint = new FlxPoint(0, 0);
+    public var ptFromCamera : Point = new Point(0, 0);
+    public var ptToCamera : Point = new Point(0, 0);
+    public var ptPlayerCamera : Point = new Point(0, 0);
     
     public function UpdatePlayerCamera() : Void
     {
@@ -4979,7 +4980,7 @@ If 11 and water, 13
             
             var toadd : Puff = null;
             
-            toadd = try cast(Util.GetInvisibleSpriteByName(arrayParticles, "Puff"), Puff) catch(e:Dynamic) null;
+            toadd = Util.GetInvisibleSpriteByName(arrayParticles, "Puff");
             
             if (toadd == null)
             {

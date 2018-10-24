@@ -11,8 +11,8 @@ class Slab extends Monster
     {
         super(p, "Slab", X, Y, colTrans, speedmod);
         
-        addAnimation("d", [12, 13], 4, true);
-        play("d");
+        animation.add("d", [12, 13], 4, true);
+        animation.play("d");
         
         bAcrophobic = true;
         

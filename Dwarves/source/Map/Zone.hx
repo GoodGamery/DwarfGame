@@ -3,6 +3,8 @@ package map;
 import haxe.Constraints.Function;
 import flixel.*;
 import flash.geom.Point;
+import components.PointInt;
+import flixel.math.FlxRandom;
 
 class Zone
 {
@@ -21,11 +23,11 @@ class Zone
     public var chambermap : Array<Dynamic> = null;
     public var spikemap : Array<Dynamic> = null;
     public var wallqualmap : Array<Dynamic> = null;
-    public var exits : Array<Dynamic> = null;
-    public var rand : Rndm = null;
+    public var exits : Array<Exit> = null;
+    public var rand : FlxRandom = null;
     
-    public var upperleft : Point = new Point(-1, -1);
-    public var lowerright : Point = new Point(-1, -1);
+    public var upperleft : PointInt = new PointInt(-1, -1);
+    public var lowerright : PointInt = new PointInt(-1, -1);
     
     public var description : Cave;
     
@@ -34,10 +36,10 @@ class Zone
     
     public var backmap : Array<Dynamic> = null;
     public var remplats : Int = -1;
-    public var points : Array<Dynamic> = new Array<Dynamic>();
-    public var secrets : Array<Dynamic> = new Array<Dynamic>();
-    public var intangs : Array<Dynamic> = new Array<Dynamic>();
-    public var floorsecrets : Array<Dynamic> = new Array<Dynamic>();
+    public var points : Array<PointInt> = new Array<PointInt>();
+    public var secrets : Array<PointInt> = new Array<PointInt>();
+    public var intangs : Array<PointInt> = new Array<PointInt>();
+    public var floorsecrets : Array<PointInt> = new Array<PointInt>();
     public var momentum : Int = 20;
     public var brush : Int = 1;
     
@@ -68,8 +70,8 @@ class Zone
         spikemap = Util.Clone(z.spikemap);
         wallqualmap = Util.Clone(z.wallqualmap);
         
-        exits = new Array<Dynamic>();
-        for (ex/* AS3HX WARNING could not determine type for var: ex exp: EField(EIdent(z),exits) type: null */ in z.exits)
+        exits = new Array<Exit>();
+        for (ex in z.exits)
         {
             exits.push(new Exit(ex.x, ex.y, ex.id));
         }
@@ -80,25 +82,25 @@ class Zone
         description = new Cave();
         description.BecomeCopyOf(z.description);
         
-        secrets = new Array<Dynamic>();
-        for (pt/* AS3HX WARNING could not determine type for var: pt exp: EField(EIdent(z),secrets) type: null */ in z.secrets)
+        secrets = new Array<PointInt>();
+        for (pt in z.secrets)
         {
-            secrets.push(new Point(pt.x, pt.y));
+            secrets.push(new PointInt(pt.x, pt.y));
         }
         
-        intangs = new Array<Dynamic>();
-        for (ipt/* AS3HX WARNING could not determine type for var: ipt exp: EField(EIdent(z),intangs) type: null */ in z.intangs)
+        intangs = new Array<PointInt>();
+        for (ipt in z.intangs)
         {
-            intangs.push(new Point(ipt.x, ipt.y));
+            intangs.push(new PointInt(ipt.x, ipt.y));
         }
         
-        floorsecrets = new Array<Dynamic>();
-        for (fpt/* AS3HX WARNING could not determine type for var: fpt exp: EField(EIdent(z),floorsecrets) type: null */ in z.floorsecrets)
+        floorsecrets = new Array<PointInt>();
+        for (fpt in z.floorsecrets)
         {
-            floorsecrets.push(new Point(fpt.x, fpt.y));
+            floorsecrets.push(new PointInt(fpt.x, fpt.y));
         }
         
-        rand = new Rndm(Util.Seed(description.coords.x + 100, description.coords.y + 100));
+        rand = new FlxRandom(Util.Seed(description.coords.x + 100, description.coords.y + 100));
     }
     
     public function new()
@@ -107,7 +109,7 @@ class Zone
     
     public function InitZone(x : Int, y : Int) : Void
     {
-        rand = new Rndm(Util.Seed(x, y));
+        rand = new FlxRandom(Util.Seed(x, y));
         
         map = new Array<Dynamic>();
         watermap = new Array<Dynamic>();
@@ -121,7 +123,7 @@ class Zone
         chambermap = new Array<Dynamic>();
         spikemap = new Array<Dynamic>();
         wallqualmap = new Array<Dynamic>();
-        exits = new Array<Dynamic>();
+        exits = new Array<Exit>();
         
         var xx : Int = 0;
         var yy : Int = 0;
@@ -264,7 +266,7 @@ class Zone
         
         while (array.length > 0)
         {
-            var i : Int = rand.integer(0, array.length);
+            var i : Int = rand.int(0, array.length);
             toret.push(array[i]);
             array.splice(i, 1);
         }
@@ -285,7 +287,7 @@ class Zone
         var i : Int = 0;
         while (i < exits.length - 1)
         {
-            if (CheckPassage(new Point((try cast(exits[i], Exit) catch(e:Dynamic) null).x, (try cast(exits[i], Exit) catch(e:Dynamic) null).y), new Point((try cast(exits[i + 1], Exit) catch(e:Dynamic) null).x, (try cast(exits[i + 1], Exit) catch(e:Dynamic) null).y)) == false)
+            if (CheckPassage(new PointInt(exits[i].x, exits[i].y), new PointInt(exits[i + 1].x, exits[i + 1].y)) == false)
             {
                 return false;
             }
@@ -295,21 +297,20 @@ class Zone
         return true;
     }
     
-    public function CheckPassage(a : Point, b : Point) : Bool
+    public function CheckPassage(a : PointInt, b : PointInt) : Bool
     {
         var checkmap : Array<Dynamic> = Util.Clone(backmap);
         
-        var checkers : Array<Dynamic> = new Array<Dynamic>();
+        var checkers : Array<PointInt> = new Array<PointInt>();
         checkers.push(a);
         
         while (checkers.length > 0)
         {
-            var oldcheckers : Array<Dynamic> = new Array<Dynamic>();  // Util.Clone(checkers);  
+            var oldcheckers : Array<Point> = new Array<Point>();  // Util.Clone(checkers);  
             
             for (pt in checkers)
             {
-                oldcheckers.push(new Point());
-                oldcheckers[oldcheckers.length - 1] = pt;
+                oldcheckers.push(pt);
             }
             
             var i : Int = 0;
@@ -317,7 +318,7 @@ class Zone
             i = 0;
             while (i < oldcheckers.length)
             {
-                var tocheck : Point = try cast(oldcheckers[i], Point) catch(e:Dynamic) null;
+                var tocheck : PointInt = oldcheckers[i];
                 
                 if (tocheck.y == b.y && tocheck.x == b.x)
                 {
@@ -330,7 +331,7 @@ class Zone
                         (checkmap[tocheck.x][tocheck.y - 1] == 0 && intangmap[tocheck.x][tocheck.y - 1] == 1))
                     {
                         checkmap[tocheck.x][tocheck.y - 1] = 3;
-                        checkers.push(new Point(tocheck.x, tocheck.y - 1));
+                        checkers.push(new PointInt(tocheck.x, tocheck.y - 1));
                     }
                 }
                 
@@ -340,7 +341,7 @@ class Zone
                         (checkmap[tocheck.x][tocheck.y + 1] == 0 && intangmap[tocheck.x][tocheck.y + 1] == 1))
                     {
                         checkmap[tocheck.x][tocheck.y + 1] = 3;
-                        checkers.push(new Point(tocheck.x, tocheck.y + 1));
+                        checkers.push(new PointInt(tocheck.x, tocheck.y + 1));
                     }
                 }
                 
@@ -350,7 +351,7 @@ class Zone
                         (checkmap[tocheck.x - 1][tocheck.y] == 0 && intangmap[tocheck.x - 1][tocheck.y] == 1))
                     {
                         checkmap[tocheck.x - 1][tocheck.y] = 3;
-                        checkers.push(new Point(tocheck.x - 1, tocheck.y));
+                        checkers.push(new PointInt(tocheck.x - 1, tocheck.y));
                     }
                 }
                 
@@ -360,7 +361,7 @@ class Zone
                         (checkmap[tocheck.x + 1][tocheck.y] == 0 && intangmap[tocheck.x + 1][tocheck.y] == 1))
                     {
                         checkmap[tocheck.x + 1][tocheck.y] = 3;
-                        checkers.push(new Point(tocheck.x + 1, tocheck.y));
+                        checkers.push(new PointInt(tocheck.x + 1, tocheck.y));
                     }
                 }
                 i++;
@@ -412,14 +413,14 @@ class Zone
         { //trace("a - " + ((1.0 / 3.0) * width).toString());
             
             
-            x = as3hx.Compat.parseInt(rand.integer(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
-            y = as3hx.Compat.parseInt(rand.integer(0, (2.0 / 9.0) * height) + (1.0 / 9.0) * height);
+            x = Math.floor(rand.int(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
+            y = Math.floor(rand.int(0, (2.0 / 9.0) * height) + (1.0 / 9.0) * height);
             
             
             //trace("b - " + x.toString());
             
-            x = (width / 2) - (((width / 2) - x) * (hcinch));
-            y = (height / 2) - (((height / 2) - y) * vcinch);
+            x = Math.floor((width / 2) - (((width / 2) - x) * (hcinch)));
+            y = Math.floor((height / 2) - (((height / 2) - y) * vcinch));
             
             
             exits.push(new Exit(x, y, 0));
@@ -427,8 +428,8 @@ class Zone
         
         if (description.exits.south)
         {
-            x = as3hx.Compat.parseInt(rand.integer(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
-            y = as3hx.Compat.parseInt(rand.integer(0, (2.0 / 9.0) * height) + (2.0 / 3.0) * height);
+            x = Math.floor(rand.int(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
+            y = Math.floor(rand.int(0, (2.0 / 9.0) * height) + (2.0 / 3.0) * height);
             
             x = (width / 2) - (((width / 2) - x) * hcinch);
             y = (height / 2) - (((height / 2) - y) * vcinch);
@@ -438,8 +439,8 @@ class Zone
         
         if (description.exits.west)
         {
-            x = as3hx.Compat.parseInt(rand.integer(0, (2.0 / 9.0) * width) + (1.0 / 9.0) * width);
-            y = as3hx.Compat.parseInt(rand.integer(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
+            x = Math.floor(rand.int(0, (2.0 / 9.0) * width) + (1.0 / 9.0) * width);
+            y = Math.floor(rand.int(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
             
             x = (width / 2) - (((width / 2) - x) * hcinch);
             y = (height / 2) - (((height / 2) - y) * vcinch);
@@ -449,8 +450,8 @@ class Zone
         
         if (description.exits.east)
         {
-            x = as3hx.Compat.parseInt(rand.integer(0, (2.0 / 9.0) * width) + (2.0 / 3.0) * width);
-            y = as3hx.Compat.parseInt(rand.integer(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
+            x = Math.floor(rand.int(0, (2.0 / 9.0) * width) + (2.0 / 3.0) * width);
+            y = Math.floor(rand.int(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
             
             x = (width / 2) - (((width / 2) - x) * hcinch);
             y = (height / 2) - (((height / 2) - y) * vcinch);
@@ -460,8 +461,8 @@ class Zone
         
         if (exits.length == 1)
         {
-            x = as3hx.Compat.parseInt(rand.integer(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
-            y = as3hx.Compat.parseInt(rand.integer(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
+            x = Math.floor(rand.int(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
+            y = Math.floor(rand.int(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
             
             x = (width / 2) - (((width / 2) - x) * hcinch);
             y = (height / 2) - (((height / 2) - y) * vcinch);
@@ -474,33 +475,33 @@ class Zone
         ex = 0;
         while (ex < exits.length)
         {
-            if (!(try cast(exits[ex], Exit) catch(e:Dynamic) null).handled)
+            if (!exits[ex].handled)
             {
-                var digger : Point = new Point((try cast(exits[ex], Exit) catch(e:Dynamic) null).x, (try cast(exits[ex], Exit) catch(e:Dynamic) null).y);
+                var digger : Point = new PointInt(exits[ex].x, exits[ex].y);
                 var target : Point = null;
                 var targetexit : Int = -1;
                 
                 if (ex == 0)
                 {
-                    targetexit = as3hx.Compat.parseInt(rand.integer(0, exits.length - 1) + 1);  // <- Do NOT get tricked into thinking the rand is exclusive!  
+                    targetexit = Math.floor(rand.int(0, exits.length - 1) + 1);  // <- Do NOT get tricked into thinking the rand is exclusive!  
                     
-                    (try cast(exits[ex], Exit) catch(e:Dynamic) null).handled = true;
-                    (try cast(exits[targetexit], Exit) catch(e:Dynamic) null).handled = true;
+                    exits[ex].handled = true;
+                    exits[targetexit].handled = true;
                     
-                    target = new Point((try cast(exits[targetexit], Exit) catch(e:Dynamic) null).x, (try cast(exits[targetexit], Exit) catch(e:Dynamic) null).y);
+                    target = new PointInt(exits[targetexit].x, exits[targetexit].y);
                 }
                 else if (nodes.length > 0)
                 {
-                    targetexit = rand.integer(0, nodes.length);
+                    targetexit = rand.int(0, nodes.length);
                     
-                    (try cast(exits[ex], Exit) catch(e:Dynamic) null).handled = true;
+                    exits[ex].handled = true;
                     
-                    target = new Point((try cast(nodes[targetexit], Point) catch(e:Dynamic) null).x, (try cast(nodes[targetexit], Point) catch(e:Dynamic) null).y);
+                    target = new PointInt(nodes[targetexit].x, nodes[targetexit].y);
                 }
                 else
                 {
                     trace("No nodes?!?!?!?!?!!?!?!?!??!?!?!?!?!??!?!?!?!?!??!?!");
-                    target = new Point(0, 0);
+                    target = new PointInt(0, 0);
                 }
                 
                 
@@ -514,7 +515,7 @@ class Zone
                 
                 do
                 {
-                    nodes.push(new Point(as3hx.Compat.parseInt(digger.x), as3hx.Compat.parseInt(digger.y)));
+                    nodes.push(new PointInt(Math.floor(digger.x), Math.floor(digger.y)));
                     
                     
                     var xdiff : Float = target.x - digger.x;
@@ -535,13 +536,13 @@ class Zone
                             wiggle = 0;
                             angle = Math.asin((target.y - digger.y) / dist);
                         }
-                        else if (rand.integer(0, 100) <= 98 && angle != -999)
+                        else if (rand.int(0, 100) <= 98 && angle != -999)
                         {  //Console.WriteLine("Preserving previous: " + (angle * (180 / Math.PI)));  
                             
                         }
                         else
                         {
-                            wiggle = rand.integer(0, maxwiggle) - (maxwiggle / 2);
+                            wiggle = rand.int(0, maxwiggle) - (maxwiggle / 2);
                             wiggle *= Math.PI / 180;
                             angle = Math.asin((target.y - digger.y) / dist) + wiggle;
                         }
@@ -560,7 +561,7 @@ class Zone
                             }
                         }
                         
-                        var trav : Float = rand.integer(as3hx.Compat.parseInt(hopdistance / 2), hopdistance * 4);
+                        var trav : Float = rand.int(Math.floor(hopdistance / 2), hopdistance * 4);
                         
                         var xtrav : Float = Math.cos(angle) * trav * -1;
                         var ytrav : Float = Math.sin(angle) * trav * -1;
@@ -575,11 +576,11 @@ class Zone
                             ytrav *= -1;
                         }
                         
-                        mult = (rand.integer(0, 100) + 100) / 100;
+                        mult = (rand.int(0, 100) + 100) / 100;
                         //trace("mult a = " + mult.toString());
                         //trace("mult b = " + (int(size * mult)).toString());
                         
-                        StampLine(as3hx.Compat.parseInt(size * mult), new Point(as3hx.Compat.parseInt(digger.x), as3hx.Compat.parseInt(digger.y)), new Point(as3hx.Compat.parseInt(digger.x + xtrav), as3hx.Compat.parseInt(digger.y + ytrav)));
+                        StampLine(Math.floor(size * mult), new PointInt(Math.floor(digger.x), Math.floor(digger.y)), new PointInt(Math.floor(digger.x + xtrav), Math.floor(digger.y + ytrav)));
                         
                         digger.x += xtrav;
                         digger.y += ytrav;
@@ -587,13 +588,13 @@ class Zone
                 }
                 while ((toofar));
                 
-                mult = (rand.integer(0, 100) + 100) / 100;
+                mult = (rand.int(0, 100) + 100) / 100;
                 //trace("mult c = " + mult.toString());
                 //trace("mult d = " + (int(size * mult)).toString());
                 
-                var t : Point = new Point(as3hx.Compat.parseInt(target.x), as3hx.Compat.parseInt(target.y));
+                var t : Point = new PointInt(Math.floor(target.x), Math.floor(target.y));
                 
-                StampLine(as3hx.Compat.parseInt(size * mult), t, t);
+                StampLine(Math.floor(size * mult), t, t);
             }
             ex++;
         }
@@ -602,13 +603,13 @@ class Zone
         ex = 0;
         while (ex < exits.length)
         {
-            if ((try cast(exits[ex], Exit) catch(e:Dynamic) null).id == 0)
+            if (exits[ex].id == 0)
             {
-                SetMap((try cast(exits[ex], Exit) catch(e:Dynamic) null).x - 1, (try cast(exits[ex], Exit) catch(e:Dynamic) null).y + 1, 1);
-                SetMap((try cast(exits[ex], Exit) catch(e:Dynamic) null).x, (try cast(exits[ex], Exit) catch(e:Dynamic) null).y + 1, 1);
-                SetMap((try cast(exits[ex], Exit) catch(e:Dynamic) null).x + 1, (try cast(exits[ex], Exit) catch(e:Dynamic) null).y + 1, 1);
+                SetMap(exits[ex].x - 1, exits[ex].y + 1, 1);
+                SetMap(exits[ex].x, exits[ex].y + 1, 1);
+                SetMap(exits[ex].x + 1, exits[ex].y + 1, 1);
             }
-            else if ((try cast(exits[ex], Exit) catch(e:Dynamic) null).id == 99)
+            else if (exits[ex].id == 99)
             {  //exits.splice(ex, 1);  
                 //ex--;
                 
@@ -622,7 +623,7 @@ class Zone
     
     public function ResetRandom() : Void
     {
-        rand = new Rndm(Util.Seed(this.description.coords.x + 100, this.description.coords.y + 100));
+        rand = new FlxRandom(Util.Seed(this.description.coords.x + 100, this.description.coords.y + 100));
     }
     
     public function DefineBounds() : Void
@@ -679,10 +680,10 @@ class Zone
             x++;
         }
         
-        y = as3hx.Compat.parseInt(height - 1);
+        y = Math.floor(height - 1);
         while (y > 0 && lowerright.y == -1)
         {
-            x = as3hx.Compat.parseInt(width - 1);
+            x = Math.floor(width - 1);
             while (x > 0 && lowerright.y == -1)
             {
                 if (GetMap(x, y) != 1)
@@ -694,10 +695,10 @@ class Zone
             y--;
         }
         
-        x = as3hx.Compat.parseInt(width - 1);
+        x = Math.floor(width - 1);
         while (x > 0 && lowerright.x == -1)
         {
-            y = as3hx.Compat.parseInt(height - 1);
+            y = Math.floor(height - 1);
             while (y > 0 && lowerright.x == -1)
             {
                 if (GetMap(x, y) != 1)
@@ -717,10 +718,10 @@ class Zone
     
     public function CleanUp() : Void
     {
-        var y : Int = as3hx.Compat.parseInt(upperleft.y + 2);
+        var y : Int = Math.floor(upperleft.y + 2);
         while (y < lowerright.y - 2)
         {
-            var x : Int = as3hx.Compat.parseInt(upperleft.x + 2);
+            var x : Int = Math.floor(upperleft.x + 2);
             while (x < lowerright.x - 2)
             {
                 if (GetMap(x - 1, y) == 1 && GetMap(x, y) == 0 && GetMap(x + 1, y) == 1 &&
@@ -737,10 +738,10 @@ class Zone
                 
                 var bNearExitOrWater : Bool = false;
                 
-                var xx : Int = as3hx.Compat.parseInt(x - 1);
+                var xx : Int = Math.floor(x - 1);
                 while (xx <= x + 1 && bNearExitOrWater == false)
                 {
-                    var yy : Int = as3hx.Compat.parseInt(y - 1);
+                    var yy : Int = Math.floor(y - 1);
                     while (yy <= y + 1 && bNearExitOrWater == false)
                     {
                         if (watermap[xx][yy] == 1)
@@ -789,10 +790,10 @@ class Zone
     
     public function MakeSpikes() : Void
     {
-        var y : Int = as3hx.Compat.parseInt(upperleft.y + 10);
+        var y : Int = Math.floor(upperleft.y + 10);
         while (y < lowerright.y)
         {
-            var x : Int = as3hx.Compat.parseInt(upperleft.x + 1);
+            var x : Int = Math.floor(upperleft.x + 1);
             while (x < lowerright.x)
             {
                 var bValid : Bool = true;
@@ -824,7 +825,7 @@ class Zone
                         {
                             if (GetMap(xx + 1, y) == 1)
                             {
-                                length = as3hx.Compat.parseInt(xx - x + 2);
+                                length = Math.floor(xx - x + 2);
                                 break;
                             }
                         }
@@ -859,7 +860,7 @@ class Zone
                         yoff++;
                     }
                     
-                    if (rand.integer(0, 100) <= Content.nRequireSpaceForSpikesChance * 100)
+                    if (rand.int(0, 100) <= Content.nRequireSpaceForSpikesChance * 100)
                     
                     { // Guarantee jump space
                         
@@ -965,13 +966,13 @@ class Zone
                 var xchange : Float = perc * (b.x - a.x);
                 xn = xchange + a.x;
                 
-                StampAt(SetMap, stamp, size, as3hx.Compat.parseInt(xn), as3hx.Compat.parseInt(yn));
+                StampAt(SetMap, stamp, size, Math.floor(xn), Math.floor(yn));
                 yn++;
             }
         }
         else if (a.x == b.x)
         {
-            StampAt(SetMap, stamp, size, as3hx.Compat.parseInt(a.x), as3hx.Compat.parseInt(a.y));
+            StampAt(SetMap, stamp, size, Math.floor(a.x), Math.floor(a.y));
         }
         else
         {
@@ -989,7 +990,7 @@ class Zone
                 var ychange : Float = perc * (b.y - a.y);
                 yn = ychange + a.y;
                 
-                StampAt(SetMap, stamp, size, as3hx.Compat.parseInt(xn), as3hx.Compat.parseInt(yn));
+                StampAt(SetMap, stamp, size, Math.floor(xn), Math.floor(yn));
                 xn++;
             }
         }
@@ -1042,15 +1043,15 @@ class Zone
     {
         var halfsize : Float = size / 2;
         
-        var sx : Int = as3hx.Compat.parseInt(x - as3hx.Compat.parseInt(halfsize));
-        var sy : Int = as3hx.Compat.parseInt(y - as3hx.Compat.parseInt(halfsize));
+        var sx : Int = Math.floor(x - Math.floor(halfsize));
+        var sy : Int = Math.floor(y - Math.floor(halfsize));
         
         for (yy in 0...size)
         {
             for (xx in 0...size)
             {
-                var cx : Int = as3hx.Compat.parseInt(sx + xx);
-                var cy : Int = as3hx.Compat.parseInt(sy + yy);
+                var cx : Int = Math.floor(sx + xx);
+                var cy : Int = Math.floor(sy + yy);
                 
                 
                 if (stamp[xx][yy] == 1)
@@ -1065,8 +1066,6 @@ class Zone
     public function ApplyFilter(f : Function, items : Int, variable : Int, deathchance : Int) : Bool
     //for (var i:int = 0; i < iterations; i++)   // PSH WHO DOES ITERATIONS ANYMORE
     {
-        
-        { //
         var failout : Int = 0;
         var keepgoing : Bool = false;
         
@@ -1178,11 +1177,11 @@ class Zone
                     {
                         if (GetBackmap(x, y) == 1 && (GetBackmap(x + 1, y) == 0) ||
                             (GetBackmap(x, y) == 0 && (GetBackmap(x + 1, y) == 1) ||
-                            (HowHighUp(x, y) > 5 && rand.integer(0, 100) < 40)
+                            (HowHighUp(x, y) > 5 && rand.int(0, 100) < 40)
                             ||
-                            (GetBackmap(x, y) == 0 && rand.integer(0, 100) < 10)))
+                            (GetBackmap(x, y) == 0 && rand.int(0, 100) < 10)))
                         {
-                            points.push(new Point(x, y));
+                            points.push(new PointInt(x, y));
                         }
                         x++;
                     }
@@ -1192,22 +1191,22 @@ class Zone
             
             if (points.length > 0)
             {
-                var p : Int = rand.integer(0, points.length);
-                var pt : Point = try cast(points[p], Point) catch(e:Dynamic) null;
+                var p : Int = rand.int(0, points.length);
+                var pt : Point = points[p];
                 
-                var span : Int = as3hx.Compat.parseInt(rand.integer(0, variable) + (variable / 2) + 1);
+                var span : Int = Math.floor(rand.int(0, variable) + (variable / 2) + 1);
                 
                 var h : Int = -1;
                 
-                h = as3hx.Compat.parseInt(pt.x - (span / 2));
+                h = Math.floor(pt.x - (span / 2));
                 while (h < pt.x + (span / 2))
                 {
                     SetBackmap(h, pt.y + 1, 1);
                     h++;
                 }
                 
-                h = as3hx.Compat.parseInt(pt.x - (span / 2) + 1 + (rand.integer(0, 2)));
-                while (h < pt.x + (span / 2) - 1 - (rand.integer(0, 2)))
+                h = Math.floor(pt.x - (span / 2) + 1 + (rand.int(0, 2)));
+                while (h < pt.x + (span / 2) - 1 - (rand.int(0, 2)))
                 {
                     SetBackmap(h, pt.y, 1);
                     h++;
@@ -1231,8 +1230,8 @@ class Zone
         
         while (success < items && fail < 500)
         {
-            x = rand.integer(upperleft.x, lowerright.x);
-            y = rand.integer(upperleft.y, lowerright.y);
+            x = rand.int(upperleft.x, lowerright.x);
+            y = rand.int(upperleft.y, lowerright.y);
             
             if (GetBackmap(x, y) == 0 && watermap[x][y] == 0)
             {
@@ -1251,7 +1250,7 @@ class Zone
                         i--;
                     }
                     
-                    var startx : Int = as3hx.Compat.parseInt(i + 1);
+                    var startx : Int = Math.floor(i + 1);
                     
                     i = startx;
                     while ((GetBackmap(i, y) == 0 || watermap[i][y + 1] > 0) && watermap[i][y] == 0)
@@ -1296,12 +1295,12 @@ class Zone
         
         while (points.length < variable && fail != -1)
         {
-            var x : Int = rand.integer(upperleft.x, lowerright.x);
-            var y : Int = rand.integer(upperleft.y, lowerright.y);
+            var x : Int = rand.int(upperleft.x, lowerright.x);
+            var y : Int = rand.int(upperleft.y, lowerright.y);
             
             if (GetBackmap(x, y) == 0 && GetBackmap(x, y + 1) == 1)
             {
-                points.push(new Point(x, y));
+                points.push(new PointInt(x, y));
             }
             
             fail++;
@@ -1309,7 +1308,7 @@ class Zone
         
         for (pt in points)
         {
-            var size : Float = variable * (rand.integer(50, 150) / 100);
+            var size : Float = variable * (rand.int(50, 150) / 100);
             
             for (y in size * -1...0)
             {
@@ -1340,15 +1339,15 @@ class Zone
         
         while (points.length < items && fail < 500)
         {
-            var x : Int = rand.integer(upperleft.x + 10, lowerright.x - 10);
-            var y : Int = rand.integer(upperleft.y, lowerright.y);
+            var x : Int = rand.int(upperleft.x + 10, lowerright.x - 10);
+            var y : Int = rand.int(upperleft.y, lowerright.y);
             
             
             if (GetBackmap(x, y) == 0 && GetBackmap(x, y + 1) == 1)
             {
                 fail--;
                 
-                var dir : Int = rand.integer(0, 2);
+                var dir : Int = rand.int(0, 2);
                 
                 
                 dir *= 2;
@@ -1376,13 +1375,13 @@ class Zone
                         var bAllDone : Bool = false;
                         
                         
-                        var xx : Int = as3hx.Compat.parseInt(x + dir + dir);
+                        var xx : Int = Math.floor(x + dir + dir);
                         while (xx >= upperleft.x + 10 && xx <= lowerright.x - 10 && !bAllDone)
                         {
                             var yy : Int = y;
                             while (yy > upperleft.y + 10 && !bAllDone)
                             {
-                                if (rand.integer(1, 100) <= deathchance)
+                                if (rand.int(1, 100) <= deathchance)
                                 {
                                     break;
                                 }
@@ -1397,12 +1396,12 @@ class Zone
                                 }
                                 else
                                 {
-                                    points.push(new Point(xx, yy));
+                                    points.push(new PointInt(xx, yy));
                                 }
                                 yy--;
                             }
                             
-                            if (rand.integer(1, 100) <= deathchance)
+                            if (rand.int(1, 100) <= deathchance)
                             {
                                 y--;
                             }
@@ -1439,15 +1438,15 @@ class Zone
         
         while (points.length < items && fail < 500)
         {
-            x = rand.integer(upperleft.x, lowerright.x);
-            y = rand.integer(upperleft.y, lowerright.y);
+            x = rand.int(upperleft.x, lowerright.x);
+            y = rand.int(upperleft.y, lowerright.y);
             
             
             if (GetBackmap(x, y) == 0)
             {
                 fail--;
                 
-                var chance : Float = rand.integer(0, 100);
+                var chance : Float = rand.int(0, 100);
                 
                 if (GetBackmap(x + 1, y) == 1)
                 {
@@ -1468,7 +1467,7 @@ class Zone
                 
                 if (chance <= variable)
                 {
-                    points.push(new Point(x, y));
+                    points.push(new PointInt(x, y));
                 }
             }
             
@@ -1496,25 +1495,25 @@ class Zone
                     GetBackmap(x - 1, y + 0) == 1 && GetBackmap(x + 0, y + 0) == 0 && GetBackmap(x + 1, y + 0) == 0 &&
                     GetBackmap(x - 1, y + 1) == 1 && GetBackmap(x + 0, y + 1) == 1 && GetBackmap(x + 1, y + 1) == 1)
                 {
-                    points.push(new Point(x, y));
+                    points.push(new PointInt(x, y));
                 }
                 else if (GetBackmap(x - 1, y - 1) == 1 && GetBackmap(x + 0, y - 1) == 1 && GetBackmap(x + 1, y - 1) == 1 &&
                     GetBackmap(x - 1, y + 0) == 1 && GetBackmap(x + 0, y + 0) == 0 && GetBackmap(x + 1, y + 0) == 0 &&
                     GetBackmap(x - 1, y + 1) == 1 && GetBackmap(x + 0, y + 1) == 0 && GetBackmap(x + 1, y + 1) == 0)
                 {
-                    points.push(new Point(x, y));
+                    points.push(new PointInt(x, y));
                 }
                 else if (GetBackmap(x - 1, y - 1) == 0 && GetBackmap(x + 0, y - 1) == 0 && GetBackmap(x + 1, y - 1) == 1 &&
                     GetBackmap(x - 1, y + 0) == 0 && GetBackmap(x + 0, y + 0) == 0 && GetBackmap(x + 1, y + 0) == 1 &&
                     GetBackmap(x - 1, y + 1) == 1 && GetBackmap(x + 0, y + 1) == 1 && GetBackmap(x + 1, y + 1) == 1)
                 {
-                    points.push(new Point(x, y));
+                    points.push(new PointInt(x, y));
                 }
                 else if (GetBackmap(x - 1, y - 1) == 1 && GetBackmap(x + 0, y - 1) == 1 && GetBackmap(x + 1, y - 1) == 1 &&
                     GetBackmap(x - 1, y + 0) == 0 && GetBackmap(x + 0, y + 0) == 0 && GetBackmap(x + 1, y + 0) == 1 &&
                     GetBackmap(x - 1, y + 1) == 0 && GetBackmap(x + 0, y + 1) == 0 && GetBackmap(x + 1, y + 1) == 1)
                 {
-                    points.push(new Point(x, y));
+                    points.push(new PointInt(x, y));
                 }
                 y++;
             }
@@ -1525,15 +1524,15 @@ class Zone
         var i : Int = 0;
         while (i < variable && points.length > 0)
         {
-            var which : Int = rand.integer(0, points.length - 1);
+            var which : Int = rand.int(0, points.length - 1);
             
             var forbidden : Bool = false;
             
             for (ex in exits)
             {
                 if (
-                    (try cast(points[which], Point) catch(e:Dynamic) null).x == ex.x &&
-                    ((try cast(points[which], Point) catch(e:Dynamic) null).y == ex.y || (try cast(points[which], Point) catch(e:Dynamic) null).y != ex.y - 1))
+                    points[which].x == ex.x &&
+                    (points[which].y == ex.y || points[which].y != ex.y - 1))
                 {
                     forbidden = true;
                     break;
@@ -1542,7 +1541,7 @@ class Zone
             
             if (forbidden == false)
             {
-                SetBackmap((try cast(points[which], Point) catch(e:Dynamic) null).x, (try cast(points[which], Point) catch(e:Dynamic) null).y, 1);
+                SetBackmap(points[which].x, points[which].y, 1);
             }
             
             points.splice(which, 1);
@@ -1562,11 +1561,11 @@ class Zone
             var y : Int = 5;
             while (y < this.width - 5)
             {
-                var t : Int = as3hx.Compat.parseInt(GetBackmap(x + 0, y + 0) + GetBackmap(x + 1, y + 0) + GetBackmap(x + 0, y + 1) + GetBackmap(x + 1, y + 1));
+                var t : Int = Math.floor(GetBackmap(x + 0, y + 0) + GetBackmap(x + 1, y + 0) + GetBackmap(x + 0, y + 1) + GetBackmap(x + 1, y + 1));
                 
                 if (t != 0 && t != 4)
                 {
-                    points.push(new Point(x, y));
+                    points.push(new PointInt(x, y));
                 }
                 y += 2;
             }
@@ -1576,15 +1575,15 @@ class Zone
         var i : Int = 0;
         while (i < variable && points.length > 0)
         {
-            var which : Int = rand.integer(0, points.length - 1);
-            var onoff : Int = rand.integer(0, 2);
+            var which : Int = rand.int(0, points.length - 1);
+            var onoff : Int = rand.int(0, 2);
             
             
             
-            SetBackmap((try cast(points[which], Point) catch(e:Dynamic) null).x, (try cast(points[which], Point) catch(e:Dynamic) null).y, onoff);
-            SetBackmap((try cast(points[which], Point) catch(e:Dynamic) null).x + 1, (try cast(points[which], Point) catch(e:Dynamic) null).y, onoff);
-            SetBackmap((try cast(points[which], Point) catch(e:Dynamic) null).x, (try cast(points[which], Point) catch(e:Dynamic) null).y + 1, onoff);
-            SetBackmap((try cast(points[which], Point) catch(e:Dynamic) null).x + 1, (try cast(points[which], Point) catch(e:Dynamic) null).y + 1, onoff);
+            SetBackmap(points[which].x, points[which].y, onoff);
+            SetBackmap(points[which].x + 1, points[which].y, onoff);
+            SetBackmap(points[which].x, points[which].y + 1, onoff);
+            SetBackmap(points[which].x + 1, points[which].y + 1, onoff);
             
             points.splice(which, 1);
             i++;
@@ -1607,7 +1606,7 @@ class Zone
                 {
                     if (GetBackmap(x, y) == 1 && (GetBackmap(x, y + 1) == 0) || GetBackmap(x, y - 1) == 0)
                     {
-                        points.push(new Point(x, y));
+                        points.push(new PointInt(x, y));
                     }
                     x++;
                 }
@@ -1618,7 +1617,7 @@ class Zone
         var p : Int = 0;
         while (p < points.length)
         {
-            var which : Int = rand.integer(0, points.length - 1);
+            var which : Int = rand.int(0, points.length - 1);
             
             var stamp : Array<Dynamic> = new Array<Dynamic>();
             
@@ -1634,7 +1633,7 @@ class Zone
             
             stamp = MakeCircleStamp(stamp, variable);
             
-            StampAt(SetBackmap, stamp, variable, as3hx.Compat.parseInt((try cast(points[which], Point) catch(e:Dynamic) null).x), as3hx.Compat.parseInt((try cast(points[which], Point) catch(e:Dynamic) null).y));
+            StampAt(SetBackmap, stamp, variable, Math.floor(points[which].x), Math.floor(points[which].y));
             p++;
         }
     }
@@ -1665,7 +1664,7 @@ class Zone
                         GetBackmap(x, y - 1) == 0 &&
                         GetBackmap(x, y + 1) == 0)
                     {
-                        points.push(new Point(x, y));
+                        points.push(new PointInt(x, y));
                     }
                 }
                 else if (wallmap[x][y] == 1 &&
@@ -1674,7 +1673,7 @@ class Zone
                     wallmap[x][y - 1] == 0 &&
                     wallmap[x][y + 1] == 0)
                 {
-                    points.push(new Point(x, y));
+                    points.push(new PointInt(x, y));
                 }
                 y++;
             }
@@ -1693,15 +1692,15 @@ class Zone
         var i : Int = 0;
         while (i < kill && points.length > 0)
         {
-            var which : Int = rand.integer(0, points.length - 1);
+            var which : Int = rand.int(0, points.length - 1);
             
             if (percentage > -1)
             {
-                SetBackmap((try cast(points[which], Point) catch(e:Dynamic) null).x, (try cast(points[which], Point) catch(e:Dynamic) null).y, 0);
+                SetBackmap(points[which].x, points[which].y, 0);
             }
             else
             {
-                wallmap[(try cast(points[which], Point) catch(e:Dynamic) null).x][(try cast(points[which], Point) catch(e:Dynamic) null).y] = 0;
+                wallmap[points[which].x][points[which].y] = 0;
             }
             
             points.splice(which, 1);
@@ -1727,16 +1726,16 @@ class Zone
         }
         
         var checkers : Array<Dynamic> = new Array<Dynamic>();
-        checkers.push(new Point((try cast(exits[0], Exit) catch(e:Dynamic) null).x, (try cast(exits[0], Exit) catch(e:Dynamic) null).y));
+        checkers.push(new PointInt(exits[0].x, exits[0].y));
         
         while (checkers.length > 0)
         {
-            var oldcheckers : Array<Dynamic> = new Array<Dynamic>();
+            var oldcheckers : Array<PointInt> = new Array<PointInt>();
             
             for (pt in checkers)
             {
                 accessiblemap[pt.x][pt.y] = 1;
-                oldcheckers.push(new Point());
+                oldcheckers.push(new PointInt());
                 oldcheckers[oldcheckers.length - 1] = pt;
             }
             
@@ -1745,7 +1744,7 @@ class Zone
             i = 0;
             while (i < oldcheckers.length)
             {
-                var tocheck : Point = try cast(oldcheckers[i], Point) catch(e:Dynamic) null;
+                var tocheck : Point = oldcheckers[i];
                 
                 if (tocheck.y > 0)
                 {
@@ -1753,7 +1752,7 @@ class Zone
                         (checkmap[tocheck.x][tocheck.y - 1] == 0 && intangmap[tocheck.x][tocheck.y - 1] == 1))
                     {
                         checkmap[tocheck.x][tocheck.y - 1] = 3;
-                        checkers.push(new Point(tocheck.x, tocheck.y - 1));
+                        checkers.push(new PointInt(tocheck.x, tocheck.y - 1));
                     }
                 }
                 
@@ -1763,7 +1762,7 @@ class Zone
                         (checkmap[tocheck.x][tocheck.y + 1] == 0 && intangmap[tocheck.x][tocheck.y + 1] == 1))
                     {
                         checkmap[tocheck.x][tocheck.y + 1] = 3;
-                        checkers.push(new Point(tocheck.x, tocheck.y + 1));
+                        checkers.push(new PointInt(tocheck.x, tocheck.y + 1));
                     }
                 }
                 
@@ -1773,7 +1772,7 @@ class Zone
                         (checkmap[tocheck.x - 1][tocheck.y] == 0 && intangmap[tocheck.x - 1][tocheck.y] == 1))
                     {
                         checkmap[tocheck.x - 1][tocheck.y] = 3;
-                        checkers.push(new Point(tocheck.x - 1, tocheck.y));
+                        checkers.push(new PointInt(tocheck.x - 1, tocheck.y));
                     }
                 }
                 
@@ -1783,7 +1782,7 @@ class Zone
                         (checkmap[tocheck.x + 1][tocheck.y] == 0 && intangmap[tocheck.x + 1][tocheck.y] == 1))
                     {
                         checkmap[tocheck.x + 1][tocheck.y] = 3;
-                        checkers.push(new Point(tocheck.x + 1, tocheck.y));
+                        checkers.push(new PointInt(tocheck.x + 1, tocheck.y));
                     }
                 }
                 i++;
@@ -1832,7 +1831,7 @@ class Zone
                         {
                             if (candidatelists[0] != null)
                             {
-                                for (e/* AS3HX WARNING could not determine type for var: e exp: EArray(EIdent(candidatelists),EConst(CInt(0))) type: null */ in candidatelists[0])
+                                for (e in candidatelists[0])
                                 {
                                     if (Math.abs(e.x - x) <= 6 &&
                                         Math.abs(e.y - y) <= 6 &&
@@ -1850,12 +1849,12 @@ class Zone
                             if (GetMap(x - 1, y) == 1 && GetMap(x + 1, y) == 0 &&
                                 GetMap(x - 1, y + 1) == 1 && GetMap(x - 1, y - 1) == 1)
                             {
-                                leftentrances.push(new Point(x, y));
+                                leftentrances.push(new PointInt(x, y));
                             }
                             else if (GetMap(x - 1, y) == 0 && GetMap(x + 1, y) == 1 &&
                                 GetMap(x + 1, y + 1) == 1 && GetMap(x + 1, y - 1) == 1)
                             {
-                                rightentrances.push(new Point(x, y));
+                                rightentrances.push(new PointInt(x, y));
                             }
                         }
                     }
@@ -1868,13 +1867,13 @@ class Zone
             
             while (leftentrances.length - rightentrances.length > 3)
             {
-                rcull = rand.integer(0, leftentrances.length);
+                rcull = rand.int(0, leftentrances.length);
                 leftentrances.splice(rcull, 1);
             }
             
             while (rightentrances.length - leftentrances.length > 3)
             {
-                rcull = rand.integer(0, rightentrances.lengt);
+                rcull = rand.int(0, rightentrances.lengt);
                 rightentrances.splice(rcull, 1);
             }
             
@@ -1882,12 +1881,12 @@ class Zone
             {
                 if (leftentrances.length >= rightentrances.length)
                 {
-                    rcull = rand.integer(0, leftentrances.length);
+                    rcull = rand.int(0, leftentrances.length);
                     leftentrances.splice(rcull, 1);
                 }
                 else
                 {
-                    rcull = rand.integer(0, rightentrances.length);
+                    rcull = rand.int(0, rightentrances.length);
                     rightentrances.splice(rcull, 1);
                 }
             }
@@ -1914,7 +1913,7 @@ class Zone
                 
                 for (i in 0...iterations)
                 {
-                    dirx = as3hx.Compat.parseInt(-1 + (side * 2));  // i.e., -1 for left, +1 for right  
+                    dirx = Math.floor(-1 + (side * 2));  // i.e., -1 for left, +1 for right  
                     diry = 0;
                     
                     intangplan = new Array<Dynamic>();
@@ -1925,17 +1924,17 @@ class Zone
                     
                     if (side == 0)
                     {
-                        curx = as3hx.Compat.parseInt((try cast(leftentrances[i], Point) catch(e:Dynamic) null).x + dirx);  // prime it  
-                        cury = (try cast(leftentrances[i], Point) catch(e:Dynamic) null).y;
+                        curx = Math.floor(leftentrances[i].x + dirx);  // prime it  
+                        cury = leftentrances[i].y;
                     }
                     else
                     {
-                        curx = as3hx.Compat.parseInt((try cast(rightentrances[i], Point) catch(e:Dynamic) null).x + dirx);  // prime it  
-                        cury = (try cast(rightentrances[i], Point) catch(e:Dynamic) null).y;
+                        curx = Math.floor(rightentrances[i].x + dirx);  // prime it  
+                        cury = rightentrances[i].y;
                     }
                     
                     
-                    intangplan.push(new Point(curx, cury));
+                    intangplan.push(new PointInt(curx, cury));
                     
                     var bAlive : Bool = true;
                     var bValid : Bool = true;
@@ -1953,11 +1952,11 @@ class Zone
                         
                         if (!NearIllegal(curx, cury))
                         {
-                            if (rand.integer(0, 100) >= deathchance || diry == -1 || diry == 1)
+                            if (rand.int(0, 100) >= deathchance || diry == -1 || diry == 1)
                             {
-                                if (rand.integer(0, 100) < wigglechance && curx % 2 == 0 && cury % 2 == 0)
+                                if (rand.int(0, 100) < wigglechance && curx % 2 == 0 && cury % 2 == 0)
                                 {
-                                    var newdir : Int = as3hx.Compat.parseInt((rand.integer(0, 2) * 2) - 1);
+                                    var newdir : Int = Math.floor((rand.int(0, 2) * 2) - 1);
                                     
                                     if (dirx != 0)
                                     {
@@ -1979,7 +1978,7 @@ class Zone
                                     }
                                 }
                                 
-                                intangplan.push(new Point(curx, cury));
+                                intangplan.push(new PointInt(curx, cury));
                             }
                             else
                             {
@@ -2003,12 +2002,12 @@ class Zone
                     {
                         for (p in intangplan)
                         {
-                            intangs.push(new Point(p.x, p.y));
+                            intangs.push(new PointInt(p.x, p.y));
                         }
                         
                         for (sp in secretchamberplan)
                         {
-                            intangs.push(new Point(sp.x, sp.y));
+                            intangs.push(new PointInt(sp.x, sp.y));
                         }
                         
                         for (intangpoint in intangs)
@@ -2047,10 +2046,10 @@ class Zone
         
         var x : Int;
         var y : Int;
-        x = as3hx.Compat.parseInt(upperleft.x + 5);
+        x = Math.floor(upperleft.x + 5);
         while (x < lowerright.x - 5)
         {
-            y = as3hx.Compat.parseInt(upperleft.y + 5);
+            y = Math.floor(upperleft.y + 5);
             while (y < lowerright.y - 5)
             {
                 if (intangmap[x][y] == 0 &&
@@ -2058,7 +2057,8 @@ class Zone
                 {
                     var bQualifiedSecretTunnel : Bool = false;
                     
-                    for (xx in x...{
+                    for (xx in x)
+                    {
                         if (xx == 143 && y == 126)
                         {
                             var c : Int = 0;
@@ -2080,7 +2080,7 @@ class Zone
                             {
                                 if (xx >= x + Content.nSecretTunnelMinimum)
                                 {
-                                    xx = as3hx.Compat.parseInt(x - 1);
+                                    xx = Math.floor(x - 1);
                                     bQualifiedSecretTunnel = true;
                                 }
                             }
@@ -2091,7 +2091,7 @@ class Zone
                         }
                         else
                         {
-                            if (bQualifiedSecretTunnel && rand.integer(0, 2) != 0)
+                            if (bQualifiedSecretTunnel && rand.int(0, 2) != 0)
                             {
                                 intangmap[xx - 1][y] = 0;
                             }  // "Undo" last one  
@@ -2100,7 +2100,7 @@ class Zone
                         }
                     }
                     
-                    if (bQualifiedSecretTunnel && rand.integer(0, 2) != 0)
+                    if (bQualifiedSecretTunnel && rand.int(0, 2) != 0)
                     {
                         intangmap[x][y] = 0;
                     }
@@ -2123,7 +2123,7 @@ class Zone
                     intangmap[x][y] = 0;
                     SetBackmap(x, y, 0);
                     chambermap[x][y] = 1;
-                    secrets.push(new Point(x, y));
+                    secrets.push(new PointInt(x, y));
                 }
                 y++;
             }
@@ -2146,8 +2146,8 @@ class Zone
         
         for (starti in 0...starts)
         {
-            var xx : Int = rand.integer(50, width - 50);
-            var yy : Int = rand.integer(50, width - 50);
+            var xx : Int = rand.int(50, width - 50);
+            var yy : Int = rand.int(50, width - 50);
             var fails : Int = 0;
             
             do
@@ -2158,14 +2158,14 @@ class Zone
                     trace("Not finding ice spots [] [] [] [] [] [] []");
                     break;
                 }
-                xx = rand.integer(50, width - 50);
-                yy = rand.integer(50, width - 50);
+                xx = rand.int(50, width - 50);
+                yy = rand.int(50, width - 50);
             }
             while ((!ValidIceStart(xx, yy)));
             
-            fuels.push(rand.integer(Content.iIceFuelMin, Content.iIceFuelMax));
+            fuels.push(rand.int(Content.iIceFuelMin, Content.iIceFuelMax));
             checkmap[xx][yy] = 10 + starti;
-            checkers.push(new Point(xx, yy));
+            checkers.push(new PointInt(xx, yy));
         }
         
         if (fails <= 500)
@@ -2176,7 +2176,7 @@ class Zone
                 
                 for (pt in checkers)
                 {
-                    oldcheckers.push(new Point());
+                    oldcheckers.push(new PointInt());
                     oldcheckers[oldcheckers.length - 1] = pt;
                 }
                 
@@ -2185,7 +2185,7 @@ class Zone
                 i = 0;
                 while (i < oldcheckers.length)
                 {
-                    var tocheck : Point = try cast(oldcheckers[i], Point) catch(e:Dynamic) null;
+                    var tocheck : Point = oldcheckers[i];
                     var species : Int = checkmap[tocheck.x][tocheck.y];
                     
                     if (fuels[species - 10] > 0)
@@ -2196,10 +2196,10 @@ class Zone
                             {
                                 checkmap[tocheck.x][tocheck.y - 1] = species;
                                 
-                                if (rand.integer(1, 100) > generalstop)
+                                if (rand.int(1, 100) > generalstop)
                                 {
                                     fuels[species - 10]--;
-                                    checkers.push(new Point(tocheck.x, tocheck.y - 1));
+                                    checkers.push(new PointInt(tocheck.x, tocheck.y - 1));
                                 }
                             }
                         }
@@ -2210,10 +2210,10 @@ class Zone
                             {
                                 checkmap[tocheck.x][tocheck.y + 1] = species;
                                 
-                                if (rand.integer(1, 100) > generalstop)
+                                if (rand.int(1, 100) > generalstop)
                                 {
                                     fuels[species - 10]--;
-                                    checkers.push(new Point(tocheck.x, tocheck.y + 1));
+                                    checkers.push(new PointInt(tocheck.x, tocheck.y + 1));
                                 }
                             }
                         }
@@ -2224,10 +2224,10 @@ class Zone
                             {
                                 checkmap[tocheck.x - 1][tocheck.y] = species;
                                 
-                                if (rand.integer(1, 100) > generalstop)
+                                if (rand.int(1, 100) > generalstop)
                                 {
                                     fuels[species - 10]--;
-                                    checkers.push(new Point(tocheck.x - 1, tocheck.y));
+                                    checkers.push(new PointInt(tocheck.x - 1, tocheck.y));
                                 }
                             }
                         }
@@ -2238,10 +2238,10 @@ class Zone
                             {
                                 checkmap[tocheck.x + 1][tocheck.y] = species;
                                 
-                                if (rand.integer(1, 100) > generalstop)
+                                if (rand.int(1, 100) > generalstop)
                                 {
                                     fuels[species - 10]--;
-                                    checkers.push(new Point(tocheck.x + 1, tocheck.y));
+                                    checkers.push(new PointInt(tocheck.x + 1, tocheck.y));
                                 }
                             }
                         }
@@ -2268,11 +2268,11 @@ class Zone
             {
                 if (checkmap[ix][iy] >= 10)
                 {
-                    ices.push(new Point(ix, iy));
+                    ices.push(new PointInt(ix, iy));
                 }
                 else if (watermap[ix][iy] == 1 && watermap[ix][iy - 1] == 0 && GetMap(ix, iy) == 0)
                 {
-                    ices.push(new Point(ix, iy));
+                    ices.push(new PointInt(ix, iy));
                 }
                 iy++;
             }
@@ -2344,7 +2344,7 @@ class Zone
         var groundstop : Int = 60;
         var ceilingstop : Int = 50;
         var generalstop : Int = 30;
-        var fuel : Int = rand.integer(10, 20);
+        var fuel : Int = rand.int(10, 20);
         
         
         
@@ -2368,7 +2368,7 @@ class Zone
         starty += diry;
         
         checkmap[startx][starty] = 3;
-        checkers.push(new Point(startx, starty));
+        checkers.push(new PointInt(startx, starty));
         
         while (checkers.length > 0)
         {
@@ -2376,7 +2376,7 @@ class Zone
             
             for (pt in checkers)
             {
-                oldcheckers.push(new Point());
+                oldcheckers.push(new PointInt());
                 oldcheckers[oldcheckers.length - 1] = pt;
             }
             
@@ -2385,7 +2385,7 @@ class Zone
             i = 0;
             while (i < oldcheckers.length)
             {
-                var tocheck : Point = try cast(oldcheckers[i], Point) catch(e:Dynamic) null;
+                var tocheck : Point = oldcheckers[i];
                 
                 if (fuel > 0)
                 {
@@ -2395,10 +2395,10 @@ class Zone
                         {
                             checkmap[tocheck.x][tocheck.y - 1] = 3;
                             
-                            if (rand.integer(1, 100) > ceilingstop)
+                            if (rand.int(1, 100) > ceilingstop)
                             {
                                 fuel--;
-                                checkers.push(new Point(tocheck.x, tocheck.y - 1));
+                                checkers.push(new PointInt(tocheck.x, tocheck.y - 1));
                             }
                         }
                     }
@@ -2409,10 +2409,10 @@ class Zone
                         {
                             checkmap[tocheck.x][tocheck.y + 1] = 3;
                             
-                            if (rand.integer(1, 100) > groundstop)
+                            if (rand.int(1, 100) > groundstop)
                             {
                                 fuel--;
-                                checkers.push(new Point(tocheck.x, tocheck.y + 1));
+                                checkers.push(new PointInt(tocheck.x, tocheck.y + 1));
                             }
                         }
                     }
@@ -2423,10 +2423,10 @@ class Zone
                         {
                             checkmap[tocheck.x - 1][tocheck.y] = 3;
                             
-                            if (rand.integer(1, 100) > generalstop)
+                            if (rand.int(1, 100) > generalstop)
                             {
                                 fuel--;
-                                checkers.push(new Point(tocheck.x - 1, tocheck.y));
+                                checkers.push(new PointInt(tocheck.x - 1, tocheck.y));
                             }
                         }
                     }
@@ -2437,10 +2437,10 @@ class Zone
                         {
                             checkmap[tocheck.x + 1][tocheck.y] = 3;
                             
-                            if (rand.integer(1, 100) > generalstop)
+                            if (rand.int(1, 100) > generalstop)
                             {
                                 fuel--;
-                                checkers.push(new Point(tocheck.x + 1, tocheck.y));
+                                checkers.push(new PointInt(tocheck.x + 1, tocheck.y));
                             }
                         }
                     }
@@ -2464,8 +2464,8 @@ class Zone
             {
                 if (checkmap[x][y] == 3)
                 {
-                    secretchamberplan.push(new Point(x * -1, y * -1));
-                    secrets.unshift(new Point(x, y));
+                    secretchamberplan.push(new PointInt(x * -1, y * -1));
+                    secrets.unshift(new PointInt(x, y));
                 }
                 y++;
             }
@@ -2482,10 +2482,10 @@ class Zone
             return false;
         }
         
-        var x : Int = as3hx.Compat.parseInt(xtest - 1);
+        var x : Int = Math.floor(xtest - 1);
         while (x <= xtest + 1)
         {
-            var y : Int = as3hx.Compat.parseInt(ytest - 1);
+            var y : Int = Math.floor(ytest - 1);
             while (y <= ytest + 1)
             {
                 if (GetMap(x, y) != 1 || watermap[x][y] >= 1 || chambermap[x][y] >= 1 || intangmap[x][y] >= 1)
@@ -2520,7 +2520,7 @@ class Zone
         i = 0;
         while (i < exits.length)
         {
-            if ((try cast(exits[i], Exit) catch(e:Dynamic) null).id != 99)
+            if (exits[i].id != 99)
             {
                 var thisexit : Array<Dynamic> = new Array<Dynamic>();
                 thisexit.push(exits[i]);
@@ -2534,16 +2534,16 @@ class Zone
         
         candidatelists.push(cast((exitlist), GetCandidates));
         
-        var length : Int = (try cast(candidatelists[0], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).length;
+        var length : Int = candidatelists[0].length;
         
         var c : Int = 1;
         while (c < candidatelists.length)
         {
             for (n in 0...length)
             {
-                if ((try cast(candidatelists[c][n], Exit) catch(e:Dynamic) null).id > 3)
+                if (candidatelists[c][n].id > 3)
                 {
-                    (try cast(candidatelists[0][n], Exit) catch(e:Dynamic) null).id += (try cast(candidatelists[c][n], Exit) catch(e:Dynamic) null).id;
+                    candidatelists[0][n].id += candidatelists[c][n].id;
                 }
             }
             c++;
@@ -2564,8 +2564,8 @@ class Zone
             {
                 if (
                     Math.sqrt(
-                            Math.pow((try cast(exits[i], Exit) catch(e:Dynamic) null).x - (try cast(candidatelists[0][n], Exit) catch(e:Dynamic) null).x, 2) +
-                            Math.pow((try cast(exits[i], Exit) catch(e:Dynamic) null).y - (try cast(candidatelists[0][n], Exit) catch(e:Dynamic) null).y, 2)
+                            Math.pow(exits[i].x - candidatelists[0][n].x, 2) +
+                            Math.pow(exits[i].y - candidatelists[0][n].y, 2)
                 ) < mindistance)
                 {
                     tooclose = true;
@@ -2576,14 +2576,14 @@ class Zone
             
             if (  /*GetMap((candidatelists[0][n] as Exit).x, (candidatelists[0][n] as Exit).y + 1) != 1 ||*/  tooclose)
             {
-                (try cast(candidatelists[0], Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).splice(n, 1);
+                candidatelists[0].splice(n, 1);
                 n--;
             }
-            else if ((try cast(candidatelists[0][n], Exit) catch(e:Dynamic) null).id > 4)
+            else if (candidatelists[0][n].id > 4)
             {
-                if ((try cast(candidatelists[0][n], Exit) catch(e:Dynamic) null).id > max)
+                if (candidatelists[0][n].id > max)
                 {
-                    max = (try cast(candidatelists[0][n], Exit) catch(e:Dynamic) null).id;
+                    max = candidatelists[0][n].id;
                 }
                 
                 openspaces++;
@@ -2597,11 +2597,11 @@ class Zone
         
         for (i in 0...top)
         {
-            secrets.push(new Point((try cast(candidatelists[0][i], Exit) catch(e:Dynamic) null).x, (try cast(candidatelists[0][i], Exit) catch(e:Dynamic) null).y));
+            secrets.push(new PointInt(candidatelists[0][i].x, candidatelists[0][i].y));
             
-            if (GetMap((try cast(candidatelists[0][i], Exit) catch(e:Dynamic) null).x, (try cast(candidatelists[0][i], Exit) catch(e:Dynamic) null).y + 1) == 1)
+            if (GetMap(candidatelists[0][i].x, candidatelists[0][i].y + 1) == 1)
             {
-                floorsecrets.push(new Point((try cast(candidatelists[0][i], Exit) catch(e:Dynamic) null).x, (try cast(candidatelists[0][i], Exit) catch(e:Dynamic) null).y));
+                floorsecrets.push(new PointInt(candidatelists[0][i].x, candidatelists[0][i].y));
             }
         }
         
@@ -2613,7 +2613,7 @@ class Zone
         var i : Int = 0;
         while (i < secrets.length)
         {
-            if (wallmap[(try cast(secrets[i], Point) catch(e:Dynamic) null).x][(try cast(secrets[i], Point) catch(e:Dynamic) null).y] == 0)
+            if (wallmap[secrets[i].x][secrets[i].y] == 0)
             {
                 secrets.splice(i, 1);
                 i--;
@@ -2650,7 +2650,7 @@ class Zone
             
             for (ex in checkers)
             {
-                oldcheckers.push(new Point());
+                oldcheckers.push(new PointInt());
                 oldcheckers[oldcheckers.length - 1] = ex;
             }
             
@@ -2658,7 +2658,7 @@ class Zone
             i = 0;
             while (i < oldcheckers.length)
             {
-                var tocheck : Exit = try cast(oldcheckers[i], Exit) catch(e:Dynamic) null;
+                var tocheck : Exit = oldcheckers[i];
                 
                 if (tocheck.y > 0)
                 {
@@ -2735,7 +2735,7 @@ class Zone
         var ex : Int = 0;
         while (ex < exits.length)
         {
-            if ((try cast(exits[ex], Exit) catch(e:Dynamic) null).id == 99)
+            if (exits[ex].id == 99)
             {
                 exits.splice(ex, 1);
                 ex--;
@@ -2748,7 +2748,7 @@ class Zone
     {
         var xx : Int = 0;
         var yy : Int = 0;
-        var lifetime : Int = as3hx.Compat.parseInt((((lowerright.x - upperleft.x) + (lowerright.y - upperleft.y)) / 2) / 2);  // /2 for average, then /2 for taste  
+        var lifetime : Int = Math.floor((((lowerright.x - upperleft.x) + (lowerright.y - upperleft.y)) / 2) / 2);  // /2 for average, then /2 for taste  
         
         wallmap = Util.Clone(map);  //new Array();  
         /*
@@ -2790,7 +2790,7 @@ class Zone
                 i = 0;
                 while (i < oldcheckers.length)
                 {
-                    var tocheck : Exit = try cast(oldcheckers[i], Exit) catch(e:Dynamic) null;
+                    var tocheck : Exit = oldcheckers[i];
                     
                     brush = tocheck.id;
                     
@@ -2800,7 +2800,7 @@ class Zone
                         {
                             if (ConsiderFlipping(tocheck.x, tocheck.y, brush) == true)
                             {
-                                brush = cast((brush), FlipBrush);
+                                brush = FlipBrush(brush);
                             }
                             
                             wallmap[tocheck.x][tocheck.y - 1] = brush;
@@ -2816,7 +2816,7 @@ class Zone
                         {
                             if (ConsiderFlipping(tocheck.x, tocheck.y, brush) == true)
                             {
-                                brush = cast((brush), FlipBrush);
+                                brush = FlipBrush(brush);
                             }
                             
                             wallmap[tocheck.x][tocheck.y + 1] = brush;
@@ -2832,7 +2832,7 @@ class Zone
                         {
                             if (ConsiderFlipping(tocheck.x, tocheck.y, brush) == true)
                             {
-                                brush = cast((brush), FlipBrush);
+                                brush = FlipBrush(brush);
                             }
                             
                             wallmap[tocheck.x - 1][tocheck.y] = brush;
@@ -2848,7 +2848,7 @@ class Zone
                         {
                             if (ConsiderFlipping(tocheck.x, tocheck.y, brush) == true)
                             {
-                                brush = cast((brush), FlipBrush);
+                                brush = FlipBrush(brush);
                             }
                             
                             wallmap[tocheck.x + 1][tocheck.y] = brush;
@@ -2868,23 +2868,23 @@ class Zone
                 i = 0;
                 while (i < checkers.length)
                 {
-                    if ((try cast(checkers[i], Exit) catch(e:Dynamic) null).id == 1)
+                    if (checkers[i].id == 1)
                     {
-                        if (rand.integer(0, 100) <= momentum)
+                        if (rand.int(0, 100) <= momentum)
                         {
-                            (try cast(checkers[i], Exit) catch(e:Dynamic) null).id = 2;
+                            checkers[i].id = 2;
                         }
                     }
-                    else if ((try cast(checkers[i], Exit) catch(e:Dynamic) null).id == 2)
+                    else if (checkers[i].id == 2)
                     {
-                        if (rand.integer(0, 100) <= momentum)
+                        if (rand.int(0, 100) <= momentum)
                         {
-                            (try cast(checkers[i], Exit) catch(e:Dynamic) null).id = 1;
+                            checkers[i].id = 1;
                         }
                     }
                     
                     
-                    if (rand.integer(0, lifetime) == 0)
+                    if (rand.int(0, lifetime) == 0)
                     {
                         checkers.splice(i, 1);
                         i--;
@@ -2892,7 +2892,7 @@ class Zone
                     i++;
                 }
                 
-                checkers = cast((checkers), Shuffle);
+                checkers = Shuffle(checkers);
             }
         }  // for each exit  
         
@@ -2927,7 +2927,7 @@ class Zone
             
             if (finalexit.id == 0)
             {
-                xx = as3hx.Compat.parseInt(finalexit.x - 1);
+                xx = Math.floor(finalexit.x - 1);
                 while (xx <= finalexit.x + 1)
                 {
                     yy = 0;
@@ -2941,10 +2941,10 @@ class Zone
             }
             else if (finalexit.id == 1)
             {
-                xx = as3hx.Compat.parseInt(finalexit.x - 1);
+                xx = Math.floor(finalexit.x - 1);
                 while (xx <= finalexit.x + 1)
                 {
-                    yy = as3hx.Compat.parseInt(finalexit.y - 1);
+                    yy = Math.floor(finalexit.y - 1);
                     while (yy < this.height)
                     {
                         wallmap[xx][yy] = 1;
@@ -2955,10 +2955,10 @@ class Zone
             }
             else if (finalexit.id == 3)
             {
-                xx = as3hx.Compat.parseInt(finalexit.x - 1);
+                xx = Math.floor(finalexit.x - 1);
                 while (xx < this.width)
                 {
-                    yy = as3hx.Compat.parseInt(finalexit.y - 1);
+                    yy = Math.floor(finalexit.y - 1);
                     while (yy <= finalexit.y + 1)
                     {
                         wallmap[xx][yy] = 1;
@@ -2972,7 +2972,7 @@ class Zone
                 xx = 0;
                 while (xx <= finalexit.x + 1)
                 {
-                    yy = as3hx.Compat.parseInt(finalexit.y - 1);
+                    yy = Math.floor(finalexit.y - 1);
                     while (yy <= finalexit.y + 1)
                     {
                         wallmap[xx][yy] = 1;
@@ -3023,16 +3023,16 @@ class Zone
             xx++;
         }
         
-        var cuts : Int = as3hx.Compat.parseInt(startpoints.length / 7);
+        var cuts : Int = Math.floor(startpoints.length / 7);
         for (i in 0...cuts)
         {
-            var which : Int = rand.integer(0, startpoints.length);
+            var which : Int = rand.int(0, startpoints.length);
             startpoints.splice(which, 1);
         }
         
         while (startpoints.length > 0)
         {
-            var thispoint : PointPlus = (try cast(startpoints[0], PointPlus) catch(e:Dynamic) null);
+            var thispoint : PointPlus = startpoints[0];
             var travelx : Int = thispoint.x;
             var travely : Int = thispoint.y;
             
@@ -3061,16 +3061,16 @@ class Zone
                         startpoints.splice(0, 1);
                         break;
                     }
-                    else if (rand.integer(0, 5) == 0 && travelx % 2 == 0)
+                    else if (rand.int(0, 5) == 0 && travelx % 2 == 0)
                     {
                         AddRoot(travelx, travely);
                         
-                        if (wallmap[travelx - 1][travely] == 1 && rand.integer(0, 3) != 0)
+                        if (wallmap[travelx - 1][travely] == 1 && rand.int(0, 3) != 0)
                         {
                             startpoints.push(new PointPlus(travelx - 1, travely, "l"));
                         }
                         
-                        if (wallmap[travelx + 1][travely] == 1 && rand.integer(0, 3) != 0)
+                        if (wallmap[travelx + 1][travely] == 1 && rand.int(0, 3) != 0)
                         {
                             startpoints.push(new PointPlus(travelx + 1, travely, "r"));
                         }
@@ -3091,14 +3091,14 @@ class Zone
                         startpoints.splice(0, 1);
                         break;
                     }
-                    else if (wallmap[travelx + 1][travely] == 0 || rand.integer(0, 5))
+                    else if (wallmap[travelx + 1][travely] == 0 || rand.int(0, 5) > 0)
                     {
                         AddRoot(travelx, travely);
                         startpoints.push(new PointPlus(travelx, travely + 1, "d"));
                         startpoints.splice(0, 1);
                         break;
                     }
-                    else if (rand.integer(0, 14))
+                    else if (rand.int(0, 14) > 0)
                     {  //startpoints.push(new PointPlus(travelx, travely + 1, "d"));  
                         
                     }
@@ -3115,14 +3115,14 @@ class Zone
                         startpoints.splice(0, 1);
                         break;
                     }
-                    else if (wallmap[travelx - 1][travely] == 0 || rand.integer(0, 5))
+                    else if (wallmap[travelx - 1][travely] == 0 || rand.int(0, 5))
                     {
                         AddRoot(travelx, travely);
                         startpoints.push(new PointPlus(travelx, travely + 1, "d"));
                         startpoints.splice(0, 1);
                         break;
                     }
-                    else if (rand.integer(0, 14))
+                    else if (rand.int(0, 14))
                     {  //startpoints.push(new PointPlus(travelx, travely + 1, "d"));  
                         
                     }
@@ -3148,11 +3148,11 @@ class Zone
     {
         return false;
         
-        if (wallmap[xx - 1][yy] == 1 && wallmap[xx + 1][yy] == 1 && rand.integer(0, 2) == 0)
+        if (wallmap[xx - 1][yy] == 1 && wallmap[xx + 1][yy] == 1 && rand.int(0, 2) == 0)
         {
             return true;
         }
-        else if (wallmap[xx][yy - 1] == 1 && wallmap[xx][yy + 1] == 1 && rand.integer(0, 2) == 0)
+        else if (wallmap[xx][yy - 1] == 1 && wallmap[xx][yy + 1] == 1 && rand.int(0, 2) == 0)
         {
             return true;
         }
@@ -3176,14 +3176,14 @@ class Zone
     {
         var gem : Int = 0;
         
-        var roll : Int = rand.integer(0, 100);
+        var roll : Int = rand.int(0, 100);
         
         if (roll >= (Content.nGemChance * 100))
         {
             return 0;
         }
         
-        roll = rand.integer(0, 1000);
+        roll = rand.int(0, 1000);
         
         if (roll < (Content.nLytratChance * 1000))
         {
@@ -3198,7 +3198,7 @@ class Zone
             gem = 1;
         }
         
-        roll = rand.integer(0, 100);
+        roll = rand.int(0, 100);
         
         if (roll < (Content.nClusterChance * 100))
         {
@@ -3213,9 +3213,9 @@ class Zone
         var pt : Int = 0;
         while (pt < secrets.length / 3)
         {
-            if (spikemap[(try cast(secrets[pt], Point) catch(e:Dynamic) null).x][(try cast(secrets[pt], Point) catch(e:Dynamic) null).y] == 0)
+            if (spikemap[secrets[pt].x][secrets[pt].y] == 0)
             {
-                gemmap[(try cast(secrets[pt], Point) catch(e:Dynamic) null).x][(try cast(secrets[pt], Point) catch(e:Dynamic) null).y] = GenerateGem();
+                gemmap[secrets[pt].x][secrets[pt].y] = GenerateGem();
             }
             pt++;
         }
@@ -3223,11 +3223,11 @@ class Zone
         pt = secrets.length / 3;
         while (pt < secrets.length)
         {
-            if (chambermap[(try cast(secrets[pt], Point) catch(e:Dynamic) null).x][(try cast(secrets[pt], Point) catch(e:Dynamic) null).y] == 1)
+            if (chambermap[secrets[pt].x][secrets[pt].y] == 1)
             {
-                if (spikemap[(try cast(secrets[pt], Point) catch(e:Dynamic) null).x][(try cast(secrets[pt], Point) catch(e:Dynamic) null).y] == 0)
+                if (spikemap[secrets[pt].x][secrets[pt].y] == 0)
                 {
-                    gemmap[(try cast(secrets[pt], Point) catch(e:Dynamic) null).x][(try cast(secrets[pt], Point) catch(e:Dynamic) null).y] = GenerateGem();
+                    gemmap[secrets[pt].x][secrets[pt].y] = GenerateGem();
                 }
             }
             pt++;
@@ -3253,11 +3253,11 @@ class Zone
                 }
                 else if (m.id == Content.FACADE)
                 {
-                    facademap[m.x][m.y] = as3hx.Compat.parseInt(m.strData);
+                    facademap[m.x][m.y] = Math.floor(m.strData);
                 }
                 else if (m.id == Content.WALLPAPER)
                 {
-                    wallpapermap[m.x][m.y] = as3hx.Compat.parseInt(m.strData);
+                    wallpapermap[m.x][m.y] = Math.floor(m.strData);
                 }
             }
             // profile

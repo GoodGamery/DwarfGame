@@ -19,7 +19,7 @@ class Arrow extends FlxSprite
         
         parent = p;
         
-        loadGraphic(Content.cArrow, true, true, 30, 30);
+        loadGraphic(Content.cArrow, true, 30, 30);
         
         
         
@@ -30,8 +30,8 @@ class Arrow extends FlxSprite
         
         var iStarting : Int = 0;
         
-        addAnimation("aliveH", [iStarting], 1, false);
-        addAnimation("deadH", [iStarting + 1, iStarting + 2, iStarting + 3, iStarting + 4, iStarting + 5, iStarting + 6, iStarting + 7, iStarting + 8, 
+        animation.add("aliveH", [iStarting], 1, false);
+        animation.add("deadH", [iStarting + 1, iStarting + 2, iStarting + 3, iStarting + 4, iStarting + 5, iStarting + 6, iStarting + 7, iStarting + 8, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
@@ -46,8 +46,8 @@ class Arrow extends FlxSprite
         
         iStarting = 10;
         
-        addAnimation("aliveU", [iStarting], 1, false);
-        addAnimation("deadU", [iStarting + 1, iStarting + 2, iStarting + 3, iStarting + 4, iStarting + 5, iStarting + 6, iStarting + 7, iStarting + 8, 
+        animation.add("aliveU", [iStarting], 1, false);
+        animation.add("deadU", [iStarting + 1, iStarting + 2, iStarting + 3, iStarting + 4, iStarting + 5, iStarting + 6, iStarting + 7, iStarting + 8, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
@@ -62,8 +62,8 @@ class Arrow extends FlxSprite
         
         iStarting = 20;
         
-        addAnimation("aliveD", [iStarting], 1, false);
-        addAnimation("deadD", [iStarting + 1, iStarting + 2, iStarting + 3, iStarting + 4, iStarting + 5, iStarting + 6, iStarting + 7, iStarting + 8, 
+        animation.add("aliveD", [iStarting], 1, false);
+        animation.add("deadD", [iStarting + 1, iStarting + 2, iStarting + 3, iStarting + 4, iStarting + 5, iStarting + 6, iStarting + 7, iStarting + 8, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, 
@@ -76,26 +76,26 @@ class Arrow extends FlxSprite
                 iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9, iStarting + 9
         ], 20, false);
         
-        addAnimation("bounce", [30, 31, 32, 33, 34, 35, 36, 37], 30, true);
+        animation.add("bounce", [30, 31, 32, 33, 34, 35, 36, 37], 30, true);
         
         SetDirection(direction, bRight);
         
-        cast(("alive"), ArrowPlay);
+        ArrowPlay("alive");
     }
     
     public function ArrowPlay(anim : String) : Void
     {
         if (iDir == 0)
         {
-            play(anim + "H");
+            animation.play(anim + "H");
         }
         else if (iDir == -1)
         {
-            play(anim + "U");
+            animation.play(anim + "U");
         }
         else if (iDir == 1)
         {
-            play(anim + "D");
+            animation.play(anim + "D");
         }
     }
     
@@ -129,7 +129,7 @@ class Arrow extends FlxSprite
         {
             if (bRight)
             {
-                facing = RIGHT;
+                facing = Content.RIGHT;
                 width = 14;
                 height = 3;
                 offset.x = 7;
@@ -137,7 +137,7 @@ class Arrow extends FlxSprite
             }
             else
             {
-                facing = LEFT;
+                facing = Content.LEFT;
                 width = 14;
                 height = 3;
                 offset.x = 9;
@@ -201,7 +201,7 @@ class Arrow extends FlxSprite
             }
             else
             {
-                this.facing = LEFT;
+                this.facing = Content.LEFT;
                 this.velocity.x = -iSpeed * nLateralBounceSpeed;
             }
         }
@@ -251,11 +251,11 @@ class Arrow extends FlxSprite
         
         if (velocity.x > 0)
         {
-            this.facing = LEFT;
+            this.facing = Content.LEFT;
         }
         else if (velocity.x < 0)
         {
-            this.facing = RIGHT;
+            this.facing = Content.RIGHT;
         }
         
         trace("vel = " + Std.string(velocity.x) + " , " + Std.string(velocity.y));
@@ -290,17 +290,17 @@ class Arrow extends FlxSprite
         SetEffective();
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         var overtile : Int = -1;
         var fluid : Int = -1;
         
         if (parent != null && parent.level != null)
         {
-            var xcheck : Int = as3hx.Compat.parseInt(as3hx.Compat.parseInt(this.x) / 30);
-            var ycheck : Int = as3hx.Compat.parseInt(as3hx.Compat.parseInt(this.y) / 30);
+            var xcheck : Int = Math.floor(this.x / 30);
+            var ycheck : Int = Math.floor(this.y / 30);
             
-            overtile = as3hx.Compat.parseInt(parent.level.getTile(xcheck, ycheck) % Content.iFrontSheetWidth);
+            overtile = Math.floor(parent.level.getTile(xcheck, ycheck) % Content.iFrontSheetWidth);
             
             if (overtile == 4 || overtile == 5)
             {
@@ -357,13 +357,13 @@ class Arrow extends FlxSprite
                     
                     if (toadd == null)
                     {
-                        toadd = new Bub(this.parent, xx, yy, nDir, nSpeed);
+                        toadd = new Bub(this.parent, Math.floor(xx), Math.floor(yy), nDir, nSpeed);
                         parent.arrayParticles.push(toadd);
                         parent.groupParticles.add(toadd);
                     }
                     else
                     {
-                        toadd.Reuse(xx, yy, nDir, nSpeed);
+                        toadd.Reuse(Math.floor(xx), Math.floor(yy), nDir, nSpeed);
                     }
                 }
             }

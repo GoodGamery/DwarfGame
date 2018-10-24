@@ -341,14 +341,6 @@ import flixel.system.FlxAssets;
 
     public static var cSplash : FlxGraphicAsset;
     
-    @:meta(Embed(source="../content/dwarven.txt",mimeType="application/octet-stream"))
-
-    public static var cDwarvenLanguage : Class<Dynamic>;
-    
-    @:meta(Embed(source="../content/bounds.txt",mimeType="application/octet-stream"))
-
-    public static var cEnvironmentBounds : Class<Dynamic>;
-    
     @:meta(Embed(source="../content/miracles.txt",mimeType="application/octet-stream"))
 
     public static var cMiracles : Class<Dynamic>;

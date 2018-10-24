@@ -5,8 +5,8 @@ import flixel.*;
 
 class FaceShoot extends Monster
 {
-    public var nSpitTime : Float = 2;
-    public var nSpitTimer : Float = nSpitTime;
+    public var nSpitTime : Float = 2.0;
+    public var nSpitTimer : Float = 2.0;
     
     public function new(p : PlayState, X : Float, Y : Float, colTrans : ColorTransform = null, speedmod : Float = 1)
     {
@@ -23,10 +23,10 @@ class FaceShoot extends Monster
         bOriginalMonsterCollision = false;
         
         
-        addAnimation("spit", [32, 33, 34, 35, 34, 33, 32], as3hx.Compat.parseInt(6 * speedmod), false);
-        addAnimation("d", [32], 6, true);
+        animation.add("spit", [32, 33, 34, 35, 34, 33, 32], as3hx.Compat.parseInt(6 * speedmod), false);
+        animation.add("d", [32], 6, true);
         
-        play("d");
+        animation.play("d");
         
         
         //remVelocity.x = -30;
@@ -46,11 +46,11 @@ class FaceShoot extends Monster
         
         
         
-        facing = RIGHT;
+        facing = Content.RIGHT;
         
         bFrontMonster = true;
         
-        var r : Rndm = new Rndm(x + (y * 2000));
+        var r : FlxRandom = new FlxRandom(x + (y * 2000));
         nSpitTimer += r.integer(0, 200) / 100;
     }
     

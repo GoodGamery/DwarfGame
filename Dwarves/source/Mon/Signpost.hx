@@ -13,10 +13,10 @@ class Signpost extends Talker
         
         sprFace = new FlxSprite();
         sprFace.loadGraphic(Content.cNPCOther, true, true, 60, 60, true);
-        sprFace.addAnimation("s", [0], 16, true);
+        sprFace.animation.add("s", [0], 16, true);
         sprFace.scrollFactor.x = 0;
         sprFace.scrollFactor.y = 0;
-        sprFace.play("s");
+        sprFace.animation.play("s");
         
         bAcrophobic = false;
         bFriendly = true;
@@ -26,8 +26,8 @@ class Signpost extends Talker
         bOriginalMonsterCollision = false;
         
         loadGraphic(Content.cNPCStatic, true, true, 30, 30, true);
-        addAnimation("s", [1], 16, true);
-        play("s");
+        animation.add("s", [1], 16, true);
+        animation.play("s");
         
         //remVelocity.x = -30;
         
@@ -36,7 +36,7 @@ class Signpost extends Talker
         offset.x = 3;
         offset.y = 0;
         
-        facing = RIGHT;
+        facing = Content.RIGHT;
     }
     
     

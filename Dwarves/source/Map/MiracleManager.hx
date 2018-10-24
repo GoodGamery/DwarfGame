@@ -2,7 +2,6 @@ package map;
 
 import flash.utils.ByteArray;
 import map.Biome;
-import flixel.Rndm;
 import flash.net.FileReference;
 
 @:final class MiracleManager
@@ -14,8 +13,8 @@ import flash.net.FileReference;
     {
         arrayMiracles.splice(0, arrayMiracles.length);
         
-        LoadMiraclesFrom(try cast(new content.CMiracles(), ByteArray) catch(e:Dynamic) null, 1);
-        LoadMiraclesFrom(try cast(new content.CMiraclesGame1(), ByteArray) catch(e:Dynamic) null, 0);
+        LoadMiraclesFrom(try cast(new Content.cMiracles(), ByteArray) catch(e:Dynamic) null, 1);
+        LoadMiraclesFrom(try cast(new Content.cMiraclesGame1(), ByteArray) catch(e:Dynamic) null, 0);
         
         trace("._.-`* MIRACLES LOADED: " + Std.string(arrayMiracles.length));
     }
@@ -33,13 +32,13 @@ import flash.net.FileReference;
             
             if (fields.length >= 7)
             {
-                var zonex : Int = as3hx.Compat.parseInt(fields[0]);
-                var zoney : Int = as3hx.Compat.parseInt(fields[1]);
-                var xx : Int = as3hx.Compat.parseInt(fields[2]);
-                var yy : Int = as3hx.Compat.parseInt(fields[3]);
-                var identity : Int = as3hx.Compat.parseInt(fields[4]);
+                var zonex : Int = fields[0];
+                var zoney : Int = fields[1];
+                var xx : Int = fields[2];
+                var yy : Int = fields[3];
+                var identity : Int = fields[4];
                 var data : String = fields[5];
-                var universal : Int = as3hx.Compat.parseInt(fields[6]);
+                var universal : Int = fields[6];
                 
                 arrayMiracles.push(new Miracle(zonex, zoney, xx, yy, identity, data, universal));
             }

@@ -5,7 +5,7 @@ import flixel.*;
 
 class Hopper extends Monster
 {
-    public var nHopForce : Float = Content.nForceTwo  //0.4;  ;
+    public var nHopForce : Float = Content.nForceTwo;  //0.4;
     public var bMoveOnlyWhenJumping : Bool = false;
     public var bTurnWhenWalking : Bool = false;
     public var bTurnWhenFalling : Bool = false;

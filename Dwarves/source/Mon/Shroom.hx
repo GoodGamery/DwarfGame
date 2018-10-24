@@ -11,8 +11,8 @@ class Shroom extends Monster
     {
         super(p, "Shroom", X, Y, colTrans, speedmod);
         
-        addAnimation("d", [8, 9, 10, 11], 6, true);
-        play("d");
+        animation.add("d", [8, 9, 10, 11], 6, true);
+        animation.play("d");
         
         bAcrophobic = true;
         

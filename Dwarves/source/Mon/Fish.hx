@@ -3,6 +3,7 @@ package mon;
 import flash.geom.ColorTransform;
 import flash.geom.Point;
 import flixel.*;
+import flixel.math.FlxRandom;
 
 class Fish extends Monster
 {
@@ -17,10 +18,10 @@ class Fish extends Monster
         
         bDiesInWater = false;
         
-        //addAnimation("run", [8, 9, 10, 11], 6, true);
-        addAnimation("d", [16, 17, 18, 19], 6, true);
+        //animation.add("run", [8, 9, 10, 11], 6, true);
+        animation.add("d", [16, 17, 18, 19], 6, true);
         
-        play("d");
+        animation.play("d");
         
         bAcrophobic = false;
         
@@ -40,7 +41,7 @@ class Fish extends Monster
         
         //bForceHit = false;
         
-        var r : Rndm = new Rndm(x + (y * 2000));
+        var r : FlxRandom = new FlxRandom(x + (y * 2000));
         nAngle = r.integer(0, Math.PI * 200) / 100;
         
         this.health = 20;

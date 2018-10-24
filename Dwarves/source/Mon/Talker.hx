@@ -18,9 +18,9 @@ class Talker extends Monster
         super(p, name, X, Y);
     }
     
-    override public function update() : Void
+    override public function update(elapsed:Float) : Void
     {
-        super.update();
+        super.update(elapsed);
     }
 }
 

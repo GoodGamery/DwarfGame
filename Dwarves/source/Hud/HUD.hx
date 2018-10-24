@@ -10,6 +10,7 @@ import flixel.text.FlxText;
 import flixel.FlxObject;
 import flixel.system.FlxSound;
 import components.DwarfText;
+import PlayState;
 
 class HUD extends FlxGroup
 {
@@ -676,7 +677,8 @@ class HUD extends FlxGroup
                 line++;
             }
             
-            chatgroup.members = [];   // Clear the array
+            chatgroup.members.map(function(s:FlxSprite) {s.destroy();});
+            chatgroup.clear();
             chatgroup.add(face);
             chatgroup.add(chatbox);
             chatgroup.add(chattext);
@@ -698,7 +700,8 @@ class HUD extends FlxGroup
         }
         else
         {
-            chatgroup.members.length = [];   // Clear the array
+            chatgroup.members.map(function(s:FlxSprite) {s.destroy();});
+            chatgroup.clear();
             arrayIntended = null;
         }
         
@@ -929,7 +932,7 @@ class HUD extends FlxGroup
         
         if (parent.zone != null)
         {
-            Remake(parent.zone.description.coords.x, parent.zone.description.coords.y);
+            Remake(Math.floor(parent.zone.description.coords.x), Math.floor(parent.zone.description.coords.y));
         }
     }
     
@@ -950,7 +953,7 @@ class HUD extends FlxGroup
         
         if (parent.zone != null)
         {
-            Remake(parent.zone.description.coords.x, parent.zone.description.coords.y);
+            Remake(Math.floor(parent.zone.description.coords.x), Math.floor(parent.zone.description.coords.y));
         }
     }
     

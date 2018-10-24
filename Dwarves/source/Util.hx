@@ -45,7 +45,7 @@ import Content;
             var line : String = Std.string(lines[i]);
             if (line.indexOf(" ") > -1 && ParseCommand(line) == "header")
             {
-                if (cast((line), ParseContent).toLowerCase() == header.toLowerCase())
+                if (ParseContent(line).toLowerCase() == header.toLowerCase())
                 {
                     return i;
                 }
@@ -178,8 +178,7 @@ import Content;
     public static var words : Array<Dynamic>;
     public static function LoadLanguage() : Void
     {
-        var bytes : ByteArray = new Content.CDwarvenLanguage();
-        var s : String = bytes.readUTFBytes(bytes.length);
+        var s : String = Assets.getText("dwarven.txt");
         
         words = new Array<Dynamic>();
         
@@ -217,8 +216,7 @@ import Content;
     
     public static function LoadBiomeParameters() : Void
     {
-        var bytes : ByteArray = new Content.cEnvironmentBounds();
-        var s : String = bytes.readUTFBytes(bytes.length);
+        var s : String = Assets.getText("bounds.txt");
         
         var lines : Array<String> = s.split("\n");
         lines.splice(0, 1);  // Get rid of header line  
@@ -485,7 +483,7 @@ import Content;
             }
         }
         
-        front = cast((front), Capitalize);
+        front = Capitalize(front);
         
         return front + mid + back;
     }
@@ -513,11 +511,8 @@ import Content;
             }
         }
         
-        place = cast((place), Capitalize);
-        
-        
-        
-        
+        place = Capitalize(place);
+
         var type : Int = -1;
         
         while (type == -1)
@@ -628,7 +623,7 @@ import Content;
         return code;
     }
     
-    public static function ColorF(R : Int, B : Int, G : Int) : Int
+    public static function ColorF(R : Float, B : Float, G : Float) : Int
     {
         return Color(Math.floor(R), Math.floor(B), Math.floor(G));
     }

@@ -12,21 +12,21 @@ class Gopher extends Talker
         super(p, name, X, Y);
         
         sprFace = new FlxSprite();
-        sprFace.loadGraphic(Content.cNPCOther, true, true, 60, 60, true);
-        sprFace.addAnimation("s", [1], 16, true);
+        sprFace.loadGraphic(Content.cNPCOther, true, 60, 60, true);
+        sprFace.animation.add("s", [1], 16, true);
         sprFace.scrollFactor.x = 0;
         sprFace.scrollFactor.y = 0;
-        sprFace.play("s");
+        sprFace.animation.play("s");
         
         bAcrophobic = true;
         bFriendly = true;
         
         iRunSpeed = 15;
         
-        loadGraphic(Content.cMonsters, true, true, 90, 90, true);
-        addAnimation("s", [4], 3, true);
-        addAnimation("w", [4, 5, 4, 6], 3, true);
-        play("w");
+        loadGraphic(Content.cMonsters, true, 90, 90, true);
+        animation.add("s", [4], 3, true);
+        animation.add("w", [4, 5, 4, 6], 3, true);
+        animation.play("w");
         
         //remVelocity.x = -30;
         
@@ -35,7 +35,7 @@ class Gopher extends Talker
         offset.x = 30;
         offset.y = 8;
         
-        facing = RIGHT;
+        facing = Content.RIGHT;
     }
     
     
