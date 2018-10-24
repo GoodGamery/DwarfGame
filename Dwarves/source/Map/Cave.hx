@@ -30,12 +30,12 @@ class Cave
         CalculateColor();
         
         colorpieces = new FlxSprite(100 + (x * 12), 100 + (y * 12));
-        colorpieces.loadGraphic(Content.cMapCaves, false, false, 96, 48, true);
+        colorpieces.loadGraphic(Content.cMapCaves, false, 96, 48, true);
         colorpieces.pixels.colorTransform(new Rectangle(0, 0, 96, 48), levelColor);
         colorpieces.dirty = true;
         
         purepieces = new FlxSprite(100 + (x * 12), 100 + (y * 12));
-        purepieces.loadGraphic(Content.cMapCaves, false, false, 96, 48, true);
+        purepieces.loadGraphic(Content.cMapCaves, false, 96, 48, true);
         purepieces.dirty = true;
     }
     
@@ -234,22 +234,22 @@ class Cave
             dirs.west = false;
             dirs.east = false;
             
-            if (r.integer(0, 100) < Content.nVChance * 100)
+            if (r.int(0, 100) < Content.nVChance * 100)
             {
                 dirs.north = true;
             }
             
-            if (r.integer(0, 100) < Content.nVChance * 100)
+            if (r.int(0, 100) < Content.nVChance * 100)
             {
                 dirs.south = true;
             }
             
-            if (r.integer(0, 100) < Content.nHChance * 100)
+            if (r.int(0, 100) < Content.nHChance * 100)
             {
                 dirs.west = true;
             }
             
-            if (r.integer(0, 100) < Content.nHChance * 100)
+            if (r.int(0, 100) < Content.nHChance * 100)
             {
                 dirs.east = true;
             }
@@ -311,16 +311,16 @@ class Cave
             var cy : Int = (y - 1);
             while (cy <= y + 1)
             {
-                (try cast(vacinity[vacinity.length - 1], Array) catch(e:Dynamic) null).push(NeighborlyDirections(cx, cy));
+                vacinity[vacinity.length - 1].push(NeighborlyDirections(cx, cy));
                 cy++;
             }
             cx++;
         }
         
-        exits.north = (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).north;
-        exits.east = (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).east;
-        exits.south = (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).south;
-        exits.west = (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).west;
+        exits.north =vacinity[1][1].north;
+        exits.east = vacinity[1][1].east;
+        exits.south = vacinity[1][1].south;
+        exits.west = vacinity[1][1].west;
         
         /* _ _ _ _ _
 		  |    0    |
@@ -335,10 +335,10 @@ class Cave
         var seed : Int;
         
         if (  // Loop in upper-left  
-            (try cast(vacinity[0][0], DirectionSet) catch(e:Dynamic) null).east &&
-            (try cast(vacinity[1][0], DirectionSet) catch(e:Dynamic) null).south &&
-            (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).west &&
-            (try cast(vacinity[0][1], DirectionSet) catch(e:Dynamic) null).north)
+            vacinity[0][0].east &&
+            vacinity[1][0].south &&
+            vacinity[1][1].west &&
+            vacinity[0][1].north)
         
         { // Draw straws
             
@@ -351,7 +351,7 @@ class Cave
                 );
             straws = new FlxRandom(seed);
             
-            straw = straws.integer(0, 3);
+            straw = straws.int(0, 3);
             
             if (straw == 1)
             {
@@ -364,15 +364,15 @@ class Cave
         }
         
         if (  // Loop in upper-right  
-            (try cast(vacinity[1][0], DirectionSet) catch(e:Dynamic) null).east &&
-            (try cast(vacinity[2][0], DirectionSet) catch(e:Dynamic) null).south &&
-            (try cast(vacinity[2][1], DirectionSet) catch(e:Dynamic) null).west &&
-            (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).north)
+            vacinity[1][0].east &&
+            vacinity[2][0].south &&
+            vacinity[2][1].west &&
+            vacinity[1][1].north)
         
         { // Draw straws
             
             
-            seed = flixel.math.QuadSeed(
+            seed = Util.QuadSeed(
                             x - 0, y - 1, 
                             x + 1, y - 1, 
                             x + 1, y - 0, 
@@ -380,7 +380,7 @@ class Cave
                 );
             straws = new FlxRandom(seed);
             
-            straw = straws.integer(0, 3);
+            straw = straws.int(0, 3);
             
             if (straw == 3)
             {
@@ -393,10 +393,10 @@ class Cave
         }
         
         if (  // Loop in lower-right  
-            (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).east &&
-            (try cast(vacinity[2][1], DirectionSet) catch(e:Dynamic) null).south &&
-            (try cast(vacinity[2][2], DirectionSet) catch(e:Dynamic) null).west &&
-            (try cast(vacinity[1][2], DirectionSet) catch(e:Dynamic) null).north)
+           vacinity[1][1].east &&
+           vacinity[2][1].south &&
+           vacinity[2][2].west &&
+           vacinity[1][2].north)
         
         { // Draw straws
             
@@ -409,7 +409,7 @@ class Cave
                 );
             straws = new FlxRandom(seed);
             
-            straw = straws.integer(0, 3);
+            straw = straws.int(0, 3);
             
             if (straw == 0)
             {
@@ -422,10 +422,10 @@ class Cave
         }
         
         if (  // Loop in lower-left  
-            (try cast(vacinity[0][1], DirectionSet) catch(e:Dynamic) null).east &&
-            (try cast(vacinity[1][1], DirectionSet) catch(e:Dynamic) null).south &&
-            (try cast(vacinity[1][2], DirectionSet) catch(e:Dynamic) null).west &&
-            (try cast(vacinity[0][2], DirectionSet) catch(e:Dynamic) null).north)
+            vacinity[0][1].east &&
+            vacinity[1][1].south &&
+            vacinity[1][2].west &&
+            vacinity[0][2].north)
         
         { // Draw straws
             
@@ -438,7 +438,7 @@ class Cave
                 );
             straws = new FlxRandom(seed);
             
-            straw = straws.integer(0, 3);
+            straw = straws.int(0, 3);
             
             if (straw == 0)
             {
@@ -480,7 +480,7 @@ class Cave
         style = -1;
         
         var r : FlxRandom = new FlxRandom(Util.Seed(x, y));
-        var nexustest : Int = r.integer(0, 100);
+        var nexustest : Int = r.int(0, 100);
         
         //trace("nexus threshold = " + (Content.nNexusChance * 100).toString() + " Roll = " + nexustest.toString());
         
@@ -491,7 +491,7 @@ class Cave
             { // limit deadwater to Shar Surface and below
                 
                 {
-                    style = r.integer(0, Content.numbiomes);
+                    style = r.int(0, Content.numbiomes);
                 }
             }
             while ((style == 4 && y < 10));
@@ -513,7 +513,7 @@ class Cave
                 while (xx < x + 10)
                 {
                     var rr : FlxRandom = new FlxRandom(Util.Seed(xx, yy));
-                    nexustest = rr.integer(0, 100);
+                    nexustest = rr.int(0, 100);
                     
                     if (nexustest < Content.nNexusChance * 100)
                     {
@@ -524,7 +524,7 @@ class Cave
                         { // limit deadwater to Shar Surface and below
                             
                             {
-                                biomestyle = rr.integer(0, Content.numbiomes);
+                                biomestyle = rr.int(0, Content.numbiomes);
                             }
                         }
                         while ((biomestyle == 4 && yy < 10));
@@ -553,23 +553,23 @@ class Cave
             }
         }
         
-        strRegionName = Util.MakeRegionName(Util.Seed(mynexus.x, mynexus.y), style);
+        strRegionName = Util.MakeRegionName(Util.Seed(Math.floor(mynexus.x), Math.floor(mynexus.y)), style);
     }
     
     public function CalculateColor() : Void
     {
-        var ran : FlxRandom = new FlxRandom(Util.Seed(mynexus.x, mynexus.y));
+        var ran : FlxRandom = new FlxRandom(Util.Seed(Math.floor(mynexus.x), Math.floor(mynexus.y)));
         
-        var testing : Int = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
-        testing = ran.integer(0, 10);
+        var testing : Int = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
+        testing = ran.int(0, 10);
         
         var maxex : Int = 10;
         
@@ -583,22 +583,22 @@ class Cave
             o++;
         }
         
-        var whichone : Int = ran.integertrace(0, maxex);
+        var whichone : Int = ran.int(0, maxex);
         
-        var which : String = Std.string((try cast(Content.biomes[style], Biome) catch(e:Dynamic) null).overlays[whichone]);
-        var mods : Array<Dynamic> = which.split("|");
+        var which : String = Std.string(Content.biomes[style].overlays[whichone]);
+        var mods : Array<String> = which.split("|");
         
-        var r : Float = as3hx.Compat.parseFloat(mods[0]);
-        var g : Float = as3hx.Compat.parseFloat(mods[1]);
-        var b : Float = as3hx.Compat.parseFloat(mods[2]);
+        var r : Float = Std.parseFloat(mods[0]);
+        var g : Float = Std.parseFloat(mods[1]);
+        var b : Float = Std.parseFloat(mods[2]);
         
         r = 1 + (r / 10);
         g = 1 + (g / 10);
         b = 1 + (b / 10);
         
-        r *= (ran.integer(80, 120) / 100);
-        g *= (ran.integer(80, 120) / 100);
-        b *= (ran.integer(80, 120) / 100);
+        r *= (ran.int(80, 120) / 100);
+        g *= (ran.int(80, 120) / 100);
+        b *= (ran.int(80, 120) / 100);
         
         levelColor = new ColorTransform(r, g, b, 1, 0, 0, 0);
     }

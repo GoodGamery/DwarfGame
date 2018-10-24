@@ -12,6 +12,7 @@ import mon.*;
 import tasks.*;
 import particles.*;
 import flixel.text.FlxText;
+import flixel.tile.FlxTilemap;
 
 class PlayState extends FlxState
 {

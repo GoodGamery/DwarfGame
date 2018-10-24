@@ -8,6 +8,7 @@ import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.FlxObject;
+import flixel.system.FlxSound;
 import components.DwarfText;
 
 class HUD extends FlxGroup
@@ -78,6 +79,8 @@ class HUD extends FlxGroup
     public var makerBlocker : FlxSprite;
     public var makerMap : FlxSprite;
     public var backupMap : FlxSprite;
+
+    private var soundChat : FlxSound;
     
     public function new(p : PlayState)
     {
@@ -92,7 +95,7 @@ class HUD extends FlxGroup
 			cornerbg.scrollFactor.y = 0;
 			add(cornerbg);
 			*/
-        
+        soundChat = FlxG.sound.load(AssetPaths.chat__mp3, Content.volumeChat);
         
         
         bg = new FlxSprite(-1, -1);
@@ -369,9 +372,8 @@ class HUD extends FlxGroup
         add(cavecanvas);
         
         //GoCorner();
-        cast((false), StatBarVisible);
-        
-        
+        StatBarVisible(false);
+                
         piecebar = new FlxSpriteGroup();
         
         for (pc in 0...16)
@@ -431,7 +433,7 @@ class HUD extends FlxGroup
         backupMap.scrollFactor.y = 0;
         maker.add(backupMap);
         
-        makerReport = new DwarfText(480 + 20, 20, 300, "test", true);
+        makerReport = new DwarfText(480 + 20, 20, 300, "test", 8, true);
         makerReport.color = 0xFFFFFFFF;
         makerReport.scrollFactor.x = 0;
         makerReport.scrollFactor.y = 0;
@@ -472,7 +474,7 @@ class HUD extends FlxGroup
         
         if (ratio < Content.stats.iHearts * 2)
         {
-            ratio = Math.float(ratio);
+            ratio = Math.floor(ratio);
         }
         
         var h : Int = 0;
@@ -509,7 +511,7 @@ class HUD extends FlxGroup
         
         for (n in 0...16)
         {
-            var animnum : Int = as3hx.Compat.parseInt(iCurrentPiece + n - 8);
+            var animnum : Int = (iCurrentPiece + n - 8);
             
             if (animnum < 0)
             {
@@ -674,7 +676,7 @@ class HUD extends FlxGroup
                 line++;
             }
             
-            chatgroup.members.clear();
+            chatgroup.members = [];   // Clear the array
             chatgroup.add(face);
             chatgroup.add(chatbox);
             chatgroup.add(chattext);
@@ -696,7 +698,7 @@ class HUD extends FlxGroup
         }
         else
         {
-            chatgroup.members.clear();
+            chatgroup.members.length = [];   // Clear the array
             arrayIntended = null;
         }
         
@@ -809,7 +811,7 @@ class HUD extends FlxGroup
                         !(chattext.text.charAt(chattext.text.length - 1) == " " &&
                         chattext.text.charAt(chattext.text.length - 2) == " "))
                     {
-                        FlxG.sound.play(Content.soundChat, Content.volumeChat, false, false, Content.nDefaultSkip);
+                        soundChat.play();
                     }
                 }
             }
@@ -859,7 +861,7 @@ class HUD extends FlxGroup
     
     public function SlideIn() : Void
     {        
-        SetBars(inout + (elapsed / slideintime));
+        SetBars(inout + (FlxG.elapsed / slideintime));
         
         if (inout > 1)
         {

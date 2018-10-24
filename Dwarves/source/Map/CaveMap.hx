@@ -18,13 +18,13 @@ class CaveMap
     public function new(cx : Int, cy : Int, radius : Int)
     {
         circlemask = new FlxSprite(0, 0);
-        circlemask.loadGraphic(Content.cCircleMask, false, false, 268, 268, true);
+        circlemask.loadGraphic(Content.cCircleMask, false, 268, 268, true);
         
         youarehere = new FlxSprite(0, 0);
-        youarehere.loadGraphic(Content.cYouAreHere, false, false, 12, 12, true);
+        youarehere.loadGraphic(Content.cYouAreHere, false, 12, 12, true);
         
         cavenew = new FlxSprite(0, 0);
-        cavenew.loadGraphic(Content.cCaveNew, false, false, 4, 4, true);
+        cavenew.loadGraphic(Content.cCaveNew, false, 4, 4, true);
         
         upperleft.x = cx - radius;
         upperleft.y = cy - radius;
@@ -85,10 +85,11 @@ class CaveMap
     {
         canvas.pixels.fillRect(new Rectangle(0, 0, canvas.pixels.width, canvas.pixels.height), 0xFF5D5D5D);
         
-        var xx : Int = upperleft.x;
+        var xx : Int = Math.floor(upperleft.x);
+        var yy : Int = 0;
         while (xx < upperleft.x + size.x)
         {
-            var yy : Int = upperleft.y;
+            yy = Math.floor(upperleft.y);
             while (yy < upperleft.y + size.y)
             
             { //hud.cavepieces.add(Content.stats.cavemap.GetCave(xx, yy).sprite);
@@ -127,7 +128,7 @@ class CaveMap
         xx = Math.floor(upperleft.x);
         while (xx < upperleft.x + size.x)
         {
-            yy = upperleft.y;
+            yy = Math.floor(upperleft.y);
             while (yy < upperleft.y + size.y)
             {
                 if (Content.stats.cavemap.GetCave(xx, yy).visited)
@@ -244,8 +245,8 @@ class CaveMap
             var y : Int = 0;
             while (y < size.y)
             {
-                var xworld : Int = Math.float(x + upperleft.x);
-                var yworld : Int = Math.float(y + upperleft.y);
+                var xworld : Int = Math.floor(x + upperleft.x);
+                var yworld : Int = Math.floor(y + upperleft.y);
                 
                 
                 
@@ -306,16 +307,16 @@ class CaveMap
     {
         var orig : String = GetCaveRegion(x, y);
         
-        var checkers : Array<Dynamic> = new Array<Dynamic>();
+        var checkers : Array<Point> = new Array<Point>();
         checkers.push(new Point(x, y));
         
         while (checkers.length > 0)
         {
-            var oldcheckers : Array<Dynamic> = new Array<Dynamic>();
+            var oldcheckers : Array<Point> = new Array<Point>();
             
             for (pt in checkers)
             {
-                GetCave(pt.x, pt.y).sensed = true;
+                GetCaveF(pt.x, pt.y).sensed = true;
                 
                 oldcheckers.push(new Point());
                 oldcheckers[oldcheckers.length - 1] = pt;
@@ -326,36 +327,36 @@ class CaveMap
             i = 0;
             while (i < oldcheckers.length)
             {
-                var tocheck : Point = try cast(oldcheckers[i], Point) catch(e:Dynamic) null;
+                var tocheck : Point = oldcheckers[i];
                 
-                AddCave(tocheck.x, tocheck.y - 1);
+                AddCaveF(tocheck.x, tocheck.y - 1.0);
                 
-                if (GetCave(tocheck.x, tocheck.y - 1).strRegionName == orig &&
-                    GetCave(tocheck.x, tocheck.y - 1).sensed == false)
+                if (GetCaveF(tocheck.x, tocheck.y - 1).strRegionName == orig &&
+                    GetCaveF(tocheck.x, tocheck.y - 1).sensed == false)
                 {
                     checkers.push(new Point(tocheck.x, tocheck.y - 1));
                 }
                 
-                AddCave(tocheck.x, tocheck.y + 1);
+                AddCaveF(tocheck.x, tocheck.y + 1.0);
                 
-                if (GetCave(tocheck.x, tocheck.y + 1).strRegionName == orig &&
-                    GetCave(tocheck.x, tocheck.y + 1).sensed == false)
+                if (GetCaveF(tocheck.x, tocheck.y + 1).strRegionName == orig &&
+                    GetCaveF(tocheck.x, tocheck.y + 1).sensed == false)
                 {
                     checkers.push(new Point(tocheck.x, tocheck.y + 1));
                 }
                 
-                AddCave(tocheck.x - 1, tocheck.y);
+                AddCaveF(tocheck.x - 1, tocheck.y);
                 
-                if (GetCave(tocheck.x - 1, tocheck.y).strRegionName == orig &&
-                    GetCave(tocheck.x - 1, tocheck.y).sensed == false)
+                if (GetCaveF(tocheck.x - 1, tocheck.y).strRegionName == orig &&
+                    GetCaveF(tocheck.x - 1, tocheck.y).sensed == false)
                 {
                     checkers.push(new Point(tocheck.x - 1, tocheck.y));
                 }
                 
-                AddCave(tocheck.x + 1, tocheck.y);
+                AddCaveF(tocheck.x + 1, tocheck.y);
                 
-                if (GetCave(tocheck.x + 1, tocheck.y).strRegionName == orig &&
-                    GetCave(tocheck.x + 1, tocheck.y).sensed == false)
+                if (GetCaveF(tocheck.x + 1, tocheck.y).strRegionName == orig &&
+                    GetCaveF(tocheck.x + 1, tocheck.y).sensed == false)
                 {
                     checkers.push(new Point(tocheck.x + 1, tocheck.y));
                 }
@@ -375,8 +376,8 @@ class CaveMap
     
     function GetCave(xget : Int, yget : Int) : Cave
     {
-        xget -= upperleft.x;
-        yget -= upperleft.y;
+        xget -= Math.floor(upperleft.x);
+        yget -= Math.floor(upperleft.y);
         
         if (xget < 0 || xget >= size.x || yget < 0 || yget >= size.y)
         {
@@ -388,8 +389,8 @@ class CaveMap
     
     function GetCaveRegion(xget : Int, yget : Int) : String
     {
-        xget -= upperleft.x;
-        yget -= upperleft.y;
+        xget -= Math.floor(upperleft.x);
+        yget -= Math.floor(upperleft.y);
         
         if (xget < 0 || xget >= size.x || yget < 0 || yget >= size.y)
         {
@@ -407,6 +408,16 @@ class CaveMap
         FillRegionSense(xadd, yadd);
     }
     
+    public function AddCaveF(x : Float, y : Float) : Void
+    {
+        AddCave(Math.floor(x), Math.floor(y));
+    }
+
+    public function GetCaveF(x : Float, y : Float) : Cave
+    {
+        return GetCave(Math.floor(x), Math.floor(y));
+    }
+
     public function AddCave(xadd : Int, yadd : Int) : Void
     {
         var xx : Int = 0;
@@ -414,7 +425,7 @@ class CaveMap
         
         if (xadd < upperleft.x)
         {
-            arrayCaveMap.unshift(new Array<Dynamic>());
+            arrayCaveMap.unshift(new Array<Cave>());
             
             yy = 0;
             while (yy < size.y)
@@ -424,7 +435,7 @@ class CaveMap
                 { // just do it
                     
                     {
-                        arrayCaveMap[0].push(new Cave(xadd, yy + upperleft.y));
+                        arrayCaveMap[0].push(new Cave(xadd, Math.floor(yy + upperleft.y)));
                     }
                 }
                 else
@@ -439,7 +450,7 @@ class CaveMap
         }
         else if (xadd >= upperleft.x + size.x)
         {
-            arrayCaveMap.push(new Array<Dynamic>());
+            arrayCaveMap.push(new Array<Cave>());
             
             yy = 0;
             while (yy < size.y)
@@ -460,7 +471,7 @@ class CaveMap
                 { // just do it
                     
                     {
-                        arrayCaveMap[xx].unshift(new Cave(xx + upperleft.x, yadd));
+                        arrayCaveMap[xx].unshift(new Cave(Math.floor(xx + upperleft.x), yadd));
                     }
                 }
                 else
@@ -483,7 +494,7 @@ class CaveMap
                 { // just do it
                     
                     {
-                        arrayCaveMap[xx].push(new Cave(xx + upperleft.x, yadd));
+                        arrayCaveMap[xx].push(new Cave(Math.floor(xx + upperleft.x), yadd));
                     }
                 }
                 else

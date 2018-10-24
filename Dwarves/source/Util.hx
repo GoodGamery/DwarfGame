@@ -43,7 +43,7 @@ import Content;
         while (i < lines.length)
         {
             var line : String = Std.string(lines[i]);
-            if (line.indexOf(" ") > -1 && cast((line), ParseCommand) == "header")
+            if (line.indexOf(" ") > -1 && ParseCommand(line) == "header")
             {
                 if (cast((line), ParseContent).toLowerCase() == header.toLowerCase())
                 {
@@ -86,7 +86,7 @@ import Content;
     
     public static function Random(low : Int, highinclusive : Int) : Int  // INCLUSIVE ON BOTH ENDS!!!  
     {
-        return as3hx.Compat.parseInt(Math.floor(Math.random() * (1 + highinclusive - low)) + low);
+        return Math.floor(Math.random() * (1 + highinclusive - low)) + low;
     }
     
     public static function Seed(x : Int, y : Int) : Int
@@ -112,12 +112,12 @@ import Content;
             y++;
         }
         
-        return as3hx.Compat.parseInt((x + (y * 64)) + (x % 13) + (y * x) + ((y * x) % 7));
+        return ((x + (y * 64)) + (x % 13) + (y * x) + ((y * x) % 7));
     }
     
     public static function QuadSeed(x1 : Int, y1 : Int, x2 : Int, y2 : Int, x3 : Int, y3 : Int, x4 : Int, y4 : Int) : Int
     {
-        return as3hx.Compat.parseInt((Seed(x1, y1) * 1) +
+        return ((Seed(x1, y1) * 1) +
                 (Seed(x2, y2) * 25) +
                 (Seed(x3, y3) * 127) +
                 (Seed(x4, y4) * 503));
@@ -178,7 +178,7 @@ import Content;
     public static var words : Array<Dynamic>;
     public static function LoadLanguage() : Void
     {
-        var bytes : ByteArray = new content.CDwarvenLanguage();
+        var bytes : ByteArray = new Content.CDwarvenLanguage();
         var s : String = bytes.readUTFBytes(bytes.length);
         
         words = new Array<Dynamic>();
@@ -217,14 +217,14 @@ import Content;
     
     public static function LoadBiomeParameters() : Void
     {
-        var bytes : ByteArray = new content.CEnvironmentBounds();
+        var bytes : ByteArray = new Content.cEnvironmentBounds();
         var s : String = bytes.readUTFBytes(bytes.length);
         
-        var lines : Array<Dynamic> = s.split("\n");
+        var lines : Array<String> = s.split("\n");
         lines.splice(0, 1);  // Get rid of header line  
         
         var w : Int = 1;
-        var line : Array<Dynamic> = (Std.string(lines[i])).split(",");
+        var line : Array<String> = (Std.string(lines[0])).split(",");
         
         w = 1;
         while (w < Content.numbiomes + 1)
@@ -445,7 +445,7 @@ import Content;
         var front : String = "";
         while (front == "")
         {
-            w = r.integer(0, words.length - 1);
+            w = r.int(0, words.length - 1);
             if ((try cast(words[w], Word) catch(e:Dynamic) null).front)
             {
                 front = (try cast(words[w], Word) catch(e:Dynamic) null).str;
@@ -455,14 +455,14 @@ import Content;
         var mid : String = "";
         while (mid == "")
         {
-            w = r.integer(0, words.length - 1);
+            w = r.int(0, words.length - 1);
             if ((try cast(words[w], Word) catch(e:Dynamic) null).mid)
             {
                 mid = (try cast(words[w], Word) catch(e:Dynamic) null).str;
             }
         }
         
-        if (r.integer(0, 2) == 1)
+        if (r.int(0, 2) == 1)
         {
             mid = "";
         }
@@ -470,7 +470,7 @@ import Content;
         var back : String = "";
         while (back == "")
         {
-            w = r.integer(0, words.length - 1);
+            w = r.int(0, words.length - 1);
             if ((try cast(words[w], Word) catch(e:Dynamic) null).back)
             {
                 back = (try cast(words[w], Word) catch(e:Dynamic) null).str;
@@ -501,7 +501,7 @@ import Content;
         var place : String = "";
         while (place == "")
         {
-            w = r.integer(0, words.length - 1);
+            w = r.int(0, words.length - 1);
             if ((try cast(words[w], Word) catch(e:Dynamic) null).front == false &&
                 (try cast(words[w], Word) catch(e:Dynamic) null).mid == false &&
                 (try cast(words[w], Word) catch(e:Dynamic) null).back == false)
@@ -522,7 +522,7 @@ import Content;
         
         while (type == -1)
         {
-            type = r.integer(0, 3);
+            type = r.int(0, 3);
             
             if (type == 0 && (try cast(words[w], Word) catch(e:Dynamic) null).s == false)
             {
@@ -623,29 +623,34 @@ import Content;
     {
         var code : Int;
         
-        code = as3hx.Compat.parseInt((R * 256 * 256) + (B * 256) + G);
+        code = ((R * 256 * 256) + (B * 256) + G);
         
         return code;
     }
     
+    public static function ColorF(R : Int, B : Int, G : Int) : Int
+    {
+        return Color(Math.floor(R), Math.floor(B), Math.floor(G));
+    }
+    
     public static function HexR(hex : Int) : Int
     {
-        return as3hx.Compat.parseInt((hex & 0xFF0000) >> 16);
+        return ((hex & 0xFF0000) >> 16);
     }
     
     public static function HexG(hex : Int) : Int
     {
-        return as3hx.Compat.parseInt((hex & 0x00FF00) >> 8);
+        return ((hex & 0x00FF00) >> 8);
     }
     
     public static function HexB(hex : Int) : Int
     {
-        return as3hx.Compat.parseInt(hex & 0x0000FF);
+        return (hex & 0x0000FF);
     }
     
     public static function DarkSkin(newcolSkin : Int) : Int
     {
-        return Util.Color(Util.HexR(newcolSkin) * 0.85, 
+        return Util.ColorF(Util.HexR(newcolSkin) * 0.85, 
                 Util.HexG(newcolSkin) * 0.70, 
                 Util.HexB(newcolSkin) * 0.52
         );
@@ -653,7 +658,7 @@ import Content;
     
     public static function Swirl(newcolSkin : Int) : Int
     {
-        return Util.Color(Util.HexR(newcolSkin) * 1, 
+        return Util.ColorF(Util.HexR(newcolSkin) * 1, 
                 Util.HexG(newcolSkin) * 0.73, 
                 Util.HexB(newcolSkin) * 0.85
         );
@@ -661,7 +666,7 @@ import Content;
     
     public static function DarkHair(newcolHair : Int) : Int
     {
-        return Util.Color(Util.HexR(newcolHair) * 0.54, 
+        return Util.ColorF(Util.HexR(newcolHair) * 0.54, 
                 Util.HexG(newcolHair) * 0.53, 
                 Util.HexB(newcolHair) * 0.42
         );
@@ -671,12 +676,12 @@ import Content;
     {
         var str : String = "";
         var sign : String = (num > 0) ? "" : "-";
-        num = Math.abs(num);
+        num = Math.floor(Math.abs(num));
         while (num > 0)
         {
-            var tmp : Int = as3hx.Compat.parseInt(num % 1000);
+            var tmp : Int = (num % 1000);
             str = ((num > 999) ? "," + ((tmp < 100) ? ((tmp < 10) ? "00" : "0") : "") : "") + tmp + str;
-            num = as3hx.Compat.parseInt(num / 1000);
+            num = Math.floor((num / 1000));
         }
         return sign + str;
     }
