@@ -3216,7 +3216,7 @@ class Zone
         MiracleManager.IntegrateZoneMiracles();
         MiracleManager.PopulateZoneMiracles(this.description.coords.x, this.description.coords.y);
         
-        for (m/* AS3HX WARNING could not determine type for var: m exp: EField(EIdent(MiracleManager),arrayZoneMiracles) type: null */ in MiracleManager.arrayZoneMiracles)
+        for (m in MiracleManager.arrayZoneMiracles)
         {
             if (m.universal)
             {

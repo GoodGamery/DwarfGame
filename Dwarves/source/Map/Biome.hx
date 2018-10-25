@@ -3,7 +3,7 @@ package map;
 
 class Biome
 {
-    public var back : Class<Dynamic>;
+    public var back : String;
     public var wall : Int;
     public var front : Int;
     public var song : String = "";
@@ -12,9 +12,10 @@ class Biome
     public var bounds : Array<Dynamic> = new Array<Dynamic>();
     public var overlays : Array<Dynamic> = new Array<Dynamic>();
     
-    public function new(b : Class<Dynamic>, w : Int, f : Int)
+    public function new(biomeAssetPath : String, w : Int, f : Int)
     {
-        back = b;
+        
+        back = biomeAssetPath;
         wall = w;
         front = f;
         

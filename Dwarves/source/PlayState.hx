@@ -15,6 +15,8 @@ import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
+import flixel.math.FlxRandom;
+import flixel.FlxG;
 
 class PlayState extends FlxState
 {
@@ -117,22 +119,20 @@ class PlayState extends FlxState
     {
         MiracleManager.LoadMiracles();
         
-        Content.biomes = new Array<Dynamic>();
-        Content.biomes.push(new Biome(Content.cBackForest, 0, 0));
-        Content.biomes.push(new Biome(Content.cBackSwamp, 1, 1));
-        Content.biomes.push(new Biome(Content.cBackIce, 2, 2));
-        Content.biomes.push(new Biome(Content.cBackSand, 3, 3));
-        Content.biomes.push(new Biome(Content.cBackDeadwater, 4, 4));
-        Content.biomes.push(new Biome(Content.cBackVents, 5, 5));
-        Content.biomes.push(new Biome(Content.cBackColumns, 6, 6));
-        Content.biomes.push(new Biome(Content.cBackAmber, 7, 7));
-        Content.biomes.push(new Biome(Content.cBackStone, 8, 8));
+        Content.biomes = new Array<Biome>();
+        Content.biomes.push(new Biome(AssetPaths.back_forest__png, 0, 0));
+        Content.biomes.push(new Biome(AssetPaths.back_swamp__png, 1, 1));
+        Content.biomes.push(new Biome(AssetPaths.back_ice__png, 2, 2));
+        Content.biomes.push(new Biome(AssetPaths.back_sand__png, 3, 3));
+        Content.biomes.push(new Biome(AssetPaths.back_deadwater__png, 4, 4));
+        Content.biomes.push(new Biome(AssetPaths.back_vents__png, 5, 5));
+        Content.biomes.push(new Biome(AssetPaths.back_columns__png, 6, 6));
+        Content.biomes.push(new Biome(AssetPaths.back_amber__png, 7, 7));
+        Content.biomes.push(new Biome(AssetPaths.back_stone__png, 8, 8));
         
         LoadFiles();
         
-        
-        
-        FlxG.mouse.hide();
+        FlxG.mouse.enabled = false;
         
         camefrom = 1;
         
@@ -176,16 +176,17 @@ class PlayState extends FlxState
     public var nElapsedInZone : Float = 0;
     public function LoadZone(x : Int, y : Int) : Void
     {
-        FlxG.clearBitmapCache();
+        FlxG.bitmap.clearCache();
         
         var radius : Int = 0;
         if (hud == null)
         {
-            hud = add(new HUD(this));
-            
+            hud = new HUD(this);
+            add(hud);
+
             
             Content.stats.cavemap.RefreshBorders();
-            Content.stats.cavemap.UpdateSprites(Math.floor(Content.screenwidth / 2) - 6 + 1, (Content.screenheight / 2) - 6 + 36 + 1, x, y, 
+            Content.stats.cavemap.UpdateSprites(Math.floor(Content.screenwidth / 2) - 6 + 1, Math.floor(Content.screenheight / 2) - 6 + 36 + 1, x, y, 
                     3
             );
             Content.stats.cavemap.AddSpritesToHUD(hud.cavecanvasload, x, y, 
@@ -210,7 +211,6 @@ class PlayState extends FlxState
         Content.stats.iHealth = Content.stats.iMaxHealth;
         hud.UpdateHearts();
         
-        hud.pausable = false;
         hud.LoadVisible(true);
         hud.SetBars(1);
         if (camefrom == 0)
@@ -942,7 +942,7 @@ class PlayState extends FlxState
         }
         
         
-        FlxG.clearBitmapCache();
+        FlxG.bitmap.clearCache();
     }
     
     public var back : FlxSprite;
@@ -962,7 +962,8 @@ class PlayState extends FlxState
         var mapheight : Int = 256;
         var mapwidth : Int = 256;
         
-        back = new FlxSprite(0, 0, Content.biomes[zone.description.style].back);
+        back = new FlxSprite(0, 0);
+        back.loadGraphic(Content.biomes[zone.description.style].back);
         back.scrollFactor.x = 0;
         back.scrollFactor.y = 0;
         add(back);
@@ -1014,7 +1015,7 @@ class PlayState extends FlxState
         
         colTransLevel = zone.description.levelColor;
         
-        level._tiles.colorTransform(new Rectangle(0, 0, level._tiles.width, level._tiles.height), colTransLevel);
+        level._tiles.colorTransform(new Rectangle(0, 0, level.widthInTiles, level.heightInTiles), colTransLevel);
         
         
         lillevel = new FlxTilemap();
@@ -1027,7 +1028,7 @@ class PlayState extends FlxState
         interim_wall = new FlxTilemap();
         interim_wall.loadMap(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
         
-        wall._tiles.colorTransform(new Rectangle(0, 0, wall._tiles.width, wall._tiles.height), colTransLevel);
+        wall._tiles.colorTransform(new Rectangle(0, 0, wall.widthInTiles, wall.heightInTiles), colTransLevel);
         
         wallpaper = new FlxTilemap();
         wallpaper.loadMap(tempstr, Content.cWallpaper, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
@@ -1080,13 +1081,13 @@ class PlayState extends FlxState
         
         
         groupDoors = new FlxGroup();
-        e = 0;
+        var e : Int = 0;
         while (e < zone.exits.length)
         {
             groupDoors.add(new FlxSprite(zone.exits[e].x * 30, (zone.exits[e].y * 30) - 30));
             groupDoors.members[e].loadGraphic(Content.cDoors, true, false, 30, 60, false);
-            groupDoors.members[e].addAnimation("d", [zone.exits[e].id], 1, true);
-            groupDoors.members[e].play("d");
+            groupDoors.members[e].animation.add("d", [zone.exits[e].id], 1, true);
+            groupDoors.members[e].animation.play("d");
             e++;
         }
         this.add(groupDoors);
@@ -1094,7 +1095,7 @@ class PlayState extends FlxState
         FlxG.worldBounds.width = level.width;
         FlxG.worldBounds.height = level.height;
         
-        var gemrandom : Rndm = new Rndm(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
+        var gemrandom : FlxRandom = new FlxRandom(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
         gemrandom.shuffle(9);
         
         xx = 0;
@@ -1106,14 +1107,14 @@ class PlayState extends FlxState
                 var gem : Int = zone.gemmap[xx][yy];
                 if (gem != 0)
                 {
-                    var xwig : Int = Math.floor(gemrandom.integer(0, 12) - 6);
-                    var ywig : Int = Math.floor(gemrandom.integer(0, 12) - 6);
+                    var xwig : Int = Math.floor(gemrandom.int(0, 12) - 6);
+                    var ywig : Int = Math.floor(gemrandom.int(0, 12) - 6);
                     
                     arrayAllGems.push(new Collectible(this, gem - 1, (xx * 30) + 10 + xwig, (yy * 30) + 10 + ywig));
                     this.addarrayAllGems[arrayAllGems.length - 1];
                     lillevel.setTile(xx, yy, 5, true);
                     
-                    arrayAllGems[arrayAllGems.length - 1].play("d");
+                    arrayAllGems[arrayAllGems.length - 1].animation.play("d");
                 }
                 yy++;
             }
@@ -1198,21 +1199,21 @@ class PlayState extends FlxState
         
         var variant : Int = 0;
         var iPeppers : Int = arrayPeppers.length;
-        var peprandom : Rndm = new Rndm(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
+        var peprandom : FlxRandom = new FlxRandom(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
         
         peprandom.shuffle(5);
         
         if (zone.description.style == Content.MEADOW)
         {
-            variant = peprandom.integer(0, 2);
+            variant = peprandom.int(0, 2);
         }
         else if (zone.description.style == Content.SWAMP)
         {
-            variant = peprandom.integer(0, 2);
+            variant = peprandom.int(0, 2);
         }
         else if (zone.description.style == Content.COLUMNS)
         {
-            variant = peprandom.integer(0, 2);
+            variant = peprandom.int(0, 2);
         }
         
         trace("Pepper variant = " + Std.string(variant));
@@ -1245,8 +1246,8 @@ class PlayState extends FlxState
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
                     
-                    toadd.addAnimation("", [zone.rand.int(0, 2) + (variant * 2)], 0, true);
-                    toadd.play("");
+                    toadd.animation.add("", [zone.rand.int(0, 2) + (variant * 2)], 0, true);
+                    toadd.animation.play("");
                     groupPeppers.add(toadd);
                     arrayPeppers.splice(spot, 1);
                 }
@@ -1261,8 +1262,8 @@ class PlayState extends FlxState
                         toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                         toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                         
-                        toadd.addAnimation("", [zone.rand.int(0, 2) + 70], 0, true);
-                        toadd.play("");
+                        toadd.animation.add("", [zone.rand.int(0, 2) + 70], 0, true);
+                        toadd.animation.play("");
                         groupPeppers.add(toadd);
                         arrayPeppers.splice(spot, 1);
                     }
@@ -1273,8 +1274,8 @@ class PlayState extends FlxState
                     toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
-                    toadd.addAnimation("", [zone.rand.int(0, 3) + 72], 0, true);
-                    toadd.play("");
+                    toadd.animation.add("", [zone.rand.int(0, 3) + 72], 0, true);
+                    toadd.animation.play("");
                     groupPeppers.add(toadd);
                     arrayPeppers.splice(spot, 1);
                 }
@@ -1315,8 +1316,8 @@ class PlayState extends FlxState
                     which = Math.floor((zone.description.style * 10) + 6 + zone.rand.int(0, 3));
                 }
                 
-                toadd.addAnimation("", [which], 0, true);
-                toadd.play("");
+                toadd.animation.add("", [which], 0, true);
+                toadd.animation.play("");
                 groupPeppers.add(toadd);
                 arrayPeppers.splice(spot, 1);
             }
@@ -1364,8 +1365,8 @@ class PlayState extends FlxState
                         toadd.loadGraphic(Content.cWaterfall, true, false, 30, 30, true);
                         toadd.pixels.colorTransform(new Rectangle(0, 0, 30 * 10, 30), colTransLevel);
                         
-                        toadd.addAnimation("", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 26, true);
-                        toadd.play("");
+                        toadd.animation.add("", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 26, true);
+                        toadd.animation.play("");
                         
                         groupNearBack.add(toadd);
                     }
@@ -1384,8 +1385,8 @@ class PlayState extends FlxState
         /*
 			var windmill:FlxSprite = new FlxSprite(140 * 30, 130 * 30);
 			windmill.loadGraphic(Content.cWindmill, true, false, 150, 150, true);
-			windmill.addAnimation("s", [0, 1, 2, 3, 4, 5], 5, true);
-			windmill.play("s");
+			windmill.animation.add("s", [0, 1, 2, 3, 4, 5], 5, true);
+			windmill.animation.play("s");
 			groupPeppers.add(windmill);	
 			*/
         
@@ -1472,13 +1473,13 @@ class PlayState extends FlxState
         
         bow = new FlxSprite(300, 0);
         bow.loadGraphic(Content.cHero, true, true, 100, 100);
-        bow.addAnimation("rest", [63], 1, false);
-        bow.addAnimation("shoot", [63, 64, 65, 63], 18, false);
-        bow.addAnimation("restup", [66], 1, false);
-        bow.addAnimation("shootup", [66, 67, 68, 66], 18, false);
-        bow.addAnimation("restdn", [69], 1, false);
-        bow.addAnimation("shootdn", [69, 70, 71, 69], 18, false);
-        bow.play("rest");
+        bow.animation.add("rest", [63], 1, false);
+        bow.animation.add("shoot", [63, 64, 65, 63], 18, false);
+        bow.animation.add("restup", [66], 1, false);
+        bow.animation.add("shootup", [66, 67, 68, 66], 18, false);
+        bow.animation.add("restdn", [69], 1, false);
+        bow.animation.add("shootdn", [69, 70, 71, 69], 18, false);
+        bow.animation.animation.play("rest");
         bow.visible = false;  // Set TRUE in Player.as when hero's "arrive" animation completes  
         this.add(bow);
         
@@ -1488,12 +1489,11 @@ class PlayState extends FlxState
         
         hover = new FlxSprite(30, 30);
         hover.loadGraphic(Content.cHover, true, false, 30, 30, false);
-        hover.addAnimation("door", [0], 1, true);
-        hover.addAnimation("talk", [1], 1, true);
-        hover.addAnimation("look", [2], 1, true);
-        hover.addAnimation("talking", [3, 4, 5, 6], 8, false);
+        hover.animation.add("door", [0], 1, true);
+        hover.animation.add("talk", [1], 1, true);
+        hover.animation.add("look", [2], 1, true);
+        hover.animation.add("talking", [3, 4, 5, 6], 8, false);
         hover.visible = false;
-        hover.pausable = false;
         
         
         
@@ -1744,7 +1744,7 @@ class PlayState extends FlxState
         bWasDead = false;
         bMovedOnce = false;
         
-        FlxG.play(Content.soundEnter, Content.volumeEnter, false, false);
+        FlxG.sound.play(Content.soundEnter, Content.volumeEnter, false, false);
         
         nElapsedInZone = 0;
         
@@ -2365,7 +2365,7 @@ If 11 and water, 13
     
     public function MakeMonsters(saturation : Float) : Void
     {
-        var ran : Rndm = new Rndm(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
+        var ran : FlxRandom = new FlxRandom(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
         
         var arrayBestiaryPossible : Array<Dynamic> = new Array<Dynamic>();  // One each of the possible cards for this zone  
         var arrayBestiary : Array<Dynamic> = new Array<Dynamic>();  // One each of the possible cards for this zone  
@@ -2570,7 +2570,8 @@ If 11 and water, 13
         var bStillNeeded : Bool = true;
         var kind : Int = 0;
         var kinds : Int = 0;
-        
+        var which : Int = 0;
+
         var m : Int = 0;
         do
         {
@@ -2620,7 +2621,7 @@ If 11 and water, 13
                         {
                             spotsforkinds = 0;
                             
-                            var which : Int = 0;
+                            which = 0;
                             var unique : Bool = true;
                             
                             which = ran.integer(arrayBestiaryCards.length);
@@ -3226,8 +3227,8 @@ If 11 and water, 13
                     
                     
                     
-                    FlxG.play(Content.soundDead, Content.volumeDead, false, false);
-                    FlxG.play(Content.soundHurt, Content.volumeHurt * 0.7, false, false);
+                    FlxG.sound.play(Content.soundDead, Content.volumeDead, false, false);
+                    FlxG.sound.play(Content.soundHurt, Content.volumeHurt * 0.7, false, false);
                     
                     iDeadState = Content.WAITFORCOIN;
                 }
@@ -3238,7 +3239,7 @@ If 11 and water, 13
                     if (iDeadState == Content.WAITFORCOIN &&
                         nDeadWait <= Content.nDeadWaitTime / 2)
                     {
-                        FlxG.play(Content.soundDreamCoin, Content.volumeDreamCoin, false, false, Content.nDefaultSkip);
+                        FlxG.sound.play(Content.soundDreamCoin, Content.volumeDreamCoin, false, false, Content.nDefaultSkip);
                         arrayGrunts.push(new Grunt(hero.x + (hero.width / 2), hero.y + (hero.height / 2) - 10, "+1 Dream Coin", 0xFF888888, 120));
                         arrayGrunts[arrayGrunts.length - 1].AddSprite(18);
                         groupGrunts.addarrayGrunts[arrayGrunts.length - 1];
@@ -3335,7 +3336,7 @@ If 11 and water, 13
                             
                             hover.visible = true;
                             
-                            hover.play("talking", true);
+                            hover.animation.play("talking", true);
                             hover.x = venttarget.x;  // - venttarget.offset.x;  
                             hover.y = venttarget.y - 0 - 24;
                         }
@@ -3355,7 +3356,7 @@ If 11 and water, 13
                         iLineState = Content.PROCESSING;
                         
                         hover.visible = true;
-                        hover.play("talking", true);
+                        hover.animation.play("talking", true);
                         hover.x = starring.x;  // - starring.offset.x;  
                         hover.y = starring.y - 0 - 24;
                         return;
@@ -3372,7 +3373,7 @@ If 11 and water, 13
                         hud.SetChoice(true);
                         
                         hover.visible = true;
-                        hover.play("talking", true);
+                        hover.animation.play("talking", true);
                         hover.x = starring.x;  // - starring.offset.x;  
                         hover.y = starring.y - 0 - 24;
                         return;
@@ -3755,7 +3756,7 @@ If 11 and water, 13
                                 hover.visible = true;
                             }
                             
-                            hover.play("door");
+                            hover.animation.play("door");
                             hover.x = ex.x * 30;
                             hover.y = (ex.y * 30) - nHoverBounce - 30;
                         }
@@ -3806,7 +3807,7 @@ If 11 and water, 13
                                     hover.visible = true;
                                 }
                                 
-                                hover.play("talk");
+                                hover.animation.play("talk");
                                 hover.x = totalk.x;  // - totalk.offset.x;  
                                 hover.y = totalk.y - nHoverBounce - 24;
                             }
@@ -3888,14 +3889,14 @@ If 11 and water, 13
                             hero.acceleration.x = 0;
                             hero.acceleration.y = 0;
                             
-                            hero.play("leaving", true);
-                            FlxG.play(Content.soundLeave, Content.volumeLeave, false, false);
+                            hero.animation.play("leaving", true);
+                            FlxG.sound.play(Content.soundLeave, Content.volumeLeave, false, false);
                             
                             if (Content.stats.iHealth < Content.stats.iMaxHealth)
                             {
                                 Content.stats.iHealth = Content.stats.iMaxHealth;
                                 hud.UpdateHearts();
-                                FlxG.play(Content.soundRefresh, Content.volumeRefresh, false, false, Content.nDefaultSkip);
+                                FlxG.sound.play(Content.soundRefresh, Content.volumeRefresh, false, false, Content.nDefaultSkip);
                                 arrayGrunts.push(new Grunt(hero.x + (hero.width / 2), hero.y + (hero.height / 2) - 20, "Refreshed!", 0xFFff9d9d, 120));
                                 arrayGrunts[arrayGrunts.length - 1].AddSprite(19);
                                 groupGrunts.addarrayGrunts[arrayGrunts.length - 1];
@@ -4147,7 +4148,7 @@ If 11 and water, 13
         arrow.ArrowPlay("dead");
         arrow.iAlive = Content.iArrowLife - 1;
         
-        FlxG.play(Content.soundTwang, Content.volumeTwang, false, false, Content.nDefaultSkip);
+        FlxG.sound.play(Content.soundTwang, Content.volumeTwang, false, false, Content.nDefaultSkip);
     }
     
     public function ArrowLevelCollideBounceVertical(arrow : Arrow, lvl : FlxTilemap) : Void
@@ -4294,30 +4295,26 @@ If 11 and water, 13
         {
             var i : Int = 0;
             while (i < Content.iTwinkliness * (zone.waterlist.length / 150))
-            
-            { //(Content.iTwinkliness * zone.waterlist.length / 150)
+            {
+                var r : Int = Util.Random(0, zone.waterlist.length - 1);
+                x = Math.floor(zone.waterlist[r].x * 30);
+                y = Math.floor(zone.waterlist[r].y * 30);
                 
+                if (Math.abs(hero.x - x) < iThresholdX && Math.abs(hero.y - y) < iThresholdY)
                 {
-                    var r : Int = Util.Random(0, zone.waterlist.length - 1);
-                    x = Math.floor(zone.waterlist[r].x * 30);
-                    y = Math.floor(zone.waterlist[r].y * 30);
+                    x += Util.Random(0, 29);
                     
-                    if (Math.abs(hero.x - x) < iThresholdX && Math.abs(hero.y - y) < iThresholdY)
+                    if (Std.string(zone.waterlist[r].obj) == "s")
                     {
-                        x += Util.Random(0, 29);
-                        
-                        if (Std.string(zone.waterlist[r].obj) == "s")
-                        {
-                            y += Util.Random(11, 29);
-                        }
-                        else
-                        {
-                            y += Util.Random(0, 29);
-                        }
+                        y += Util.Random(11, 29);
                     }
-                    
-                    groupParticles.recycle(Class<Twinkle>, null, true, true).Reuse(x, y);
+                    else
+                    {
+                        y += Util.Random(0, 29);
+                    }
                 }
+                
+                groupParticles.recycle(Class<Twinkle>, null, true, true).Reuse(x, y);
                 i++;
             }
         }
@@ -4330,13 +4327,12 @@ If 11 and water, 13
         
         if (hero.iLastFluid == 2 || (hero.iLastFluid == 1 && hero.y % 30 > 2))
         {
-            if (Util.Random(0, 40 - (40 * hero.nBubbliness)) == 0)
-            
+            if (Util.Random(0, 40 - Math.floor(40 * hero.nBubbliness)) == 0)
             { // bub
                 
                 {
                     x = Math.floor(hero.x + 8);
-                    y = hero.y;
+                    y = Math.floor(hero.y);
                     
                     var dir : Int = 270;
                     
@@ -4349,10 +4345,10 @@ If 11 and water, 13
                         dir += Util.Random(5, 30);
                     }
                     
-                    var xoff : Int = Util.Random(-4 + (-6 * hero.nBubbliness), 4 + (6 * hero.nBubbliness));
-                    var yoff : Int = Util.Random(8 * hero.nBubbliness, 20 * hero.nBubbliness);
+                    var xoff : Int = Util.Random(-4 + Math.floor(-6 * hero.nBubbliness), 4 + Math.floor(6 * hero.nBubbliness));
+                    var yoff : Int = Util.Random(Math.floor(8 * hero.nBubbliness), Math.floor(20 * hero.nBubbliness));
                     
-                    MakeBub(x + xoff, y + yoff, dir, 10);
+                    this.MakeBub(x + xoff, y + yoff, dir, 10);
                 }
             }
         }
@@ -4420,32 +4416,32 @@ If 11 and water, 13
                 
                 if (name == "+1 Pip")
                 {
-                    FlxG.play(Content.soundPip, Content.volumePip, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(Content.soundPip, Content.volumePip, false, false, Content.nDefaultSkip);
                     Content.stats.ChangeItem("pip", 1);
                 }
                 else if (name == "+3 Pips")
                 {
-                    FlxG.play(Content.soundPip, Content.volumePip, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(Content.soundPip, Content.volumePip, false, false, Content.nDefaultSkip);
                     Content.stats.ChangeItem("pip", 5);
                 }
                 else if (name == "+1 Reod")
                 {
-                    FlxG.play(Content.soundReod, Content.volumeReod, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(Content.soundReod, Content.volumeReod, false, false, Content.nDefaultSkip);
                     Content.stats.ChangeItem("reod", 1);
                 }
                 else if (name == "+3 Reods")
                 {
-                    FlxG.play(Content.soundReod, Content.volumeReod, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(Content.soundReod, Content.volumeReod, false, false, Content.nDefaultSkip);
                     Content.stats.ChangeItem("reod", 5);
                 }
                 else if (name == "+1 Lytrat")
                 {
-                    FlxG.play(Content.soundLytrat, Content.volumeLytrat, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(Content.soundLytrat, Content.volumeLytrat, false, false, Content.nDefaultSkip);
                     Content.stats.ChangeItem("lytrat", 1);
                 }
                 else if (name == "+3 Lytrats")
                 {
-                    FlxG.play(Content.soundLytrat, Content.volumeLytrat, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(Content.soundLytrat, Content.volumeLytrat, false, false, Content.nDefaultSkip);
                     Content.stats.ChangeItem("lytrat", 5);
                 }
                 
@@ -4956,11 +4952,11 @@ If 11 and water, 13
         
         
         var colTrans : ColorTransform = new ColorTransform(1 + radj, 1 + gadj, 1 + badj, 1, 0, 0, 0);
-        level._tiles = FlxG.addBitmap(Content.cFronts, false, true);
-        level._tiles.colorTransform(new Rectangle(0, 0, level._tiles.width, level._tiles.height), colTrans);
+        level._tiles = FlxG.bitmap.add(Content.cFronts, false, true);
+        level._tiles.colorTransform(new Rectangle(0, 0, level.widthInTiles, level.heightInTiles), colTrans);
         
-        wall._tiles = FlxG.addBitmap(Content.cWalls, false, true);
-        wall._tiles.colorTransform(new Rectangle(0, 0, wall._tiles.width, wall._tiles.height), colTrans);
+        wall._tiles = FlxG.bitmap.add(Content.cWalls, false, true);
+        wall._tiles.colorTransform(new Rectangle(0, 0, wall.widthInTiles, wall.heightInTiles), colTrans);
     }
     
     public var bRefreshed : Bool = true;

@@ -1,12 +1,13 @@
 import haxe.Constraints.Function;
 import flash.utils.ByteArray;
-import map.Biome;
 import flixel.system.FlxSound;
+import flixel.system.FlxAssets;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.math.FlxRandom;
 import Content;
 import openfl.Assets;
+import flixel.FlxG;
 
 @:final class Util
 {
@@ -194,20 +195,20 @@ import openfl.Assets;
             words.push(new Word());
             
             
-            (try cast(words[i], Word) catch(e:Dynamic) null).str = line[0];
-            (try cast(words[i], Word) catch(e:Dynamic) null).front = line[1] == "1";
-            (try cast(words[i], Word) catch(e:Dynamic) null).mid = line[2] == "1";
-            (try cast(words[i], Word) catch(e:Dynamic) null).back = line[3] == "1";
-            (try cast(words[i], Word) catch(e:Dynamic) null).flat = line[4] == "1";
-            (try cast(words[i], Word) catch(e:Dynamic) null).of = line[5] == "1";
-            (try cast(words[i], Word) catch(e:Dynamic) null).s = line[6] == "1";
+            words[i].str = line[0];
+            words[i].front = line[1] == "1";
+            words[i].mid = line[2] == "1";
+            words[i].back = line[3] == "1";
+            words[i].flat = line[4] == "1";
+            words[i].of = line[5] == "1";
+            words[i].s = line[6] == "1";
             
             var b : Int = 7;
             while (b < line.length)
             {
                 if (line[b] == "1")
                 {
-                    (try cast(words[i], Word) catch(e:Dynamic) null).biomes[b - 7] = true;
+                    words[i].biomes[b - 7] = true;
                 }
                 b++;
             }
@@ -228,7 +229,7 @@ import openfl.Assets;
         w = 1;
         while (w < Content.numbiomes + 1)
         {
-            (try cast(Content.biomes[w - 1], Biome) catch(e:Dynamic) null).song = Std.string(line[w]);
+            Content.biomes[w - 1].song = Std.string(line[w]);
             w++;
         }
         
@@ -240,27 +241,25 @@ import openfl.Assets;
             line = (Std.string(lines[i])).split(",");
             
             if (i <= 5)
-            
             { // monsters
                 
                 {
                     w = 1;
                     while (w < Content.numbiomes + 1)
                     {
-                        (try cast(Content.biomes[w - 1], Biome) catch(e:Dynamic) null).bestiary[i] = Std.string(line[w]);
+                        Content.biomes[w - 1].bestiary[i] = Std.string(line[w]);
                         w++;
                     }
                 }
             }
             else if (i <= 15)
-            
             { // overlays
                 
                 {
                     w = 1;
                     while (w < Content.numbiomes + 1)
                     {
-                        (try cast(Content.biomes[w - 1], Biome) catch(e:Dynamic) null).overlays[i - 6] = Std.string(line[w]);
+                        Content.biomes[w - 1], Biome) catch(e:Dynamic) null).overlays[i - 6] = Std.string(line[w]);
                         w++;
                     }
                 }
@@ -273,7 +272,7 @@ import openfl.Assets;
                     w = 1;
                     while (w < Content.numbiomes + 1)
                     {
-                        (try cast(Content.biomes[w - 1], Biome) catch(e:Dynamic) null).bounds[i - 16] = Std.string(line[w]);
+                        Content.biomes[w - 1], Biome) catch(e:Dynamic) null).bounds[i - 16] = Std.string(line[w]);
                         w++;
                     }
                 }
@@ -309,25 +308,25 @@ import openfl.Assets;
         switch (strMusic)
         {
             case "happy":
-                PlayMusicData(Content.soundSongHappy, Content.volumeSongHappy, Content.nDefaultMusicSkip + 50, PlayMusic, true, 40);
+                PlayMusicData(AssetPaths.song_happy__mp3, Content.volumeSongHappy, Content.nDefaultMusicSkip + 50, PlayMusic, true, 40);
                 return;
             case "turtle":
-                PlayMusicData(Content.soundSongTurtle, Content.volumeSongTurtle, Content.nDefaultMusicSkip, PlayMusic, true);
+                PlayMusicData(AssetPaths.song_turtle__mp3, Content.volumeSongTurtle, Content.nDefaultMusicSkip, PlayMusic, true);
                 return;
             case "town":
-                PlayMusicData(Content.soundSongTown, Content.volumeSongTown, Content.nDefaultMusicSkip + 50, PlayMusic, true, 60);
+                PlayMusicData(AssetPaths.song_town__mp3, Content.volumeSongTown, Content.nDefaultMusicSkip + 50, PlayMusic, true, 60);
                 return;
             case "rock":
-                PlayMusicData(Content.soundSongRock, Content.volumeSongRock, Content.nDefaultMusicSkip, PlayMusic, true);
+                PlayMusicData(AssetPaths.song_rock__mp3, Content.volumeSongRock, Content.nDefaultMusicSkip, PlayMusic, true);
                 return;
             case "ice":
-                PlayMusicData(Content.soundSongIce, Content.volumeSongIce, Content.nDefaultMusicSkip, PlayMusic, true);
+                PlayMusicData(AssetPaths.song_ice__mp3, Content.volumeSongIce, Content.nDefaultMusicSkip, PlayMusic, true);
                 return;
             case "skip":
-                PlayMusicData(Content.soundSongSkip, Content.volumeSongSkip, Content.nDefaultMusicSkip, PlayMusic, true, 20);
+                PlayMusicData(AssetPaths.song_skip__mp3, Content.volumeSongSkip, Content.nDefaultMusicSkip, PlayMusic, true, 20);
                 return;
             case "desert":
-                PlayMusicData(Content.soundSongDesertIntro, Content.volumeSongDesert, Content.nDefaultMusicSkip, PlayMusic, true, 50);
+                PlayMusicData(AssetPaths.song_desert_intro__mp3, Content.volumeSongDesert, Content.nDefaultMusicSkip, PlayMusic, true, 50);
                 return;
         }
         
@@ -341,25 +340,25 @@ import openfl.Assets;
         switch (strMusic)
         {
             case "happy":
-                PlayMusicData(Content.soundSongHappy, Content.volumeSongHappy, Content.nDefaultMusicSkip + 50, PlayMusic, false, 50);
+                PlayMusicData(AssetPaths.song_happy__mp3 Content.soundSongHappy, Content.volumeSongHappy, Content.nDefaultMusicSkip + 50, PlayMusic, false, 50);
                 return;
             case "turtle":
-                PlayMusicData(Content.soundSongTurtle, Content.volumeSongTurtle, Content.nDefaultMusicSkip, PlayMusic, false);
+                PlayMusicData(AssetPaths.song_turtle__mp3, Content.volumeSongTurtle, Content.nDefaultMusicSkip, PlayMusic, false);
                 return;
             case "town":
-                PlayMusicData(Content.soundSongTown, Content.volumeSongTown, Content.nDefaultMusicSkip, PlayMusic, false);
+                PlayMusicData(AssetPaths.song_town__mp3, Content.volumeSongTown, Content.nDefaultMusicSkip, PlayMusic, false);
                 return;
             case "rock":
-                PlayMusicData(Content.soundSongRock, Content.volumeSongRock, Content.nDefaultMusicSkip, PlayMusic, false);
+                PlayMusicData(AssetPaths.song_rock__mp3, Content.volumeSongRock, Content.nDefaultMusicSkip, PlayMusic, false);
                 return;
             case "ice":
-                PlayMusicData(Content.soundSongIce, Content.volumeSongIce, Content.nDefaultMusicSkip, PlayMusic, false);
+                PlayMusicData(AssetPaths.song_ice__mp3, Content.volumeSongIce, Content.nDefaultMusicSkip, PlayMusic, false);
                 return;
             case "skip":
-                PlayMusicData(Content.soundSongSkip, Content.volumeSongSkip, Content.nDefaultMusicSkip + 40, PlayMusic, false, 20);
+                PlayMusicData(AssetPaths.song_skip__mp3, Content.volumeSongSkip, Content.nDefaultMusicSkip + 40, PlayMusic, false, 20);
                 return;
             case "desert":
-                PlayMusicData(Content.soundSongDesertMain, Content.volumeSongDesert, Content.nDefaultMusicSkip + 50, PlayMusic, true, 20);
+                PlayMusicData(AssetPaths.song_desert_main_full__mp3, Content.volumeSongDesert, Content.nDefaultMusicSkip + 50, PlayMusic, true, 20);
                 return;
         }
         
@@ -372,28 +371,18 @@ import openfl.Assets;
     public static var silence : FlxSound;
     public static var fLoopCallback : Function = null;
     
-    public static function PlayMusicData(musicAsset : FlxSoundAsset, Volume : Float = 1.0, position : Float = 0, loopcallback : Function = null, firsttime : Bool = true, silencebump : Float = 0) : Void
+    public static function PlayMusicData(musicAssetPath : String, Volume : Float = 1.0, position : Float = 0, loopcallback : Function = null, firsttime : Bool = true, silencebump : Float = 0) : Void
     {
         trace("/// Playing " + strMusic + " first time = " + Std.string(firsttime));
         if (firsttime)
         {
-            if (music == null)
-            {
-                music = new FlxSound();
-            }
-            else if (music.active)
-            {
-                music.stop();
-            }
-            
-            music.loadEmbedded(musicAsset, false);  // NOT looped  
-            music.volume = Volume;
-            music.survive = true;
+            FlxG.sound.playMusic(musicAssetPath, Volume, false);  // NOT looped
         }
         
         music.play(true, position);
         
-        playSilence(Music, position + silencebump, loopcallback, firsttime);
+        // TODO: I don't get the purpose of this
+        // playSilence(musicAssetPath, position + silencebump, loopcallback, firsttime);
     }
     
     public static function playSilence(musicAsset : FlxSoundAsset, position : Float = 0, loopcallback : Function = null, firsttime : Bool = true) : Void
@@ -437,9 +426,9 @@ import openfl.Assets;
         while (front == "")
         {
             w = r.int(0, words.length - 1);
-            if ((try cast(words[w], Word) catch(e:Dynamic) null).front)
+            if (words[w].front)
             {
-                front = (try cast(words[w], Word) catch(e:Dynamic) null).str;
+                front = words[w].str;
             }
         }
         
@@ -447,9 +436,9 @@ import openfl.Assets;
         while (mid == "")
         {
             w = r.int(0, words.length - 1);
-            if ((try cast(words[w], Word) catch(e:Dynamic) null).mid)
+            if (words[w].mid)
             {
-                mid = (try cast(words[w], Word) catch(e:Dynamic) null).str;
+                mid = words[w].str;
             }
         }
         
@@ -462,9 +451,9 @@ import openfl.Assets;
         while (back == "")
         {
             w = r.int(0, words.length - 1);
-            if ((try cast(words[w], Word) catch(e:Dynamic) null).back)
+            if (words[w].back)
             {
-                back = (try cast(words[w], Word) catch(e:Dynamic) null).str;
+                back = words[w].str;
             }
             
             if ((hard && back.charAt(back.length - 1) == "y") ||
@@ -484,22 +473,19 @@ import openfl.Assets;
     public static function MakeRegionName(seed : Int, biome : Int) : String
     {
         var r : FlxRandom = new FlxRandom(seed);
-        
         var name : String = MakeName(seed, false, false);
-        
         var w : Int = -1;
-        
         var place : String = "";
         while (place == "")
         {
             w = r.int(0, words.length - 1);
-            if ((try cast(words[w], Word) catch(e:Dynamic) null).front == false &&
-                (try cast(words[w], Word) catch(e:Dynamic) null).mid == false &&
-                (try cast(words[w], Word) catch(e:Dynamic) null).back == false)
+            if (words[w].front == false &&
+                words[w].mid == false &&
+                words[w].back == false)
             {
-                if (biome == -1 || (try cast((try cast(words[w], Word) catch(e:Dynamic) null).biomes[biome], Bool) catch(e:Dynamic) null) == true)
+                if (biome == -1 || words[w].biomes[biome] == true)
                 {
-                    place = (try cast(words[w], Word) catch(e:Dynamic) null).str;
+                    place = words[w].str;
                 }
             }
         }
@@ -512,17 +498,17 @@ import openfl.Assets;
         {
             type = r.int(0, 3);
             
-            if (type == 0 && (try cast(words[w], Word) catch(e:Dynamic) null).s == false)
+            if (type == 0 && words[w].s == false)
             {
                 type = -1;
             }
             
-            if (type == 1 && (try cast(words[w], Word) catch(e:Dynamic) null).of == false)
+            if (type == 1 && words[w].of == false)
             {
                 type = -1;
             }
             
-            if (type == 2 && (try cast(words[w], Word) catch(e:Dynamic) null).flat == false)
+            if (type == 2 && words[w].flat == false)
             {
                 type = -1;
             }
