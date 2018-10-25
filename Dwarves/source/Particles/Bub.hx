@@ -52,7 +52,7 @@ class Bub extends FlxSprite
         velocity.y = nSpeed * Math.sin(rads);
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (visible)
         {

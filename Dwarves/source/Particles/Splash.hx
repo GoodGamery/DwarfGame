@@ -27,7 +27,7 @@ class Splash extends FlxSprite
         visible = true;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (_curFrame == 5)
         {

@@ -59,16 +59,15 @@ class PlayState extends FlxState
     
     //public var arrayShapeBoard:Array = new Array();
     public var arrayArrows : Array<Dynamic> = null;
-    public var groupArrows : FlxGroup = null;
+    public var groupArrows : FlxSpriteGroup = null;
     public var arrayPellets : Array<Dynamic> = null;
-    public var groupPellets : FlxGroup = null;
-    public var arrayParticles : Array<Dynamic> = null;
-    public var groupParticles : FlxGroup = null;
-    public var groupMonsters : FlxGroup = null;
-    public var groupFrontMonsters : FlxGroup = null;
+    public var groupPellets : FlxSpriteGroup = null;
+    public var groupParticles : FlxSpriteGroup = null;
+    public var groupMonsters : FlxSpriteGroup = null;
+    public var groupFrontMonsters : FlxSpriteGroup = null;
     public var arrayGrunts : Array<Dynamic> = null;
-    public var groupGrunts : FlxGroup = null;
-    public var groupDoors : FlxGroup = null;
+    public var groupGrunts : FlxSpriteGroup = null;
+    public var groupDoors : FlxSpriteGroup = null;
     public var groupPeppers : FlxSpriteGroup = null;
     
     
@@ -235,7 +234,6 @@ class PlayState extends FlxState
         
         arrayArrows = new Array<Dynamic>();
         arrayPellets = new Array<Dynamic>();
-        arrayParticles = new Array<Dynamic>();
         arrayAllMonsters = new Array<Dynamic>();
         arrayFarMonsters = new Array<Dynamic>();
         arrayNearMonsters = new Array<Dynamic>();
@@ -329,62 +327,61 @@ class PlayState extends FlxState
         var i : Int = 0;
         var v : Int = 0;
         
-        var size : Int = Math.floor(zone.rand.integer(Content.biomes[zone.description.style].bounds[0], Content.biomes[zone.description.style].bounds[1]));
+        var size : Int = Math.floor(zone.rand.int(Content.biomes[zone.description.style].bounds[0], Content.biomes[zone.description.style].bounds[1]));
         
         if (x % 2 != y % 2)
         {
             size *= Math.floor(1.5);
         }
         
-        var cinch : Float = zone.rand.integer(Content.biomes[zone.description.style].bounds[2], Content.biomes[zone.description.style].bounds[3]) / 15;  // /10  
-        var wiggle : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[4], Content.biomes[zone.description.style].bounds[5]);
+        var cinch : Float = zone.rand.int(Content.biomes[zone.description.style].bounds[2], Content.biomes[zone.description.style].bounds[3]) / 15;  // /10  
+        var wiggle : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[4], Content.biomes[zone.description.style].bounds[5]);
         
-        var plats : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[7], Content.biomes[zone.description.style].bounds[8]);
-        if (zone.rand.integer(0, 100) > Content.biomes[zone.description.style].bounds[6])
+        var plats : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[7], Content.biomes[zone.description.style].bounds[8]);
+        if (zone.rand.int(0, 100) > Content.biomes[zone.description.style].bounds[6])
         {
             plats = 0;
         }
-        var platlength : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[9], Content.biomes[zone.description.style].bounds[10]);
+        var platlength : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[9], Content.biomes[zone.description.style].bounds[10]);
         
         if (x % 2 != y % 2)
         {
-            plats /= 2;
+            plats = Math.floor(plats / 2);
         }
         
-        var pillars : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[12], Content.biomes[zone.description.style].bounds[13]);
-        if (zone.rand.integer(0, 100) > Content.biomes[zone.description.style].bounds[11])
+        var pillars : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[12], Content.biomes[zone.description.style].bounds[13]);
+        if (zone.rand.int(0, 100) > Content.biomes[zone.description.style].bounds[11])
         {
             pillars = 0;
         }
-        var pillarlength : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[14], Content.biomes[zone.description.style].bounds[15]);
-        pillarlength /= 3;
-        pillars /= 3;
+        var pillarlength : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[14], Content.biomes[zone.description.style].bounds[15]);
+        pillarlength = Math.floor(pillarlength / 3);
+        pillars = Math.floor(pillars / 3);
         
-        var clumps : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[19], Content.biomes[zone.description.style].bounds[20]);
-        var clumpsize : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[17], Content.biomes[zone.description.style].bounds[18]);
+        var clumps : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[19], Content.biomes[zone.description.style].bounds[20]);
+        var clumpsize : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[17], Content.biomes[zone.description.style].bounds[18]);
         
         if (plats > 5)
         {
-            clumpsize /= Math.floor(plats - 5);
+            clumpsize = Math.floor(clumpSize / (plats - 5));
         }
-        
         
         clumpsize = 15;
         
         if (x % 2 != y % 2)
         {
-            clumps /= 2;
+            clumps = Math.floor(clumps / 2);
         }
-        /*if (zone.rand.integer(0, 100) > (Content.biomes[zone.style] as Biome).bounds[16])
+        /*if (zone.rand.int(0, 100) > (Content.biomes[zone.style] as Biome).bounds[16])
 				clumps = 0;*/
         
-        var rounds : Int = zone.rand.integer(0, 200);
+        var rounds : Int = zone.rand.int(0, 200);
         
         
         
-        var poolroll : Int = zone.rand.integer(0, 100);
+        var poolroll : Int = zone.rand.int(0, 100);
         //trace ("wtf = " + poolroll.toString());
-        var pools : Int = zone.rand.integer(Content.biomes[zone.description.style].bounds[22], Content.biomes[zone.description.style].bounds[23]);
+        var pools : Int = zone.rand.int(Content.biomes[zone.description.style].bounds[22], Content.biomes[zone.description.style].bounds[23]);
         if (poolroll > Content.biomes[zone.description.style].bounds[21])
         {
             pools = 0;
@@ -412,7 +409,7 @@ class PlayState extends FlxState
         {
             
             if (zone.description.exits.north == false && zone.description.exits.south == false &&
-                zone.rand.integer(0, 100) < Content.nOpenChance * 100)
+                zone.rand.int(0, 100) < Content.nOpenChance * 100)
             {
                 plats *= Math.floor(0.7);
                 pillars *= Math.floor(0.6);
@@ -425,7 +422,7 @@ class PlayState extends FlxState
             {
                 plats *= Math.floor(0.2);
                 clumps *= Math.floor(0.3);
-                size = zone.rand.integer(3, 4);
+                size = zone.rand.int(3, 4);
                 Content.nCurrentVerticalCinchCoefficient = Content.nShaftCoefficient;
                 trace("forced vert!!!!!!!!!!!!!!!!!!!!!!!!!! size = " + Std.string(size));
             }
@@ -524,17 +521,17 @@ class PlayState extends FlxState
             {
                 if (zone.intangmap[x + 64][y + 64] == 1)
                 {
-                    hud.makerMap._pixels.setPixel(x, y, 0xFFAAFFCC);
+                    hud.makerMap.pixels.setPixel(x, y, 0xFFAAFFCC);
                     hud.makerMap.dirty = true;
                 }
                 else if (zone.GetMap(x + 64, y + 64) == 0)
                 {
-                    hud.makerMap._pixels.setPixel(x, y, 0xFF000000);
+                    hud.makerMap.pixels.setPixel(x, y, 0xFF000000);
                     hud.makerMap.dirty = true;
                 }
                 else if (zone.GetMap(x + 64, y + 64) == 1)
                 {
-                    hud.makerMap._pixels.setPixel(x, y, 0xFFAA6622);
+                    hud.makerMap.pixels.setPixel(x, y, 0xFFAA6622);
                     hud.makerMap.dirty = true;
                 }
             }
@@ -542,8 +539,8 @@ class PlayState extends FlxState
         
         for (ex/* AS3HX WARNING could not determine type for var: ex exp: EField(EIdent(zone),exits) type: null */ in zone.exits)
         {
-            hud.makerMap._pixels.setPixel(ex.x - 64, ex.y - 64, 0xFF0055FF);
-            hud.makerMap._pixels.setPixel(ex.x - 64, ex.y - 64 - 1, 0xFF0055FF);
+            hud.makerMap.pixels.setPixel(ex.x - 64, ex.y - 64, 0xFF0055FF);
+            hud.makerMap.pixels.setPixel(ex.x - 64, ex.y - 64 - 1, 0xFF0055FF);
         }
     }
     
@@ -555,12 +552,12 @@ class PlayState extends FlxState
 				{
 					if (zone.wallmap[x + 64][y + 64] == 0)
 					{
-						hud.backupMap._pixels.setPixel(x, y, 0xFF000000);
+						hud.backupMap.pixels.setPixel(x, y, 0xFF000000);
 						hud.backupMap.dirty = true;
 					}
 					else 
 					{
-						hud.backupMap._pixels.setPixel(x, y, 0xFF000055);
+						hud.backupMap.pixels.setPixel(x, y, 0xFF000055);
 						hud.backupMap.dirty = true;
 					}
 				}
@@ -574,17 +571,17 @@ class PlayState extends FlxState
 				{
 					if (zone.intangmap[x + 64][y + 64] == 1)
 					{
-						hud.backupMap._pixels.setPixel(x, y, 0xFFAAFFCC);
+						hud.backupMap.pixels.setPixel(x, y, 0xFFAAFFCC);
 						hud.backupMap.dirty = true;
 					}
 					else if (zone.GetBackmap(x + 64, y + 64) == 0)
 					{
-						hud.backupMap._pixels.setPixel(x, y, 0xFF000000);
+						hud.backupMap.pixels.setPixel(x, y, 0xFF000000);
 						hud.backupMap.dirty = true;
 					}
 					else if (zone.GetBackmap(x + 64, y + 64) == 1)
 					{
-						hud.backupMap._pixels.setPixel(x, y, 0xFFAA6622);
+						hud.backupMap.pixels.setPixel(x, y, 0xFFAA6622);
 						hud.backupMap.dirty = true;
 					}
 				}
@@ -592,8 +589,8 @@ class PlayState extends FlxState
 			
 			for each(var ex:Exit in zone.exits)
 			{
-				hud.backupMap._pixels.setPixel(ex.x - 64, ex.y - 64, 0xFF0055FF);
-				hud.backupMap._pixels.setPixel(ex.x - 64, ex.y - 64 - 1, 0xFF0055FF);
+				hud.backupMap.pixels.setPixel(ex.x - 64, ex.y - 64, 0xFF0055FF);
+				hud.backupMap.pixels.setPixel(ex.x - 64, ex.y - 64 - 1, 0xFF0055FF);
 			}
 			*/
         
@@ -619,7 +616,7 @@ class PlayState extends FlxState
         }
         else if (command.name == "LineCave")
         {
-            zone.LineCave(Math.floor(command.p1), as3hx.Compat.parseFloat(command.p2), Math.floor(command.p3));
+            zone.LineCave(Math.floor(command.p1), (command.p2), Math.floor(command.p3));
         }
         else if (command.name == "Plats")
         {
@@ -743,7 +740,7 @@ class PlayState extends FlxState
                 zonehistory.push(zone);
             }
             
-            if (hud.ZoneInMapHistory(zone.description.coords.x, zone.description.coords.y) == -1)
+            if (hud.ZoneInMapHistory(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y)) == -1)
             {
                 Content.stats.arrayMapNodes.push(new MapNode(new Point(zone.description.coords.x, zone.description.coords.y), zone.description.style, zone.description.exits.north, zone.description.exits.south, zone.description.exits.west, zone.description.exits.east));
                 
@@ -756,7 +753,7 @@ class PlayState extends FlxState
         }
         else
         {
-            var progress : Int = ((totalgen - commands.length) / totalgen) * 100;
+            var progress : Int = Math.floor(((totalgen - commands.length) / totalgen) * 100);
             if (progress < 0)
             {
                 progress = 0;
@@ -769,6 +766,12 @@ class PlayState extends FlxState
             
             hud.SetLoadProgress(progress);
         }
+    }
+
+    private function destroyAllInGroup(group : FlxSpriteGroup) {
+        group.forEach( function(s:FlxSprite) { s.destroy(); } );
+        group.clear();
+        group.destroy();
     }
     
     public function dump() : Void
@@ -805,18 +808,19 @@ class PlayState extends FlxState
 			if (groupGrunts != null) this.remove(groupGrunts, true);
 			if (groupDoors != null) this.remove(groupDoors, true);
 			if (groupPeppers != null) this.remove(groupPeppers, true);
-			if (hud != null) this.remove(hud, true);*/
+			if (hud != null) this.remove(hud, true);
+        */
         
         
-        groupNearBack.destroymembers();
-        groupArrows.destroymembers();
-        groupPellets.destroymembers();
-        groupMonsters.destroymembers();
-        groupFrontMonsters.destroymembers();
-        groupParticles.destroymembers();
-        groupGrunts.destroymembers();
-        groupDoors.destroymembers();
-        groupPeppers.destroymembers();
+        destroyAllInGroup(groupNearBack);
+        destroyAllInGroup(groupArrows);
+        destroyAllInGroup(groupPellets);
+        destroyAllInGroup(groupMonsters);
+        destroyAllInGroup(groupFrontMonsters);
+        destroyAllInGroup(groupParticles);
+        destroyAllInGroup(groupGrunts);
+        destroyAllInGroup(groupDoors);
+        destroyAllInGroup(groupPeppers);
         
         groupNearBack = null;
         groupArrows = null;
@@ -828,7 +832,7 @@ class PlayState extends FlxState
         groupDoors = null;
         groupPeppers = null;
         
-        hud.destroymembers();
+        destroyAllInGroup(hud);
         hud = null;
         
         zone = null;
@@ -875,16 +879,6 @@ class PlayState extends FlxState
                 arrayPellets.splice(0, 1);
             }
             arrayPellets = null;
-        }
-        
-        if (arrayParticles != null)
-        {
-            while (arrayParticles.length > 0)
-            {
-                this.remove(arrayParticles[0]);
-                arrayParticles.splice(0, 1);
-            }
-            arrayParticles = null;
         }
         
         if (commands != null)
@@ -1225,11 +1219,11 @@ class PlayState extends FlxState
         
         if (variant == 0)
         {
-            iPeppers = Math.floor(arrayPeppers.length * (zone.rand.integer(10, 30) / 100));
+            iPeppers = Math.floor(arrayPeppers.length * (zone.rand.int(10, 30) / 100));
         }
         else if (variant == 1)
         {
-            iPeppers = Math.floor(arrayPeppers.length * (zone.rand.integer(20, 50) / 100));
+            iPeppers = Math.floor(arrayPeppers.length * (zone.rand.int(20, 50) / 100));
         }
         
         groupPeppers = new FlxSpriteGroup();
@@ -1237,7 +1231,7 @@ class PlayState extends FlxState
         for (i in 0...iPeppers)
         {
             var toadd : FlxSprite;
-            var spot : Int = zone.rand.integer(0, arrayPeppers.length);
+            var spot : Int = zone.rand.int(0, arrayPeppers.length);
             var which : Int = 0;
             
             var roll : Int = 0;
@@ -1251,7 +1245,7 @@ class PlayState extends FlxState
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
                     
-                    toadd.addAnimation("", [zone.rand.integer(0, 2) + (variant * 2)], 0, true);
+                    toadd.addAnimation("", [zone.rand.int(0, 2) + (variant * 2)], 0, true);
                     toadd.play("");
                     groupPeppers.add(toadd);
                     arrayPeppers.splice(spot, 1);
@@ -1267,7 +1261,7 @@ class PlayState extends FlxState
                         toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                         toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                         
-                        toadd.addAnimation("", [zone.rand.integer(0, 2) + 70], 0, true);
+                        toadd.addAnimation("", [zone.rand.int(0, 2) + 70], 0, true);
                         toadd.play("");
                         groupPeppers.add(toadd);
                         arrayPeppers.splice(spot, 1);
@@ -1279,7 +1273,7 @@ class PlayState extends FlxState
                     toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
-                    toadd.addAnimation("", [zone.rand.integer(0, 3) + 72], 0, true);
+                    toadd.addAnimation("", [zone.rand.int(0, 3) + 72], 0, true);
                     toadd.play("");
                     groupPeppers.add(toadd);
                     arrayPeppers.splice(spot, 1);
@@ -1297,11 +1291,11 @@ class PlayState extends FlxState
                 {
                     if (Std.string(arrayPeppers[spot].obj) == "w")
                     {
-                        which = Math.floor((zone.description.style * 10) + 3 + zone.rand.integer(0, 2));
+                        which = Math.floor((zone.description.style * 10) + 3 + zone.rand.int(0, 2));
                     }
                     else
                     {
-                        roll = zone.rand.integer(0, 10);
+                        roll = zone.rand.int(0, 10);
                         if (roll == 1)
                         {
                             which = Math.floor((zone.description.style * 10) + 5);
@@ -1312,13 +1306,13 @@ class PlayState extends FlxState
                         }
                         else
                         {
-                            which = Math.floor((zone.description.style * 10) + 0 + zone.rand.integer(0, 2));
+                            which = Math.floor((zone.description.style * 10) + 0 + zone.rand.int(0, 2));
                         }
                     }
                 }
                 else
                 {
-                    which = Math.floor((zone.description.style * 10) + 6 + zone.rand.integer(0, 3));
+                    which = Math.floor((zone.description.style * 10) + 6 + zone.rand.int(0, 3));
                 }
                 
                 toadd.addAnimation("", [which], 0, true);
@@ -1346,7 +1340,7 @@ class PlayState extends FlxState
             
             while (waterfalls < Content.iWaterfallCap && xs.length > 0)
             {
-                which = zone.rand.integer(0, xs.length);
+                which = zone.rand.int(0, xs.length);
                 
                 x = (Math.floor(xs[which]));
                 
@@ -1368,7 +1362,7 @@ class PlayState extends FlxState
                     {
                         toadd = new FlxSprite(x * 30, y * 30);
                         toadd.loadGraphic(Content.cWaterfall, true, false, 30, 30, true);
-                        toadd._pixels.colorTransform(new Rectangle(0, 0, 30 * 10, 30), colTransLevel);
+                        toadd.pixels.colorTransform(new Rectangle(0, 0, 30 * 10, 30), colTransLevel);
                         
                         toadd.addAnimation("", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 26, true);
                         toadd.play("");
@@ -1380,7 +1374,7 @@ class PlayState extends FlxState
                 waterfalls++;
                 xs.splice(which, 1);
                 
-                if (zone.rand.integer(0, 100) < 40)
+                if (zone.rand.int(0, 100) < 40)
                 {
                     break;
                 }
@@ -1567,11 +1561,7 @@ class PlayState extends FlxState
         
         var splash : Splash = new Splash(this, 0, 0);
         splash.visible = false;
-        arrayParticles.push(splash);
         groupParticles.add(splash);
-        
-        
-        
         
         var e : Int = 0;
         e = 0;
@@ -2390,8 +2380,8 @@ If 11 and water, 13
                 var needsone : Int = 0;
                 var needsall : Int = 0;
                 var resists : Int = 0;
-                var weight : Float = as3hx.Compat.parseFloat(tokens[1]);
-                var satmodifier : Float = as3hx.Compat.parseFloat(tokens[2]);
+                var weight : Float = (tokens[1]);
+                var satmodifier : Float = (tokens[2]);
                 
                 var _sw0_ = (tokens[0]);                
 
@@ -2847,7 +2837,7 @@ If 11 and water, 13
                 
                 if (left && right)
                 {
-                    if (zone.rand.integer(0, 1) == 0)
+                    if (zone.rand.int(0, 1) == 0)
                     {
                         right = false;
                     }
@@ -3082,7 +3072,7 @@ If 11 and water, 13
     public var bPaused : Bool = false;
     public var bAnyKeyJustPressed : Bool = false;
     public var bLastAnyKeyState : Bool = false;
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (bUpdateBreak)
         {
@@ -3175,7 +3165,7 @@ If 11 and water, 13
             }
             case Content.LEAVING:
             {
-                super.update();
+                super.update(elapsed);
                 
                 UnpausedUpdates();
                 UpdateCameraPan();
@@ -3217,7 +3207,7 @@ If 11 and water, 13
             }
             case Content.DEAD:
             {
-                super.update();
+                super.update(elapsed);
                 
                 UnpausedUpdates();
                 //UpdateCameraPan();
@@ -3286,7 +3276,7 @@ If 11 and water, 13
             }
             case Content.SCRIPTED:
             {
-                super.update();
+                super.update(elapsed);
                 
                 hero.bBearings = false;  // Disable camera look-left/look-right  
                 //ptDeviation.x = ptTargetDeviation.x;
@@ -3978,7 +3968,7 @@ If 11 and water, 13
                         }
                     }
                     
-                    super.update();
+                    super.update(elapsed);
                     
                     if (this.bPaused == false)
                     {
@@ -4218,7 +4208,7 @@ If 11 and water, 13
         var m2midx : Int = Math.floor(m2.x + (m2.width / 2));
         var m2midy : Int = Math.floor(m2.y + (m2.height / 2));
         
-        var bigwidth : Int = Math.max(m1.width, m2.width);
+        var bigwidth : Int = Math.max(Math.floor(m1.width), Math.floor(m2.width));
         
         if (Math.abs(m1midx + m2midx) < bigwidth / 2)
         {
@@ -4326,20 +4316,7 @@ If 11 and water, 13
                         }
                     }
                     
-                    var toadd : Twinkle = null;
-                    
-                    toadd = Util.GetInvisibleSpriteByName(arrayParticles, "Twinkle");
-                    
-                    if (toadd == null)
-                    {
-                        toadd = new Twinkle(this, x, y);
-                        arrayParticles.push(toadd);
-                        groupParticles.add(toadd);
-                    }
-                    else
-                    {
-                        toadd.Reuse(x, y);
-                    }
+                    groupParticles.recycle(Class<Twinkle>, null, true, true).Reuse(x, y);
                 }
                 i++;
             }
@@ -4383,20 +4360,7 @@ If 11 and water, 13
     
     public function MakeBub(x : Int, y : Int, dir : Float, sp : Float) : Void
     {
-        var toadd : Bub = null;
-        
-        toadd = Util.GetInvisibleSpriteByName(arrayParticles, "Bub");
-        
-        if (toadd == null)
-        {
-            toadd = new Bub(this, x, y, dir, sp);
-            arrayParticles.push(toadd);
-            groupParticles.add(toadd);
-        }
-        else
-        {
-            toadd.Reuse(x, y, dir, sp);
-        }
+        groupParticles.recycle(Class<Bub>, null, true, true).Reuse(x, y, dir, sp);
     }
     
     public function UpdateDoorBubs() : Void
@@ -4977,21 +4941,7 @@ If 11 and water, 13
         for (i in 0...splode)
         {
             var spd : Float = Util.Random(40, 100);
-            
-            var toadd : Puff = null;
-            
-            toadd = Util.GetInvisibleSpriteByName(arrayParticles, "Puff");
-            
-            if (toadd == null)
-            {
-                toadd = new Puff(this, x, y, ((360 / splode) * i) + rot, spd, row);
-                arrayParticles.push(toadd);
-                groupParticles.add(toadd);
-            }
-            else
-            {
-                toadd.Reuse(x, y, ((360 / splode) * i) + rot, spd, row);
-            }
+            groupParticles.recycle(Class<Puff>, null, true, true).Reuse(x, y, ((360 / splode) * i) + rot, spd, row);
         }
     }
     

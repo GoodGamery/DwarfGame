@@ -40,11 +40,11 @@ class Beetle extends Monster
         this.health = 40;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         bEnraged = as3hx.Compat.parseInt(parent.hero.y / 30) == as3hx.Compat.parseInt(this.y / 30) &&
-                ((this.facing == LEFT && parent.hero.x < this.x) ||
-                (this.facing == RIGHT && parent.hero.x > this.x));
+                ((this.facing == Content.LEFT && parent.hero.x < this.x) ||
+                (this.facing == Content.RIGHT && parent.hero.x > this.x));
         
         
         if (bEnraged == false)
@@ -56,7 +56,7 @@ class Beetle extends Monster
             iRunSpeed = iBaseSpeed * 3;
         }
         
-        super.update();
+        super.update(elapsed);
     }
     
     override public function DoesThisArrowHurtMe(arrow : Arrow, hhit : Int, vhit : Int) : Bool
@@ -70,25 +70,25 @@ class Beetle extends Monster
             }
         }
         
-        if (arrow.velocity.x < 0 && this.facing == RIGHT)
+        if (arrow.velocity.x < 0 && this.facing == Content.RIGHT)
         {
             return false;
         }
         
-        if (arrow.velocity.x > 0 && this.facing == LEFT)
+        if (arrow.velocity.x > 0 && this.facing == Content.LEFT)
         {
             return false;
         }
         
         /*
-			if (this.facing == RIGHT)
+			if (this.facing == Content.RIGHT)
 			{
-				this.facing = LEFT;
+				this.facing = Content.LEFT;
 				velocity.x = 0;
 			}
 			else
 			{
-				this.facing = RIGHT;
+				this.facing = Content.RIGHT;
 				velocity.x = 0;
 			}
 			*/

@@ -82,7 +82,7 @@ class Monster extends FlxSprite
             this._defaultColorTransform = colTrans;
         }
         
-        facing = LEFT;
+        facing = Content.LEFT;
         
         iRunSpeed *= as3hx.Compat.parseInt(speedmod);
         maxVelocity.x = 200;  //walking speed  
@@ -565,7 +565,7 @@ class Monster extends FlxSprite
     {
         if (isTouching(FLOOR))
         {
-            if (facing == LEFT)
+            if (facing == Content.LEFT)
             {
                 if (this.velocity.x < -iRunSpeed)
                 {
@@ -576,7 +576,7 @@ class Monster extends FlxSprite
                     this.velocity.x = -iRunSpeed;
                 }
             }
-            else if (facing == RIGHT)
+            else if (facing == Content.RIGHT)
             {
                 if (this.velocity.x > iRunSpeed)
                 {
@@ -592,15 +592,15 @@ class Monster extends FlxSprite
     
     public function UpdateWallBonk() : Void
     {
-        if (facing == LEFT && isTouching(LEFT))
+        if (facing == Content.LEFT && isTouching(LEFT))
         {
             velocity.x = iRunSpeed;
-            facing = RIGHT;
+            facing = Content.RIGHT;
         }
-        else if (facing == RIGHT && isTouching(RIGHT))
+        else if (facing == Content.RIGHT && isTouching(RIGHT))
         {
             velocity.x = -iRunSpeed;
-            facing = LEFT;
+            facing = Content.LEFT;
         }
     }
     
@@ -608,11 +608,11 @@ class Monster extends FlxSprite
     {
         if (isTouching(FLOOR))
         {
-            if (facing == LEFT)
+            if (facing == Content.LEFT)
             {
                 sBroom.x = this.x - 4;
             }
-            else if (facing == RIGHT)
+            else if (facing == Content.RIGHT)
             {
                 sBroom.x = this.x + this.width - 1 + 4;
             }
@@ -622,13 +622,13 @@ class Monster extends FlxSprite
             if (sBroom.overlaps(parent.level))
             {
             }
-            else if (facing == LEFT)
+            else if (facing == Content.LEFT)
             {
-                facing = RIGHT;
+                facing = Content.RIGHT;
             }
-            else if (facing == RIGHT)
+            else if (facing == Content.RIGHT)
             {
-                facing = LEFT;
+                facing = Content.LEFT;
             }
         }
     }

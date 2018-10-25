@@ -55,9 +55,9 @@ class Goblin extends Monster
         this._cFlickerColor = 0x00FFFFFF;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
     }
     
     override public function DoesThisArrowHurtMe(arrow : Arrow, hhit : Int, vhit : Int) : Bool
@@ -78,15 +78,15 @@ class Goblin extends Monster
         if ((velocity.y > 0 && bTurnWhenFalling) ||
             (bTurnWhenWalking && isTouching(FLOOR)))
         {
-            if (facing == LEFT && isTouching(LEFT))
+            if (facing == Content.LEFT && isTouching(LEFT))
             {
                 velocity.x = iRunSpeed;
-                facing = RIGHT;
+                facing = Content.RIGHT;
             }
-            else if (facing == RIGHT && isTouching(RIGHT))
+            else if (facing == Content.RIGHT && isTouching(RIGHT))
             {
                 velocity.x = -iRunSpeed;
-                facing = LEFT;
+                facing = Content.LEFT;
             }
         }
     }
@@ -137,12 +137,12 @@ class Goblin extends Monster
         
         if (iRetreatStrat < 0)
         {
-            facing = LEFT;
+            facing = Content.LEFT;
             iRetreatStrat -= Math.floor(iRunSpeed * FlxG.elapsed);
         }
         else if (iRetreatStrat > 0)
         {
-            facing = RIGHT;
+            facing = Content.RIGHT;
             iRetreatStrat += Math.floor(iRunSpeed * FlxG.elapsed);
         }
         
@@ -219,11 +219,11 @@ class Goblin extends Monster
                 {
                     if (parent.hero.x < x)
                     {
-                        facing = LEFT;
+                        facing = Content.LEFT;
                     }
                     else
                     {
-                        facing = RIGHT;
+                        facing = Content.RIGHT;
                     }
                 }
             }
@@ -247,7 +247,7 @@ class Goblin extends Monster
         {
             if (bFloorRecovered)
             {
-                if (facing == LEFT)
+                if (facing == Content.LEFT)
                 {
                     if (this.velocity.x < -iRunSpeed)
                     {
@@ -258,7 +258,7 @@ class Goblin extends Monster
                         this.velocity.x = -iRunSpeed;
                     }
                 }
-                else if (facing == RIGHT)
+                else if (facing == Content.RIGHT)
                 {
                     if (this.velocity.x > iRunSpeed)
                     {

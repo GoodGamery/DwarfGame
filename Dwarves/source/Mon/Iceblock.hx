@@ -39,16 +39,16 @@ class Iceblock extends Monster
         offset.x = 30;
         offset.y = 30;
         
-        facing = RIGHT;
+        facing = Content.RIGHT;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         acceleration.y = 0;
         velocity.x = 0;
         velocity.y = 0;
         
-        super.update();
+        super.update(elapsed);
     }
     
     override public function UpdatePlayerHits() : Void

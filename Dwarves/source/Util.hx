@@ -6,6 +6,7 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.math.FlxRandom;
 import Content;
+import openfl.Assets;
 
 @:final class Util
 {
@@ -178,7 +179,7 @@ import Content;
     public static var words : Array<Dynamic>;
     public static function LoadLanguage() : Void
     {
-        var s : String = Assets.getText("dwarven.txt");
+        var s : String = Assets.getText("assets/data/dwarven.txt");
         
         words = new Array<Dynamic>();
         
@@ -216,7 +217,7 @@ import Content;
     
     public static function LoadBiomeParameters() : Void
     {
-        var s : String = Assets.getText("bounds.txt");
+        var s : String = Assets.getText("assets/data/bounds.txt");
         
         var lines : Array<String> = s.split("\n");
         lines.splice(0, 1);  // Get rid of header line  
@@ -371,7 +372,7 @@ import Content;
     public static var silence : FlxSound;
     public static var fLoopCallback : Function = null;
     
-    public static function PlayMusicData(Music : Class<Dynamic>, Volume : Float = 1.0, position : Float = 0, loopcallback : Function = null, firsttime : Bool = true, silencebump : Float = 0) : Void
+    public static function PlayMusicData(musicAsset : FlxSoundAsset, Volume : Float = 1.0, position : Float = 0, loopcallback : Function = null, firsttime : Bool = true, silencebump : Float = 0) : Void
     {
         trace("/// Playing " + strMusic + " first time = " + Std.string(firsttime));
         if (firsttime)
@@ -385,17 +386,17 @@ import Content;
                 music.stop();
             }
             
-            music.loadEmbedded(Music, false);  // NOT looped  
+            music.loadEmbedded(musicAsset, false);  // NOT looped  
             music.volume = Volume;
             music.survive = true;
         }
         
-        music.play(true, position, false);
+        music.play(true, position);
         
         playSilence(Music, position + silencebump, loopcallback, firsttime);
     }
     
-    public static function playSilence(Music : Class<Dynamic>, position : Float = 0, loopcallback : Function = null, firsttime : Bool = true) : Void
+    public static function playSilence(musicAsset : FlxSoundAsset, position : Float = 0, loopcallback : Function = null, firsttime : Bool = true) : Void
     {
         trace("/// Playing silence for " + strMusic + " first time = " + Std.string(firsttime));
         if (firsttime)
@@ -409,20 +410,12 @@ import Content;
                 silence.stop();
             }
             
-            silence.loadEmbedded(Music, true);
+            silence.loadEmbedded(musicAsset, true);
             silence.volume = 0;
-            silence.survive = true;
         }
         
-        if (loopcallback != null)
-        {
-            fLoopCallback = loopcallback;
-            silence.play(true, position, true);
-        }
-        else
-        {
-            silence.play(true, position, false);
-        }
+        fLoopCallback = loopcallback;
+        silence.play(true, position);
     }
     
     public static function IsBarrier(tile : Int) : Bool

@@ -47,9 +47,9 @@ class Fish extends Monster
         this.health = 20;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
         acceleration.y = 0;
     }
     
@@ -89,20 +89,20 @@ class Fish extends Monster
         
         if (velocity.x < 0)
         {
-            facing = LEFT;
+            facing = Content.LEFT;
         }
         else if (velocity.x > 0)
         {
-            facing = RIGHT;
+            facing = Content.RIGHT;
         }
         
         if (isTouching(RIGHT))
         {
-            facing = LEFT;
+            facing = Content.LEFT;
         }
         else if (isTouching(LEFT))
         {
-            facing = RIGHT;
+            facing = Content.RIGHT;
         }
         
         var opp : Float = Math.sin(nAngle) * iRunSpeed;

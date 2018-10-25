@@ -30,7 +30,7 @@ class Whoosh extends FlxSprite
         velocity.y = nSpeed * Math.sin(rads);
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (_curFrame == 3)
         {

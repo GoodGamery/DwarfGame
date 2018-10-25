@@ -409,76 +409,54 @@ class Zone
         var nodes : Array<Dynamic> = new Array<Dynamic>();
         
         if (description.exits.north)
-        
-        { //trace("a - " + ((1.0 / 3.0) * width).toString());
-            
-            
-            x = Math.floor(rand.int(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
-            y = Math.floor(rand.int(0, (2.0 / 9.0) * height) + (1.0 / 9.0) * height);
-            
-            
-            //trace("b - " + x.toString());
-            
+        {
             x = Math.floor((width / 2) - (((width / 2) - x) * (hcinch)));
             y = Math.floor((height / 2) - (((height / 2) - y) * vcinch));
-            
             
             exits.push(new Exit(x, y, 0));
         }
         
         if (description.exits.south)
         {
-            x = Math.floor(rand.int(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
-            y = Math.floor(rand.int(0, (2.0 / 9.0) * height) + (2.0 / 3.0) * height);
-            
-            x = (width / 2) - (((width / 2) - x) * hcinch);
-            y = (height / 2) - (((height / 2) - y) * vcinch);
+            x = Math.floor((width / 2) - (((width / 2) - x) * hcinch));
+            y = Math.floor((height / 2) - (((height / 2) - y) * vcinch));
             
             exits.push(new Exit(x, y, 1));
         }
         
         if (description.exits.west)
         {
-            x = Math.floor(rand.int(0, (2.0 / 9.0) * width) + (1.0 / 9.0) * width);
-            y = Math.floor(rand.int(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
-            
-            x = (width / 2) - (((width / 2) - x) * hcinch);
-            y = (height / 2) - (((height / 2) - y) * vcinch);
+            x = Math.floor((width / 2) - (((width / 2) - x) * hcinch));
+            y = Math.floor((height / 2) - (((height / 2) - y) * vcinch));
             
             exits.push(new Exit(x, y, 2));
         }
         
         if (description.exits.east)
         {
-            x = Math.floor(rand.int(0, (2.0 / 9.0) * width) + (2.0 / 3.0) * width);
-            y = Math.floor(rand.int(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
-            
-            x = (width / 2) - (((width / 2) - x) * hcinch);
-            y = (height / 2) - (((height / 2) - y) * vcinch);
+            x = Math.floor((width / 2) - (((width / 2) - x) * hcinch));
+            y = Math.floor((height / 2) - (((height / 2) - y) * vcinch));
             
             exits.push(new Exit(x, y, 3));
         }
         
         if (exits.length == 1)
         {
-            x = Math.floor(rand.int(0, (1.0 / 3.0) * width) + (1.0 / 3.0) * width);
-            y = Math.floor(rand.int(0, (1.0 / 3.0) * height) + (1.0 / 3.0) * height);
-            
             x = (width / 2) - (((width / 2) - x) * hcinch);
             y = (height / 2) - (((height / 2) - y) * vcinch);
             
             exits.push(new Exit(x, y, 99));
         }
         
-        exits = cast((exits), Shuffle);
+        exits = Shuffle(exits);
         var ex : Int = 0;
         ex = 0;
         while (ex < exits.length)
         {
             if (!exits[ex].handled)
             {
-                var digger : Point = new PointInt(exits[ex].x, exits[ex].y);
-                var target : Point = null;
+                var digger : PointInt = new PointInt(exits[ex].x, exits[ex].y);
+                var target : PointInt = null;
                 var targetexit : Int = -1;
                 
                 if (ex == 0)
@@ -561,7 +539,7 @@ class Zone
                             }
                         }
                         
-                        var trav : Float = rand.int(Math.floor(hopdistance / 2), hopdistance * 4);
+                        var trav : Float = rand.int(Math.floor(hopdistance / 2), Math.floor(hopdistance * 4));
                         
                         var xtrav : Float = Math.cos(angle) * trav * -1;
                         var ytrav : Float = Math.sin(angle) * trav * -1;
@@ -592,7 +570,7 @@ class Zone
                 //trace("mult c = " + mult.toString());
                 //trace("mult d = " + (int(size * mult)).toString());
                 
-                var t : Point = new PointInt(Math.floor(target.x), Math.floor(target.y));
+                var t : PointInt = new PointInt(Math.floor(target.x), Math.floor(target.y));
                 
                 StampLine(Math.floor(size * mult), t, t);
             }
@@ -929,7 +907,7 @@ class Zone
         }
     }
     
-    public function StampLine(size : Int, a : Point, b : Point) : Void
+    public function StampLine(size : Int, a : PointInt, b : PointInt) : Void
     {
         var stamp : Array<Dynamic> = new Array<Dynamic>();
         
@@ -1192,7 +1170,7 @@ class Zone
             if (points.length > 0)
             {
                 var p : Int = rand.int(0, points.length);
-                var pt : Point = points[p];
+                var pt : PointInt = points[p];
                 
                 var span : Int = Math.floor(rand.int(0, variable) + (variable / 2) + 1);
                 
@@ -1308,11 +1286,11 @@ class Zone
         
         for (pt in points)
         {
-            var size : Float = variable * (rand.int(50, 150) / 100);
+            var minY : Int = Math.floor(-1 * variable * (rand.int(50, 150) / 100));
             
-            for (y in size * -1...0)
+            for (yy in minY...0)
             {
-                SetBackmap(pt.x, pt.y + y, 1);
+                SetBackmap(pt.x, pt.y + yy, 1);
             }
         }
     }
@@ -1744,7 +1722,7 @@ class Zone
             i = 0;
             while (i < oldcheckers.length)
             {
-                var tocheck : Point = oldcheckers[i];
+                var tocheck : PointInt = oldcheckers[i];
                 
                 if (tocheck.y > 0)
                 {
@@ -1803,6 +1781,7 @@ class Zone
     public var secretchamberplan : Array<Dynamic> = null;
     public function MakeIntangibles(wigglechance : Int, hintchance : Int, deathchance : Int) : Void
     {
+        var x : Int;
         if (Content.bSecretChambers)
         {
             intangs.splice(0, intangs.length);
@@ -1911,7 +1890,7 @@ class Zone
                     iterations = rightentrances.length;
                 }
                 
-                for (i in 0...iterations)
+                for (var i : Int = 0; i < iterations; ++i)
                 {
                     dirx = Math.floor(-1 + (side * 2));  // i.e., -1 for left, +1 for right  
                     diry = 0;
@@ -2057,14 +2036,12 @@ class Zone
                 {
                     var bQualifiedSecretTunnel : Bool = false;
                     
-                    for (xx in x)
+                    for (xx in 0...x)
                     {
                         if (xx == 143 && y == 126)
                         {
                             var c : Int = 0;
                         }
-                        
-                        i = backmap[0][0];
                         
                         if (intangmap[xx][y] == 0 &&
                             intangmap[xx + 1][y] == 0 &&
@@ -2185,7 +2162,7 @@ class Zone
                 i = 0;
                 while (i < oldcheckers.length)
                 {
-                    var tocheck : Point = oldcheckers[i];
+                    var tocheck : PointInt = oldcheckers[i];
                     var species : Int = checkmap[tocheck.x][tocheck.y];
                     
                     if (fuels[species - 10] > 0)
@@ -2385,7 +2362,7 @@ class Zone
             i = 0;
             while (i < oldcheckers.length)
             {
-                var tocheck : Point = oldcheckers[i];
+                var tocheck : PointInt = oldcheckers[i];
                 
                 if (fuel > 0)
                 {

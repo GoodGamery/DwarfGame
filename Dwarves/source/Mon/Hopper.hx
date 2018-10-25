@@ -44,9 +44,9 @@ class Hopper extends Monster
         this.health = 40;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
     }
     
     override public function Struck(hhit : Int, vhit : Int, damage : Int) : Void
@@ -61,15 +61,15 @@ class Hopper extends Monster
         if ((velocity.y > 0 && bTurnWhenFalling) ||
             (bTurnWhenWalking && isTouching(FLOOR)))
         {
-            if (facing == LEFT && isTouching(LEFT))
+            if (facing == Content.LEFT && isTouching(LEFT))
             {
                 velocity.x = iRunSpeed;
-                facing = RIGHT;
+                facing = Content.RIGHT;
             }
-            else if (facing == RIGHT && isTouching(RIGHT))
+            else if (facing == Content.RIGHT && isTouching(RIGHT))
             {
                 velocity.x = -iRunSpeed;
-                facing = LEFT;
+                facing = Content.LEFT;
             }
         }
     }
@@ -123,11 +123,11 @@ class Hopper extends Monster
             {
                 if (parent.hero.x < x)
                 {
-                    facing = LEFT;
+                    facing = Content.LEFT;
                 }
                 else
                 {
-                    facing = RIGHT;
+                    facing = Content.RIGHT;
                 }
             }
         }
@@ -137,7 +137,7 @@ class Hopper extends Monster
         {
             if (bFloorRecovered)
             {
-                if (facing == LEFT)
+                if (facing == Content.LEFT)
                 {
                     if (this.velocity.x < -iRunSpeed)
                     {
@@ -148,7 +148,7 @@ class Hopper extends Monster
                         this.velocity.x = -iRunSpeed;
                     }
                 }
-                else if (facing == RIGHT)
+                else if (facing == Content.RIGHT)
                 {
                     if (this.velocity.x > iRunSpeed)
                     {

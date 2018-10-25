@@ -47,10 +47,10 @@ class FaceCrush extends Monster
         
         
         
-        facing = RIGHT;
+        facing = Content.RIGHT;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (bPaused || visible == false)
         {
@@ -113,15 +113,15 @@ class FaceCrush extends Monster
             parent.arrayNearMonsters.push(toadd);
             parent.groupFrontMonsters.add(toadd);
             
-            if (this.facing == RIGHT)
+            if (this.facing == Content.RIGHT)
             {
-                toadd.facing = RIGHT;
+                toadd.facing = Content.RIGHT;
                 toadd.x = this.x + 15;
                 toadd.y = this.y + 8;
             }
-            else if (this.facing == LEFT)
+            else if (this.facing == Content.LEFT)
             {
-                toadd.facing = LEFT;
+                toadd.facing = Content.LEFT;
                 toadd.x = this.x - 5;
                 toadd.y = this.y + 8;
             }

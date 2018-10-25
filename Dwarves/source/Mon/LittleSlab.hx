@@ -31,9 +31,9 @@ class LittleSlab extends Monster
         this.health = 50;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
     }
     
     override public function Struck(hhit : Int, vhit : Int, damage : Int) : Void

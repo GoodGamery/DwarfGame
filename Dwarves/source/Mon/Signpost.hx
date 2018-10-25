@@ -40,13 +40,13 @@ class Signpost extends Talker
     }
     
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         acceleration.y = 0;
         velocity.x = 0;
         velocity.y = 0;
         
-        //super.update()
+        //super.update(elapsed)
         return;
     }
 }

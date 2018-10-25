@@ -32,12 +32,12 @@ class Pellet extends FlxSprite
         
         if (bRight)
         {
-            facing = RIGHT;
+            facing = Content.RIGHT;
             velocity.x = iSpeed;
         }
         else
         {
-            facing = LEFT;
+            facing = Content.LEFT;
             velocity.x = -iSpeed;
         }
         
@@ -49,7 +49,7 @@ class Pellet extends FlxSprite
     
     public var wasfalling : Float = 0;
     public var wastraveling : Float = 0;
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (isTouching(FLOOR))
         {
@@ -94,12 +94,12 @@ class Pellet extends FlxSprite
         
         if (velocity.x < 0)
         {
-            facing = LEFT;
+            facing = Content.LEFT;
         }
         
         if (velocity.x > 0)
         {
-            facing = RIGHT;
+            facing = Content.RIGHT;
         }
         
         if (velocity.y == 0)

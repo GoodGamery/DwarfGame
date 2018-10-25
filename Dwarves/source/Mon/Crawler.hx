@@ -46,14 +46,14 @@ class Crawler extends Monster
         
         iDir = Content.RIGHT;
         
-        facing = RIGHT;  // so that it doesn't mirror  
+        facing = Content.RIGHT;  // so that it doesn't mirror  
         
         bDiesInSpikes = false;
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
     }
     
     override public function HitDeadArrow(arrow : Arrow) : Bool

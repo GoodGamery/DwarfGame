@@ -3,6 +3,7 @@ package map;
 import flash.utils.ByteArray;
 import map.Biome;
 import flash.net.FileReference;
+import openfl.Assets;
 
 @:final class MiracleManager
 {
@@ -13,8 +14,8 @@ import flash.net.FileReference;
     {
         arrayMiracles.splice(0, arrayMiracles.length);
         
-        LoadMiraclesFrom(try cast(new Content.cMiracles(), ByteArray) catch(e:Dynamic) null, 1);
-        LoadMiraclesFrom(try cast(new Content.cMiraclesGame1(), ByteArray) catch(e:Dynamic) null, 0);
+        LoadMiraclesFrom(Assets.getText("assets/data/miracles.txt"), 1);
+        LoadMiraclesFrom(Assets.getText("assets/data/miracles_game1.txt"), 0);
         
         trace("._.-`* MIRACLES LOADED: " + Std.string(arrayMiracles.length));
     }

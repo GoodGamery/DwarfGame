@@ -2,6 +2,7 @@ import flash.geom.Rectangle;
 import flixel.*;
 import flixel.math.FlxRect;
 import particles.*;
+import flixel.system.FlxSound;
 
 class Arrow extends FlxSprite
 {
@@ -12,6 +13,8 @@ class Arrow extends FlxSprite
     public var bBouncing : Bool = false;
     public var iDir : Int = 0;
     public var rectEffective : FlxRect;
+
+    private var soundTing : FlxSound;
     
     public function new(p : PlayState, X : Int, Y : Int, bRight : Bool, direction : Int)
     {
@@ -21,7 +24,7 @@ class Arrow extends FlxSprite
         
         loadGraphic(Content.cArrow, true, 30, 30);
         
-        
+        soundTing = FlxG.sound.load(AssetPaths.ting__mp3, Content.volumeTing);
         
         this.x = X;
         this.y = Y;
@@ -175,9 +178,9 @@ class Arrow extends FlxSprite
     
     public function Bounce(hhit : Int, vhit : Int) : Void
     {
-        this.play("bounce");
+        this.animation.play("bounce");
         
-        FlxG.play(Content.soundTing, Content.volumeTing, false, false, Content.nDefaultSkip);
+        soundTing.play();
         
         var nUpBounceSpeed : Float = 0.35;
         var nDownBounceSpeed : Float = 0.1;
@@ -350,21 +353,8 @@ class Arrow extends FlxSprite
                     {
                         yy = this.y + Util.Random(-3, 3);
                     }
-                    
-                    var toadd : Bub = null;
-                    
-                    toadd = try cast(Util.GetInvisibleSpriteByName(parent.arrayParticles, "Bub"), Bub) catch(e:Dynamic) null;
-                    
-                    if (toadd == null)
-                    {
-                        toadd = new Bub(this.parent, Math.floor(xx), Math.floor(yy), nDir, nSpeed);
-                        parent.arrayParticles.push(toadd);
-                        parent.groupParticles.add(toadd);
-                    }
-                    else
-                    {
-                        toadd.Reuse(Math.floor(xx), Math.floor(yy), nDir, nSpeed);
-                    }
+
+                    parent.MakeBub(Math.floor(xx), Math.floor(yy), nDir, nSpeed);
                 }
             }
         }

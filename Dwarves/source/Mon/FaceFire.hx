@@ -46,15 +46,15 @@ class FaceFire extends Monster
         cast((false), Pause);
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
         acceleration.y = 0;
     }
     
     override public function UpdateMovement() : Void
     {
-        if (facing == LEFT)
+        if (facing == Content.LEFT)
         {
             width = 10;
             height = 10;
@@ -62,7 +62,7 @@ class FaceFire extends Monster
             offset.y = 45;
             this.velocity.x = -iRunSpeed;
         }
-        else if (facing == RIGHT)
+        else if (facing == Content.RIGHT)
         {
             width = 10;
             height = 10;
@@ -74,11 +74,11 @@ class FaceFire extends Monster
     
     override public function UpdateWallBonk() : Void
     {
-        if (facing == LEFT && isTouching(LEFT))
+        if (facing == Content.LEFT && isTouching(LEFT))
         {
             Slay();
         }
-        else if (facing == RIGHT && isTouching(RIGHT))
+        else if (facing == Content.RIGHT && isTouching(RIGHT))
         {
             Slay();
         }

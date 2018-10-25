@@ -29,7 +29,7 @@ class Twinkle extends FlxSprite
         play("twinkling", true);
     }
     
-    override public function update() : Void
+    override public function update(elapsed : Float) : Void
     {
         if (_curFrame == 11)
         {
