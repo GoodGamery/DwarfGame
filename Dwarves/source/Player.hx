@@ -66,6 +66,9 @@ class Player extends FlxSprite
     private var _soundJump : FlxSound;
     private var _soundSwim : FlxSound;
 
+    // TODO: This isn't hooked up to anything yet
+    private var _flickerTimer : Float;
+
     public function new(p : PlayState, X : Float, Y : Float, spriteBow : FlxSprite)
     {
         parent = p;
@@ -263,10 +266,12 @@ class Player extends FlxSprite
         
         iLastFluid = fluid;
         iLastOvertile = overtile;
+        var ycheck : Int = 0;
+        var xcheck : Int = 0;
         if (parent != null && parent.level != null)
         {
-            var xcheck : Int = Math.floor(this.x + (this.width / 2) / 30);
-            var ycheck : Int = Math.floor(this.y + (this.height / 2) / 30);
+            xcheck = Math.floor(this.x + (this.width / 2) / 30);
+            ycheck = Math.floor(this.y + (this.height / 2) / 30);
             
             overtile = Math.floor(parent.level.getTile(xcheck, ycheck) % Content.iFrontSheetWidth);
             var below : Int = Math.floor(parent.level.getTile(xcheck, ycheck + 1) % Content.iFrontSheetWidth);
@@ -304,11 +309,13 @@ class Player extends FlxSprite
         {
             if (facing == Content.LEFT)
             {
-                parent.groupParticles.recycle(Splash, null, true).Reuse(Math.floor(this.x - 8), Math.floor((ycheck - 1) * 30));
+                parent.groupParticles.recycle(Splash, null, true)
+                    .Reuse(Math.floor(this.x - 8), Math.floor((ycheck - 1) * 30));
             }
             else
             {
-                parent.groupParticles.recycle(Splash, null, true).Reuse(Math.floor(this.x - 4), Math.floor((ycheck - 1) * 30));
+                parent.groupParticles.recycle(Splash, null, true)
+                    .Reuse(Math.floor(this.x - 4), Math.floor((ycheck - 1) * 30));
             }
             
             _soundSplash.play(true, Content.nDefaultSkip);
@@ -400,7 +407,7 @@ class Player extends FlxSprite
             drag.x = maxVelocity.x * 300;
             drag.y = maxVelocity.y * 300;
             
-            if (isTouching(FLOOR) && fluid == 0)
+            if (isTouching(Content.DOWN) && fluid == 0)
             {
                 bWasWindJump = false;
                 bInAir = false;
@@ -530,19 +537,19 @@ class Player extends FlxSprite
             }
             
             
-            if (!isTouching(FLOOR) && bShooting && bDownButton && Content.stats.bHasWindJump && fluid == 0 && bWasWindJump == false)
+            if (!isTouching(Content.DOWN) && bShooting && bDownButton && Content.stats.bHasWindJump && fluid == 0 && bWasWindJump == false)
             {
                 bWasWindJump = true;
                 Jump();
             }
-            else if (!isTouching(FLOOR) && bShooting && bDownButton && fluid == 0)
+            else if (!isTouching(Content.DOWN) && bShooting && bDownButton && fluid == 0)
             {
                 if (velocity.y >= Content.stats.nSlowThreshold)
                 {
                     velocity.y = Content.stats.nSlowThreshold;
                 }
             }
-            else if ((isTouching(FLOOR) && fluid == 0) || fluid == 1)
+            else if ((isTouching(Content.DOWN) && fluid == 0) || fluid == 1)
             {
                 if (bJumpButton && bJumpRecharged)
                 {
@@ -652,7 +659,7 @@ class Player extends FlxSprite
             
             var shotted : Bool = bow.animation.name.substr(0, 5) == "shoot";
             
-            if ((shotted && bow.frameIndex == 3) || !shotted)
+            if ((shotted && bow.animation.frameIndex == 3) || !shotted)
             {
                 if (iDir == -1)
                 {
@@ -732,7 +739,7 @@ class Player extends FlxSprite
                 }
                 
                 /*
-					if (isTouching(FLOOR) && fluid == 0 && bDownButton)//&& bJumpRecharged)
+					if (isTouching(Content.DOWN) && fluid == 0 && bDownButton)//&& bJumpRecharged)
 					{
 						Jump();
 						iDir = 1;
