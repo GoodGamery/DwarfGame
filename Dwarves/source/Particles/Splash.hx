@@ -6,10 +6,8 @@ class Splash extends Particle
 {
     public function new(p : PlayState, X : Int, Y : Int)
     {
-        super(X, Y);
-        loadGraphic(Content.cSplash, true, true, 30, 60);
-        
-        strName = "Splash";
+        super(p, X, Y);
+        loadGraphic(Content.cSplash, true, 30, 60);
         
         animation.add("s", [0, 1, 2, 3, 4, 5], 15, false);
         playDefaultAnimation();

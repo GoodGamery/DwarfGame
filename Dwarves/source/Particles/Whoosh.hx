@@ -8,10 +8,10 @@ class Whoosh extends Particle
     public var nSpeed : Float = 0;
     public function new(p : PlayState, X : Int, Y : Int, dir : Float, sp : Float)
     {
-        super(X, Y);
+        super(p, X, Y);
         loadGraphic(Content.cParticle, true, true, 30, 30);
         
-        addAnimation("w", [16, 17, 18, 19, 20], 13, false);
+        animation.add("w", [16, 17, 18, 19, 20], 13, false);
         playDefaultAnimation();
         
         nDirection = dir;

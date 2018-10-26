@@ -4,23 +4,20 @@ import flixel.*;
 
 class Bub extends Particle
 {
-    public var nDirection : Float = 0;
-    public var nSpeed : Float = 0;
     public var parent : PlayState = null;
     public var nLife : Float = 0;
     
     public function new(p : PlayState, X : Int, Y : Int, dir : Float, sp : Float)
     {
+        super(p, X, Y);
+
         parent = p;
         
-        super(X, Y);
-        loadGraphic(Content.cParticle, true, true, 30, 30);
+        loadGraphic(Content.cParticle, true, 30, 30);
         
         animation.add("b", [8], 4, true);
         playDefaultAnimation();
         
-        nDirection = dir;
-        nSpeed = sp;
         
         AngleToCartSpeed();
         
@@ -31,9 +28,9 @@ class Bub extends Particle
         animation.play("b", true);
     }
     
-    override public function Reuse(X : Int, Y : Int, dir : Float, sp : Float) : Void
+    override public function Reuse(X : Int, Y : Int, ?dir : Float = 0, ?sp : Float = 0) : Void
     {
-        super.Reuse(X, Y)
+        super.Reuse(X, Y, dir, sp);
         nLife = Util.Random(100, 300) / 100;
         nDirection = dir;
         nSpeed = sp;
@@ -56,10 +53,10 @@ class Bub extends Particle
         
         if (parent != null && parent.level != null)
         {
-            var xcheck : Int = as3hx.Compat.parseInt(this.x + 2 / 30);
-            var ycheck : Int = as3hx.Compat.parseInt(this.y + 2 / 30);
+            var xcheck : Int = Math.floor(this.x + 2 / 30);
+            var ycheck : Int = Math.floor(this.y + 2 / 30);
             
-            overtile = as3hx.Compat.parseInt(parent.level.getTile(xcheck, ycheck) % Content.iFrontSheetWidth);
+            overtile = (parent.level.getTile(xcheck, ycheck) % Content.iFrontSheetWidth);
             
             if (overtile == Content.iWater || overtile == Content.iWaterGrass || overtile == Content.iWaterSpikes)
             {

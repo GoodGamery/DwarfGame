@@ -2,7 +2,7 @@ package particles;
 
 import flixel.*;
 
-class Particle extends Particle
+class Particle extends FlxSprite
 {
     public var nDirection : Float = 0;
     public var nSpeed : Float = 0;
@@ -12,14 +12,14 @@ class Particle extends Particle
         super(X, Y);
     }
     
-    public function Reuse(X : Int, Y : Int) : Void
+    public function Reuse(X : Int, Y : Int, ?dir : Float = 0, ?sp : Float = 0) : Void
     {
-        this.revive();
-        
         this.x = X;
         this.y = Y;
-        
-        playDefaultAnimation();
+        this.nDirection = dir;
+        this.nSpeed = sp;
+        this.revive();
+        this.playDefaultAnimation();
     }
 
     public function playDefaultAnimation() {
