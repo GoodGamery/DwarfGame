@@ -259,7 +259,7 @@ import flixel.FlxG;
                     w = 1;
                     while (w < Content.numbiomes + 1)
                     {
-                        Content.biomes[w - 1], Biome) catch(e:Dynamic) null).overlays[i - 6] = Std.string(line[w]);
+                        Content.biomes[w - 1].overlays[i - 6] = Std.string(line[w]);
                         w++;
                     }
                 }
@@ -272,7 +272,7 @@ import flixel.FlxG;
                     w = 1;
                     while (w < Content.numbiomes + 1)
                     {
-                        Content.biomes[w - 1], Biome) catch(e:Dynamic) null).bounds[i - 16] = Std.string(line[w]);
+                        Content.biomes[w - 1].bounds[i - 16] = Std.string(line[w]);
                         w++;
                     }
                 }
@@ -340,7 +340,7 @@ import flixel.FlxG;
         switch (strMusic)
         {
             case "happy":
-                PlayMusicData(AssetPaths.song_happy__mp3 Content.soundSongHappy, Content.volumeSongHappy, Content.nDefaultMusicSkip + 50, PlayMusic, false, 50);
+                PlayMusicData(AssetPaths.song_happy__mp3, Content.volumeSongHappy, Content.nDefaultMusicSkip + 50, PlayMusic, false, 50);
                 return;
             case "turtle":
                 PlayMusicData(AssetPaths.song_turtle__mp3, Content.volumeSongTurtle, Content.nDefaultMusicSkip, PlayMusic, false);

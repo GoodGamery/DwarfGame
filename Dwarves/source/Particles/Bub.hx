@@ -2,7 +2,7 @@ package particles;
 
 import flixel.*;
 
-class Bub extends FlxSprite
+class Bub extends Particle
 {
     public var nDirection : Float = 0;
     public var nSpeed : Float = 0;
@@ -13,90 +13,75 @@ class Bub extends FlxSprite
     {
         parent = p;
         
-        super(30, 30);
+        super(X, Y);
         loadGraphic(Content.cParticle, true, true, 30, 30);
         
-        strName = "Bub";
+        animation.add("b", [8], 4, true);
+        playDefaultAnimation();
         
-        addAnimation("b", [8], 4, true);
-        play("b");
-        
-        this.x = X;
-        this.y = Y;
         nDirection = dir;
         nSpeed = sp;
         
         AngleToCartSpeed();
         
         nLife = Util.Random(100, 300) / 100;
-        
-        update();
+    }
+
+    override public function playDefaultAnimation() {
+        animation.play("b", true);
     }
     
-    public function Reuse(X : Int, Y : Int, dir : Float, sp : Float) : Void
+    override public function Reuse(X : Int, Y : Int, dir : Float, sp : Float) : Void
     {
+        super.Reuse(X, Y)
         nLife = Util.Random(100, 300) / 100;
-        visible = true;
-        this.x = X;
-        this.y = Y;
         nDirection = dir;
         nSpeed = sp;
-        play("b", true);
         AngleToCartSpeed();
-    }
-    
-    public function AngleToCartSpeed() : Void
-    {
-        var rads : Float = nDirection * (Math.PI / 180);
-        velocity.x = nSpeed * Math.cos(rads);
-        velocity.y = nSpeed * Math.sin(rads);
     }
     
     override public function update(elapsed : Float) : Void
     {
-        if (visible)
+        velocity.x *= 0.99;
+        
+        nLife -= elapsed;
+        if (nLife < 0)
         {
-            velocity.x *= 0.99;
+            kill();
+            return;
+        }
+        
+        var overtile : Int = -1;
+        var fluid : Int = -1;
+        
+        if (parent != null && parent.level != null)
+        {
+            var xcheck : Int = as3hx.Compat.parseInt(this.x + 2 / 30);
+            var ycheck : Int = as3hx.Compat.parseInt(this.y + 2 / 30);
             
-            nLife -= FlxG.elapsed;
-            if (nLife < 0)
+            overtile = as3hx.Compat.parseInt(parent.level.getTile(xcheck, ycheck) % Content.iFrontSheetWidth);
+            
+            if (overtile == Content.iWater || overtile == Content.iWaterGrass || overtile == Content.iWaterSpikes)
             {
-                this.visible = false;
-                return;
+                fluid = 2;
+            }
+            else if (overtile == Content.iShallow || overtile == Content.iShallowGrass || overtile == Content.iShallowSpikes)
+            {
+                fluid = 1;
+            }
+            else
+            {
+                fluid = 0;
             }
             
-            var overtile : Int = -1;
-            var fluid : Int = -1;
-            
-            if (parent != null && parent.level != null)
+            if (fluid == 1 && this.y % 30 < 8)
             {
-                var xcheck : Int = as3hx.Compat.parseInt(this.x + 2 / 30);
-                var ycheck : Int = as3hx.Compat.parseInt(this.y + 2 / 30);
-                
-                overtile = as3hx.Compat.parseInt(parent.level.getTile(xcheck, ycheck) % Content.iFrontSheetWidth);
-                
-                if (overtile == Content.iWater || overtile == Content.iWaterGrass || overtile == Content.iWaterSpikes)
-                {
-                    fluid = 2;
-                }
-                else if (overtile == Content.iShallow || overtile == Content.iShallowGrass || overtile == Content.iShallowSpikes)
-                {
-                    fluid = 1;
-                }
-                else
-                {
-                    fluid = 0;
-                }
-                
-                if (fluid == 1 && this.y % 30 < 8)
-                {
-                    this.y = this.y - (this.y % 30) + 8;
-                    velocity.y = 0;
-                }
-                else if (fluid == 0)
-                {
-                    this.visible = false;
-                }
+                this.y = this.y - (this.y % 30) + 8;
+                velocity.y = 0;
+            }
+            else if (fluid == 0)
+            {
+                kill();
             }
         }
     }

@@ -2,38 +2,26 @@ package particles;
 
 import flixel.*;
 
-class Twinkle extends FlxSprite
+class Twinkle extends Particle
 {
-    
     public function new(p : PlayState, X : Int, Y : Int)
     {
-        super(1, 1);
+        super(X, Y);
         loadGraphic(Content.cTwinkle, true, true, 1, 1);
-        
-        strName = "Twinkle";
-        
-        this.x = X;
-        this.y = Y;
-        
-        addAnimation("twinkling", [0, 1, 2, 3, 4, 4, 5, 5, 6, 7, 8, 9], 10, false);
-        play("twinkling");
-    }
     
-    public function Reuse(X : Int, Y : Int) : Void
-    {
-        visible = true;
-        
-        this.x = X;
-        this.y = Y;
-        
-        play("twinkling", true);
+        animation.add("twinkling", [0, 1, 2, 3, 4, 4, 5, 5, 6, 7, 8, 9], 10, false);
+        playDefaultAnimation();
+    }
+
+    override public function playDefaultAnimation() {
+        animation.play("twinkling", true);
     }
     
     override public function update(elapsed : Float) : Void
     {
-        if (_curFrame == 11)
+        if (this.animation.frameIndex == 11)
         {
-            this.visible = false;
+            this.kill();
         }
     }
 }

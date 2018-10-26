@@ -1890,7 +1890,8 @@ class Zone
                     iterations = rightentrances.length;
                 }
                 
-                for (var i : Int = 0; i < iterations; ++i)
+                var i : Int = 0;
+                while (i < iterations)
                 {
                     dirx = Math.floor(-1 + (side * 2));  // i.e., -1 for left, +1 for right  
                     diry = 0;
@@ -2017,6 +2018,7 @@ class Zone
                         iterations--;
                         i--;
                     }
+                    ++i
                 }
             }
             

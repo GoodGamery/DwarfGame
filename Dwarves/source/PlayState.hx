@@ -64,7 +64,7 @@ class PlayState extends FlxState
     public var groupArrows : FlxSpriteGroup = null;
     public var arrayPellets : Array<Dynamic> = null;
     public var groupPellets : FlxSpriteGroup = null;
-    public var groupParticles : FlxSpriteGroup = null;
+    public var groupParticles : FlxTypedSpriteGroup<Particle> = null;
     public var groupMonsters : FlxSpriteGroup = null;
     public var groupFrontMonsters : FlxSpriteGroup = null;
     public var arrayGrunts : Array<Dynamic> = null;
@@ -1009,9 +1009,9 @@ class PlayState extends FlxState
         }
         
         level = new FlxTilemap();
-        level.loadMap(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        level.loadMapFromCSV(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         interim_level = new FlxTilemap();
-        interim_level.loadMap(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        interim_level.loadMapFromCSV(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         
         colTransLevel = zone.description.levelColor;
         
@@ -1019,21 +1019,21 @@ class PlayState extends FlxState
         
         
         lillevel = new FlxTilemap();
-        lillevel.loadMap(blankstr, Content.cLilCave, 1, 1, FlxTilemap.OFF, 0, 0, Content.barriertile);
+        lillevel.loadMapFromCSV(blankstr, Content.cLilCave, 1, 1, FlxTilemap.OFF, 0, 0, Content.barriertile);
         
         
         wall = new FlxTilemap();
-        wall.loadMap(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
+        wall.loadMapFromCSV(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
         
         interim_wall = new FlxTilemap();
-        interim_wall.loadMap(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
+        interim_wall.loadMapFromCSV(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
         
         wall._tiles.colorTransform(new Rectangle(0, 0, wall.widthInTiles, wall.heightInTiles), colTransLevel);
         
         wallpaper = new FlxTilemap();
-        wallpaper.loadMap(tempstr, Content.cWallpaper, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        wallpaper.loadMapFromCSV(tempstr, Content.cWallpaper, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         facade = new FlxTilemap();
-        facade.loadMap(tempstr, Content.cFacade, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        facade.loadMapFromCSV(tempstr, Content.cFacade, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         
         add(wall);
         add(wallpaper);
@@ -1080,12 +1080,12 @@ class PlayState extends FlxState
         
         
         
-        groupDoors = new FlxGroup();
+        groupDoors = new FlxSpriteGroup();
         var e : Int = 0;
         while (e < zone.exits.length)
         {
             groupDoors.add(new FlxSprite(zone.exits[e].x * 30, (zone.exits[e].y * 30) - 30));
-            groupDoors.members[e].loadGraphic(Content.cDoors, true, false, 30, 60, false);
+            groupDoors.members[e].loadGraphic(Content.cDoors, true, 30, 60, false);
             groupDoors.members[e].animation.add("d", [zone.exits[e].id], 1, true);
             groupDoors.members[e].animation.play("d");
             e++;
@@ -1095,8 +1095,7 @@ class PlayState extends FlxState
         FlxG.worldBounds.width = level.width;
         FlxG.worldBounds.height = level.height;
         
-        var gemrandom : FlxRandom = new FlxRandom(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
-        gemrandom.shuffle(9);
+        var gemrandom : FlxRandom = new FlxRandom(9 + Util.Seed(Math.floor(zone.description.mynexus.x), Math.floor(zone.description.mynexus.y)));
         
         xx = 0;
         while (xx < level.widthInTiles)
@@ -1111,7 +1110,7 @@ class PlayState extends FlxState
                     var ywig : Int = Math.floor(gemrandom.int(0, 12) - 6);
                     
                     arrayAllGems.push(new Collectible(this, gem - 1, (xx * 30) + 10 + xwig, (yy * 30) + 10 + ywig));
-                    this.addarrayAllGems[arrayAllGems.length - 1];
+                    this.add(arrayAllGems[arrayAllGems.length - 1]);
                     lillevel.setTile(xx, yy, 5, true);
                     
                     arrayAllGems[arrayAllGems.length - 1].animation.play("d");
@@ -1155,12 +1154,13 @@ class PlayState extends FlxState
 						//break;
 				//	}
 				//}
-			}*/
+			}
+        */
         
         ProperTiles(zone.description.style, 0, 0, level.widthInTiles, level.heightInTiles);
         
-        var arrayPeppers : Array<Dynamic> = new Array<Dynamic>();
-        
+        var arrayPeppers : Array<PointPlus> = new Array<PointPlus>();
+        var yy : Int = 0;
         xx = 0;
         while (xx < level.widthInTiles)
         {
@@ -1199,9 +1199,7 @@ class PlayState extends FlxState
         
         var variant : Int = 0;
         var iPeppers : Int = arrayPeppers.length;
-        var peprandom : FlxRandom = new FlxRandom(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
-        
-        peprandom.shuffle(5);
+        var peprandom : FlxRandom = new FlxRandom(5 + Util.Seed(Math.floor(zone.description.mynexus.x), Math.floor(zone.description.mynexus.y)));
         
         if (zone.description.style == Content.MEADOW)
         {
@@ -1553,10 +1551,10 @@ class PlayState extends FlxState
         }
         this.add(groupMonsters);
         
-        groupPellets = new FlxGroup();
+        groupPellets = new FlxSpriteGroup();
         this.add(groupPellets);
         
-        groupParticles = new FlxGroup();
+        groupParticles = new  FlxTypedSpriteGroup<Particle>();
         this.add(groupParticles);
         
         var splash : Splash = new Splash(this, 0, 0);
@@ -4314,12 +4312,17 @@ If 11 and water, 13
                     }
                 }
                 
-                groupParticles.recycle(Class<Twinkle>, null, true, true).Reuse(x, y);
+                groupParticles.recycle(Twinkle, null, true, true).Reuse(x, y);
                 i++;
             }
         }
     }
-    
+
+    public function MakeBub(x : Int, y : Int, dir : Float, sp : Float) : Void
+    {
+        groupParticles.recycle(Bub, null, true, true).Reuse(x, y, dir, sp);
+    }
+
     public function UpdateBreathBubs() : Void
     {
         var x : Int = 0;
@@ -4352,11 +4355,6 @@ If 11 and water, 13
                 }
             }
         }
-    }
-    
-    public function MakeBub(x : Int, y : Int, dir : Float, sp : Float) : Void
-    {
-        groupParticles.recycle(Class<Bub>, null, true, true).Reuse(x, y, dir, sp);
     }
     
     public function UpdateDoorBubs() : Void
@@ -4408,7 +4406,7 @@ If 11 and water, 13
                 lillevel.setTile(tilex, tiley, 1);
                 
                 // Set "collected" profile miracle
-                MiracleManager.SetOverride(new Miracle(zone.description.coords.x, zone.description.coords.y, tilex, tiley, 0, "", 
+                MiracleManager.SetOverride(new Miracle(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y), tilex, tiley, 0, "", 
                         0));
                 
                 
@@ -4416,7 +4414,7 @@ If 11 and water, 13
                 
                 if (name == "+1 Pip")
                 {
-                    FlxG.sound.play(Content.soundPip, Content.volumePip, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(AssetPaths.pip__mp3, Content.volumePip, false, false, Content.nDefaultSkip);
                     Content.stats.ChangeItem("pip", 1);
                 }
                 else if (name == "+3 Pips")
@@ -4937,7 +4935,7 @@ If 11 and water, 13
         for (i in 0...splode)
         {
             var spd : Float = Util.Random(40, 100);
-            groupParticles.recycle(Class<Puff>, null, true, true).Reuse(x, y, ((360 / splode) * i) + rot, spd, row);
+            groupParticles.recycle(Puff, null, true, true).Reuse(x, y, ((360 / splode) * i) + rot, spd, row);
         }
     }
     

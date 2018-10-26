@@ -563,7 +563,7 @@ class Monster extends FlxSprite
     public var speedrecover : Int = 5;
     public function UpdateMovement() : Void
     {
-        if (isTouching(FLOOR))
+        if (isTouching(Content.DOWN))
         {
             if (facing == Content.LEFT)
             {
@@ -592,12 +592,12 @@ class Monster extends FlxSprite
     
     public function UpdateWallBonk() : Void
     {
-        if (facing == Content.LEFT && isTouching(LEFT))
+        if (facing == Content.LEFT && isTouching(Content.LEFT))
         {
             velocity.x = iRunSpeed;
             facing = Content.RIGHT;
         }
-        else if (facing == Content.RIGHT && isTouching(RIGHT))
+        else if (facing == Content.RIGHT && isTouching(Content.RIGHT))
         {
             velocity.x = -iRunSpeed;
             facing = Content.LEFT;
@@ -606,7 +606,7 @@ class Monster extends FlxSprite
     
     public function UpdateAcrophobia() : Void
     {
-        if (isTouching(FLOOR))
+        if (isTouching(Content.DOWN))
         {
             if (facing == Content.LEFT)
             {

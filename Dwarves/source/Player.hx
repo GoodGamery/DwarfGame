@@ -6,6 +6,7 @@ import particles.Splash;
 import hud.Grunt;
 import flixel.text.FlxText;
 import flixel.util.FlxSpriteUtil;
+import flixel.system.FlxSound;
 
 // Adds flicker
 using flixel.util.FlxSpriteUtil;
@@ -59,7 +60,11 @@ class Player extends FlxSprite
 
     public var _bDangerFlicker : Bool = false;
 
-    private var _currentAnimation : String = "";
+    private var _soundHurt : FlxSound;
+    private var _soundSplash : FlxSound;
+    private var _soundArrow : FlxSound;
+    private var _soundJump : FlxSound;
+    private var _soundSwim : FlxSound;
 
     public function new(p : PlayState, X : Float, Y : Float, spriteBow : FlxSprite)
     {
@@ -67,6 +72,12 @@ class Player extends FlxSprite
         
         super(X, Y);
         
+        _soundHurt = FlxG.sound.load(AssetPaths.hurt__mp3);
+        _soundSplash = FlxG.sound.load(AssetPaths.splash__mp3);
+        _soundArrow = FlxG.sound.load(AssetPaths.arrow__mp3);
+        _soundJump = FlxG.sound.load(AssetPaths.jump__mp3);
+        _soundSwim = FlxG.sound.load(AssetPaths.swim__mp3);
+
         loadGraphic(Content.cHero, true, 100, 100);
         
         bow = spriteBow;
@@ -173,7 +184,7 @@ class Player extends FlxSprite
         }
         else
         {
-            FlxG.play(Content.soundHurt, Content.volumeHurt, false, false);
+            _soundHurt.play(true);
         }
     }
     
@@ -293,14 +304,14 @@ class Player extends FlxSprite
         {
             if (facing == Content.LEFT)
             {
-                parent.groupParticles.recycle(Class<Splash>, null, true, true).Reuse(Math.floor(this.x - 8), Math.floor((ycheck - 1) * 30)
+                parent.groupParticles.recycle(Splash, null, true).Reuse(Math.floor(this.x - 8), Math.floor((ycheck - 1) * 30));
             }
             else
             {
-                parent.groupParticles.recycle(Class<Splash>, null, true, true).Reuse(Math.floor(this.x - 4), Math.floor((ycheck - 1) * 30)
+                parent.groupParticles.recycle(Splash, null, true).Reuse(Math.floor(this.x - 4), Math.floor((ycheck - 1) * 30));
             }
             
-            FlxG.play(Content.soundSplash, Content.volumeSplash, false, false, Content.nDefaultSkip);
+            _soundSplash.play(true, Content.nDefaultSkip);
             
             nBubbliness = 1;
         }
@@ -676,7 +687,7 @@ class Player extends FlxSprite
 				}
 				else*/if (bShooting)
             {
-                FlxG.play(Content.soundArrow, Content.volumeArrow, false, false, Content.nDefaultSkip);
+                _soundArrow.play(true, Content.nDefaultSkip);
                 
                 if (iDir != 0)
                 {
@@ -820,17 +831,16 @@ class Player extends FlxSprite
     
     public function GetCurrentAnim() : String
     {
-        return this._currentAnimation;
+        return this.animation.name;
     }
 
     public function PlayAnim(anim : String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
-        this._currentAnimation = anim;
         this.animation.play(anim, force, reversed, frame);
     }
 
     private function Jump() : Void
     {
-        FlxG.play(Content.soundJump, Content.volumeJump, false, false, Content.nDefaultSkip);
+        _soundJump.play(true, Content.nDefaultSkip);
         
         bJumpCanBeCut = true;
         
@@ -851,7 +861,7 @@ class Player extends FlxSprite
     {
         if (bSwimSound == false)
         {
-            FlxG.play(Content.soundSwim, Content.volumeSwim, false, false, 120);
+            _soundSwim.play(true, 120);
         }
         bSwimSound = true;
     }

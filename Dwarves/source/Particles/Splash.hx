@@ -2,36 +2,28 @@ package particles;
 
 import flixel.*;
 
-class Splash extends FlxSprite
+class Splash extends Particle
 {
-    
     public function new(p : PlayState, X : Int, Y : Int)
     {
-        super(30, 60);
+        super(X, Y);
         loadGraphic(Content.cSplash, true, true, 30, 60);
         
         strName = "Splash";
         
-        this.x = X;
-        this.y = Y;
-        
-        addAnimation("s", [0, 1, 2, 3, 4, 5], 15, false);
-        play("s");
+        animation.add("s", [0, 1, 2, 3, 4, 5], 15, false);
+        playDefaultAnimation();
     }
-    
-    public function Reuse(X : Int, Y : Int) : Void
-    {
-        x = X;
-        y = Y;
-        play("s", true);
-        visible = true;
+
+    override public function playDefaultAnimation() {
+        animation.play("s", true);
     }
     
     override public function update(elapsed : Float) : Void
     {
-        if (_curFrame == 5)
+        if (this.animation.frameIndex == 5)
         {
-            this.visible = false;
+            this.kill();
         }
     }
 }

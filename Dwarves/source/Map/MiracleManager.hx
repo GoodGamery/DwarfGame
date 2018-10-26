@@ -20,10 +20,8 @@ import openfl.Assets;
         trace("._.-`* MIRACLES LOADED: " + Std.string(arrayMiracles.length));
     }
     
-    public static function LoadMiraclesFrom(bytes : ByteArray, universal : Int) : Void
-    {
-        var s : String = bytes.readUTFBytes(bytes.length);
-        
+    public static function LoadMiraclesFrom(s : String, universal : Int) : Void
+    {        
         var lines : Array<Dynamic> = s.split("\n");
         
         var i : Int = 0;

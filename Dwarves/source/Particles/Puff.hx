@@ -3,10 +3,8 @@ package particles;
 import flixel.*;
 import flixel.system.FlxAnim;
 
-class Puff extends FlxSprite
+class Puff extends Particle
 {
-    public var nDirection : Float = 0;
-    public var nSpeed : Float = 0;
     public function new(p : PlayState, X : Int, Y : Int, dir : Float, sp : Float, row : Int)
     {
         super(30, 30);
@@ -18,39 +16,33 @@ class Puff extends FlxSprite
         this.y = Y;
         
         addAnimation("exploding", [0 + (row * 8), 1 + (row * 8), 2 + (row * 8), 3 + (row * 8), 4 + (row * 8), 5 + (row * 8), 6 + (row * 8), 7 + (row * 8)], 15, false);
-        play("exploding");
+        playDefaultAnimation();
         
         nDirection = dir;
         nSpeed = sp;
         
         AngleToCartSpeed();
     }
+
+    override public function playDefaultAnimation() {
+        animation.play("exploding", true);
+    }
     
-    public function Reuse(X : Int, Y : Int, dir : Float, sp : Float, row : Int) : Void
+    public override function Reuse(X : Int, Y : Int, dir : Float, sp : Float, row : Int) : Void
     {
-        visible = true;
+        super.Reuse(X, Y);
         
-        
-        play("exploding", true);
-        
-        this.x = X;
-        this.y = Y;
+        playDefaultAnimation();
         
         nDirection = dir;
         nSpeed = sp;
         
-        (try cast(this._animations[0], FlxAnim) catch(e:Dynamic) null).frames = [0 + (row * 8), 1 + (row * 8), 2 + (row * 8), 3 + (row * 8), 4 + (row * 8), 5 + (row * 8), 6 + (row * 8), 7 + (row * 8)];
+        // This doesn't work any more
+        // this._animations[0].frames = [0 + (row * 8), 1 + (row * 8), 2 + (row * 8), 3 + (row * 8), 4 + (row * 8), 5 + (row * 8), 6 + (row * 8), 7 + (row * 8)];
         
         AngleToCartSpeed();
     }
-    
-    public function AngleToCartSpeed() : Void
-    {
-        var rads : Float = nDirection * (Math.PI / 180);
-        velocity.x = nSpeed * Math.cos(rads);
-        velocity.y = nSpeed * Math.sin(rads);
-    }
-    
+
     override public function update(elapsed : Float) : Void
     {
         if (_curFrame == 7)
