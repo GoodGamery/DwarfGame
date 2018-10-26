@@ -16,10 +16,10 @@ class Crawler extends Monster
         
         for (dir in 0...4)
         {
-            addAnimation(Std.string(dir), [24 + 0, 24 + 1, 24 + 2, 24 + 3], 6, true);
+            animation.add(Std.string(dir), [24 + 0, 24 + 1, 24 + 2, 24 + 3], 6, true);
         }
         
-        play("1");
+        animation.play("1");
         
         bAcrophobic = false;
         bWallBonk = false;

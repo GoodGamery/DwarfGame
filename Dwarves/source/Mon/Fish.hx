@@ -79,10 +79,10 @@ class Fish extends Monster
         
         
         if ((bHereShallow && bAboveNotShallow) ||
-            isTouching(FLOOR) ||
-            isTouching(CEILING) ||
-            isTouching(LEFT) ||
-            isTouching(RIGHT))
+            isTouching(Content.DOWN) ||
+            isTouching(Content.UP) ||
+            isTouching(Content.LEFT) ||
+            isTouching(Content.RIGHT))
         {
             nAngle += nChange * FlxG.elapsed;
         }
@@ -96,11 +96,11 @@ class Fish extends Monster
             facing = Content.RIGHT;
         }
         
-        if (isTouching(RIGHT))
+        if (isTouching(Content.RIGHT))
         {
             facing = Content.LEFT;
         }
-        else if (isTouching(LEFT))
+        else if (isTouching(Content.LEFT))
         {
             facing = Content.RIGHT;
         }

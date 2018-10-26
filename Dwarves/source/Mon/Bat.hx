@@ -18,10 +18,10 @@ class Bat extends Monster
     {
         super(p, "Bat", X, Y, colTrans, speedmod);
         
-        addAnimation("d", [44, 45, 46, 47], 9, true);
+        animation.add("d", [44, 45, 46, 47], 9, true);
         
         
-        play("d");
+        animation.play("d");
         
         bAcrophobic = false;
         
@@ -39,7 +39,7 @@ class Bat extends Monster
         
         //bForceHit = false;
         
-        var r : Rndm = new Rndm(x + (y * 2000));
+        var r : FlxRandom = new FlxRandom(x + (y * 2000));
         nAngle = r.integer(0, Math.PI * 200) / 100;
         
         this.health = 20;
@@ -82,11 +82,11 @@ class Bat extends Monster
             facing = Content.RIGHT;
         }
         
-        if (isTouching(RIGHT))
+        if (isTouching(Content.RIGHT))
         {
             facing = Content.LEFT;
         }
-        else if (isTouching(LEFT))
+        else if (isTouching(Content.LEFT))
         {
             facing = Content.RIGHT;
         }

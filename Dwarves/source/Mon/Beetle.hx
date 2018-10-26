@@ -12,11 +12,11 @@ class Beetle extends Monster
     {
         super(p, "Beetle", X, Y, colTrans, speedmod);
         
-        addAnimation("run", [40 + 0, 40 + 1, 40 + 2, 40 + 3], 6, true);
+        animation.add("run", [40 + 0, 40 + 1, 40 + 2, 40 + 3], 6, true);
         
         
         
-        play("run");
+        animation.play("run");
         
         bAcrophobic = true;
         

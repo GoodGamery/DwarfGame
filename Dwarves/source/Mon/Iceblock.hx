@@ -10,8 +10,8 @@ class Iceblock extends Monster
     {
         super(p, "Iceblock", X, Y, colTrans, 1);
         
-        addAnimation("d", [3], 1, true);
-        play("d");
+        animation.add("d", [3], 1, true);
+        animation.play("d");
         
         bAcrophobic = true;
         

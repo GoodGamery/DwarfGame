@@ -1269,7 +1269,7 @@ class PlayState extends FlxState
                 else
                 {
                     toadd = new FlxSprite(arrayPeppers[spot].x * 30, (arrayPeppers[spot].y * 30));
-                    toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
+                    toadd.loadGraphic(Content.cPeppers, true, 30, 30, true);
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
                     toadd.animation.add("", [zone.rand.int(0, 3) + 72], 0, true);
@@ -1281,10 +1281,10 @@ class PlayState extends FlxState
             else if (zone.description.style == Content.SWAMP)
             {
                 toadd = new FlxSprite(arrayPeppers[spot].x * 30, arrayPeppers[spot].y * 30);
-                toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
+                toadd.loadGraphic(Content.cPeppers, true, 30, 30, true);
                 toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                 
-                //variant = new Rndm(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y)).integer(0, 2);
+                //variant = new FlxRandom(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y)).integer(0, 2);
                 
                 if (variant == 0)
                 {

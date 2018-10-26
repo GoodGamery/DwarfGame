@@ -76,14 +76,14 @@ class Goblin extends Monster
     override public function UpdateWallBonk() : Void
     {
         if ((velocity.y > 0 && bTurnWhenFalling) ||
-            (bTurnWhenWalking && isTouching(FLOOR)))
+            (bTurnWhenWalking && isTouching(Content.DOWN)))
         {
-            if (facing == Content.LEFT && isTouching(LEFT))
+            if (facing == Content.LEFT && isTouching(Content.LEFT))
             {
                 velocity.x = iRunSpeed;
                 facing = Content.RIGHT;
             }
-            else if (facing == Content.RIGHT && isTouching(RIGHT))
+            else if (facing == Content.RIGHT && isTouching(Content.RIGHT))
             {
                 velocity.x = -iRunSpeed;
                 facing = Content.LEFT;
@@ -100,14 +100,14 @@ class Goblin extends Monster
         
         if (iRetreatStrat == 0)
         {
-            if (isTouching(FLOOR))
+            if (isTouching(Content.DOWN))
             {
-                if (isTouching(RIGHT))
+                if (isTouching(Content.RIGHT))
                 {
                     nImpatience += FlxG.elapsed;
                 }
                 
-                if (isTouching(LEFT))
+                if (isTouching(Content.LEFT))
                 {
                     nImpatience -= FlxG.elapsed;
                 }
@@ -162,8 +162,8 @@ class Goblin extends Monster
         
         if (iRetreatStrat == 0)
         {
-            if (isTouching(FLOOR) ||
-                (this.y > parent.hero.y && (isTouching(LEFT) || isTouching(RIGHT))))
+            if (isTouching(Content.DOWN) ||
+                (this.y > parent.hero.y && (isTouching(Content.LEFT) || isTouching(Content.RIGHT))))
             {
                 bFloorRecovered = true;
                 
@@ -228,7 +228,7 @@ class Goblin extends Monster
                 }
             }
             
-            if (bMoveOnlyWhenJumping == true && isTouching(FLOOR))
+            if (bMoveOnlyWhenJumping == true && isTouching(Content.DOWN))
             {
                 this.velocity.x = 0;
             }
@@ -243,7 +243,7 @@ class Goblin extends Monster
         }
         
         if (bMoveOnlyWhenJumping == false ||
-            (bMoveOnlyWhenJumping == true && !isTouching(FLOOR)))
+            (bMoveOnlyWhenJumping == true && !isTouching(Content.DOWN)))
         {
             if (bFloorRecovered)
             {

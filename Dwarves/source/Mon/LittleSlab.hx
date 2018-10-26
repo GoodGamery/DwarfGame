@@ -11,8 +11,8 @@ class LittleSlab extends Monster
     {
         super(p, "LittleSlab", X, Y, colTrans, speedmod);
         
-        addAnimation("d", [14, 15], 4, true);
-        play("d");
+        animation.add("d", [14, 15], 4, true);
+        animation.play("d");
         
         bAcrophobic = true;
         

@@ -712,7 +712,7 @@ class Player extends FlxSprite
                 //var xoff:int = -(30 - (this.width / 2));
                 
                 /*
-					if (!isTouching(LEFT) && !isTouching(RIGHT))
+					if (!isTouching(Content.LEFT) && !isTouching(Content.RIGHT))
 					{
 						xoff += 14;
 					}

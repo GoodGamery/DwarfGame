@@ -52,13 +52,13 @@ class Monster extends FlxSprite
             bLevelCollision = false;
             bMonsterCollision = false;
             strPrequashAnim = this.GetCurrentAnim();
-            this.play("q");
+            this.animation.play("q");
         }
         else
         {
             bLevelCollision = bOriginalLevelCollision;
             bMonsterCollision = bOriginalMonsterCollision;
-            this.play(strPrequashAnim);
+            this.animation.play(strPrequashAnim);
         }
     }
     

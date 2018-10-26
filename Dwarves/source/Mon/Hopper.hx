@@ -20,11 +20,11 @@ class Hopper extends Monster
     {
         super(p, "Hopper", X, Y, colTrans, speedmod);
         
-        addAnimation("d", [48 + 0], 1, true);
-        addAnimation("jump", [48 + 1], 1, true);
+        animation.add("d", [48 + 0], 1, true);
+        animation.add("jump", [48 + 1], 1, true);
         
         
-        play("d");
+        animation.play("d");
         
         bAcrophobic = false;
         
@@ -59,14 +59,14 @@ class Hopper extends Monster
     override public function UpdateWallBonk() : Void
     {
         if ((velocity.y > 0 && bTurnWhenFalling) ||
-            (bTurnWhenWalking && isTouching(FLOOR)))
+            (bTurnWhenWalking && isTouching(Content.DOWN)))
         {
-            if (facing == Content.LEFT && isTouching(LEFT))
+            if (facing == Content.LEFT && isTouching(Content.LEFT))
             {
                 velocity.x = iRunSpeed;
                 facing = Content.RIGHT;
             }
-            else if (facing == Content.RIGHT && isTouching(RIGHT))
+            else if (facing == Content.RIGHT && isTouching(Content.RIGHT))
             {
                 velocity.x = -iRunSpeed;
                 facing = Content.LEFT;
@@ -79,7 +79,7 @@ class Hopper extends Monster
     {
         var bJumping : Bool = false;
         
-        if (isTouching(FLOOR) || bOnMonster)
+        if (isTouching(Content.DOWN) || bOnMonster)
         {
             bFloorRecovered = true;
             
@@ -133,7 +133,7 @@ class Hopper extends Monster
         }
         
         if (bMoveOnlyWhenJumping == false ||
-            (bMoveOnlyWhenJumping == true && !isTouching(FLOOR)))
+            (bMoveOnlyWhenJumping == true && !isTouching(Content.DOWN)))
         {
             if (bFloorRecovered)
             {
@@ -162,7 +162,7 @@ class Hopper extends Monster
             }
         }
         
-        if (bMoveOnlyWhenJumping == true && isTouching(FLOOR))
+        if (bMoveOnlyWhenJumping == true && isTouching(Content.DOWN))
         {
             this.velocity.x = 0;
         }

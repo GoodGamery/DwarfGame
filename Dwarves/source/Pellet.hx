@@ -12,7 +12,7 @@ class Pellet extends FlxSprite
         
         loadGraphic(Content.cPellet, true, true, 7, 7);
         
-        addAnimation("d", [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
+        animation.add("d", [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
                 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
                 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
                 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
@@ -28,7 +28,7 @@ class Pellet extends FlxSprite
         this.x = X;
         this.y = Y;
         
-        play("d");
+        animation.play("d");
         
         if (bRight)
         {
@@ -51,7 +51,7 @@ class Pellet extends FlxSprite
     public var wastraveling : Float = 0;
     override public function update(elapsed : Float) : Void
     {
-        if (isTouching(FLOOR))
+        if (isTouching(Content.DOWN))
         {
             if (wasfalling > 3)
             {
@@ -66,7 +66,7 @@ class Pellet extends FlxSprite
             velocity.x *= 0.85;
         }
         
-        if (isTouching(LEFT))
+        if (isTouching(Content.LEFT))
         {
             if (wastraveling < 0)
             {
@@ -75,7 +75,7 @@ class Pellet extends FlxSprite
             
             velocity.x *= 0.99;
         }
-        else if (isTouching(RIGHT))
+        else if (isTouching(Content.RIGHT))
         {
             if (wastraveling > 0)
             {

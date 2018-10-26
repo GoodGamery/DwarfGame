@@ -13,10 +13,10 @@ class FaceFire extends Monster
         
         bDiesInWater = false;
         
-        //addAnimation("run", [8, 9, 10, 11], 6, true);
-        addAnimation("d", [37, 38, 39], 10, true);
+        //animation.add("run", [8, 9, 10, 11], 6, true);
+        animation.add("d", [37, 38, 39], 10, true);
         
-        play("d");
+        animation.play("d");
         
         bAcrophobic = false;
         

@@ -28,9 +28,9 @@ class FaceCrush extends Monster
         bOriginalLevelCollision = true;
         bOriginalMonsterCollision = false;
         
-        addAnimation("d", [36], 6, true);
+        animation.add("d", [36], 6, true);
         
-        play("d");
+        animation.play("d");
         
         
         //remVelocity.x = -30;
