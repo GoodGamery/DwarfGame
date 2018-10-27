@@ -51,7 +51,7 @@ class Monster extends FlxSprite
         {
             bLevelCollision = false;
             bMonsterCollision = false;
-            strPrequashAnim = this.GetCurrentAnim();
+            strPrequashAnim = this.animation.frameIndex;
             this.animation.play("q");
         }
         else
@@ -548,8 +548,8 @@ class Monster extends FlxSprite
             parent.hero.flickering == false &&
             parent.state != Content.LEAVING &&
             parent.state != Content.DEAD &&
-            parent.hero.GetCurrentAnim() != "leaving" &&
-            parent.hero.GetCurrentAnim() != "arriving")
+            parent.hero.animation.frameIndex != "leaving" &&
+            parent.hero.animation.frameIndex != "arriving")
         {
             parent.hero.Hit(nDamageDealt, this.x + (this.width / 2));
         }

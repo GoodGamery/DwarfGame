@@ -17,6 +17,8 @@ import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxRandom;
 import flixel.FlxG;
+import flixel.tile.FlxBaseTilemap;
+import flixel.FlxCamera;
 
 class PlayState extends FlxState
 {
@@ -64,7 +66,7 @@ class PlayState extends FlxState
     public var groupArrows : FlxSpriteGroup = null;
     public var arrayPellets : Array<Dynamic> = null;
     public var groupPellets : FlxSpriteGroup = null;
-    public var groupParticles : FlxSpriteGroup = null;
+    public var groupParticles : FlxTypedSpriteGroup<Particle> = null;
     public var groupMonsters : FlxSpriteGroup = null;
     public var groupFrontMonsters : FlxSpriteGroup = null;
     public var arrayGrunts : Array<Dynamic> = null;
@@ -768,7 +770,7 @@ class PlayState extends FlxState
         }
     }
 
-    private function destroyAllInGroup(group : FlxSpriteGroup) {
+    private static function destroyAllInGroup(group : FlxSpriteGroup) {
         group.forEach( function(s:FlxBasic) { s.destroy(); } );
         group.clear();
         group.destroy();
@@ -817,10 +819,14 @@ class PlayState extends FlxState
         destroyAllInGroup(groupPellets);
         destroyAllInGroup(groupMonsters);
         destroyAllInGroup(groupFrontMonsters);
-        destroyAllInGroup(groupParticles);
         destroyAllInGroup(groupGrunts);
         destroyAllInGroup(groupDoors);
         destroyAllInGroup(groupPeppers);
+
+        // TODO: Not sure how to do this generically
+        groupParticles.forEach( function(s:FlxBasic) { s.destroy(); } );
+        groupParticles.clear();
+        groupParticles.destroy();
         
         groupNearBack = null;
         groupArrows = null;
@@ -1010,31 +1016,30 @@ class PlayState extends FlxState
         }
         
         level = new FlxTilemap();
-        level.loadMapFromCSV(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        level.loadMapFromCSV(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemapAutoTiling.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         interim_level = new FlxTilemap();
-        interim_level.loadMapFromCSV(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        interim_level.loadMapFromCSV(blankstr, Content.cFronts, Content.twidth, Content.theight, FlxTilemapAutoTiling.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         
         colTransLevel = zone.description.levelColor;
         
-        level.colorTransform = colTransLevel;
-        
+        level.color = colTransLevel.color;
         
         lillevel = new FlxTilemap();
-        lillevel.loadMapFromCSV(blankstr, Content.cLilCave, 1, 1, FlxTilemap.OFF, 0, 0, Content.barriertile);
+        lillevel.loadMapFromCSV(blankstr, Content.cLilCave, 1, 1, FlxTilemapAutoTiling.OFF, 0, 0, Content.barriertile);
         
         
         wall = new FlxTilemap();
-        wall.loadMapFromCSV(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
+        wall.loadMapFromCSV(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemapAutoTiling.OFF, 0, 0, Content.walltile);
         
         interim_wall = new FlxTilemap();
-        interim_wall.loadMapFromCSV(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
+        interim_wall.loadMapFromCSV(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemapAutoTiling.OFF, 0, 0, Content.walltile);
         
-        wall.colorTransform = colTransLevel;
+        level.color = colTransLevel.color;
         
         wallpaper = new FlxTilemap();
-        wallpaper.loadMapFromCSV(tempstr, Content.cWallpaper, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        wallpaper.loadMapFromCSV(tempstr, Content.cWallpaper, Content.twidth, Content.theight, FlxTilemapAutoTiling.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         facade = new FlxTilemap();
-        facade.loadMapFromCSV(tempstr, Content.cFacade, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
+        facade.loadMapFromCSV(tempstr, Content.cFacade, Content.twidth, Content.theight, FlxTilemapAutoTiling.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
         
         add(wall);
         add(wallpaper);
@@ -1229,11 +1234,13 @@ class PlayState extends FlxState
         
         groupPeppers = new FlxSpriteGroup();
         
+        var which : Int = 0;
+        var toadd : FlxSprite;
+
         for (i in 0...iPeppers)
         {
-            var toadd : FlxSprite;
             var spot : Int = zone.rand.int(0, arrayPeppers.length);
-            var which : Int = 0;
+            which = 0;
             
             var roll : Int = 0;
             
@@ -1242,7 +1249,7 @@ class PlayState extends FlxState
                 if (Std.string(arrayPeppers[spot].obj) != "w")
                 {
                     toadd = new FlxSprite(arrayPeppers[spot].x * 30, arrayPeppers[spot].y * 30);
-                    toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
+                    toadd.loadGraphic(Content.cPeppers, true, 30, 30, true);
                     toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                     
                     
@@ -1259,7 +1266,7 @@ class PlayState extends FlxState
                     if (Std.string(arrayPeppers[spot].obj) != "w")
                     {
                         toadd = new FlxSprite(arrayPeppers[spot].x * 30, (arrayPeppers[spot].y * 30) + 25);
-                        toadd.loadGraphic(Content.cPeppers, true, false, 30, 30, true);
+                        toadd.loadGraphic(Content.cPeppers, true, 30, 30, true);
                         toadd.pixels.colorTransform(new Rectangle(0, 0, toadd.pixels.width, toadd.pixels.height), colTransLevel);
                         
                         toadd.animation.add("", [zone.rand.int(0, 2) + 70], 0, true);
@@ -1347,7 +1354,7 @@ class PlayState extends FlxState
                 
                 var weight : Int = 0;
                 
-                i = 0;
+                var i : Int = 0;
                 while (i < xs.length)
                 {
                     if ((Math.floor(xs[which])) == x)
@@ -1362,7 +1369,7 @@ class PlayState extends FlxState
                     if (wall.getTile(x, y) != 1 + (zone.description.style * Content.iWallSheetWidth))
                     {
                         toadd = new FlxSprite(x * 30, y * 30);
-                        toadd.loadGraphic(Content.cWaterfall, true, false, 30, 30, true);
+                        toadd.loadGraphic(Content.cWaterfall, true, 30, 30, true);
                         toadd.pixels.colorTransform(new Rectangle(0, 0, 30 * 10, 30), colTransLevel);
                         
                         toadd.animation.add("", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 26, true);
@@ -1622,7 +1629,7 @@ class PlayState extends FlxState
         
         
         spotlight = new FlxSprite(300, 0);
-        spotlight.loadGraphic(Content.cSpotlight, false, false, 30, 30);
+        spotlight.loadGraphic(Content.cSpotlight, false, 30, 30);
         spotlight.alpha = 0.25;
         this.add(spotlight);
         
@@ -1633,8 +1640,8 @@ class PlayState extends FlxState
         
         //camera = new FlxCamera(0, 0, Content.screenwidth, Content.screenheight, 0);
         
-        FlxG.camera.follow(dolly, FlxCamera.STYLE_LOCKON);
-        FlxG.camera.setBounds(0, 0, level.width, level.height);
+        FlxG.camera.follow(dolly, FlxCameraFollowStyle.LOCKON);
+        FlxG.camera.setScrollBounds(0, 0, level.width, level.height);
         FlxG.camera.width = 480 + 300;
         dollyoffset = 150;
         
@@ -1680,13 +1687,15 @@ class PlayState extends FlxState
         
         
         
-        debugtext = add(new FlxText(3, 180, 200, ""));  //adds a 100px wide text field at position 0,0 (upper left)  
+        debugtext = new FlxText(3, 180, 200, "");
+        add(debugtext);  //adds a 100px wide text field at position 0,0 (upper left)  
         Util.AssignFont(debugtext);
         debugtext.scrollFactor.x = 0;
         debugtext.scrollFactor.y = 0;
         debugtext.visible = Content.debugtexton;
         
-        distext = add(new FlxText(3, 150, 220, ""));  //adds a 100px wide text field at position 0,0 (upper left)  
+        distext = new FlxText(3, 150, 220, "");
+        add(distext);  //adds a 100px wide text field at position 0,0 (upper left)  
         Util.AssignFont(distext);
         distext.scrollFactor.x = 0;
         distext.scrollFactor.y = 0;
@@ -1749,9 +1758,9 @@ class PlayState extends FlxState
         nElapsedInZone = 0;
         
         
-        Content.stats.cavemap.AddSpritesToHUD(hud.cavecanvas, zone.description.coords.x, zone.description.coords.y, 
-                (268 / 2) - 6, 
-                (268 / 2) - 6, 
+        Content.stats.cavemap.AddSpritesToHUD(hud.cavecanvas, Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y), 
+                Math.floor(268 / 2) - 6, 
+                Math.floor(268 / 2) - 6, 
                 0, 
                 0, 
                 42, 
@@ -2365,7 +2374,7 @@ If 11 and water, 13
     
     public function MakeMonsters(saturation : Float) : Void
     {
-        var ran : FlxRandom = new FlxRandom(Util.Seed(zone.description.mynexus.x, zone.description.mynexus.y));
+        var ran : FlxRandom = new FlxRandom(Util.Seed(Math.floor(zone.description.mynexus.x), Math.floor(zone.description.mynexus.y)));
         
         var arrayBestiaryPossible : Array<Dynamic> = new Array<Dynamic>();  // One each of the possible cards for this zone  
         var arrayBestiary : Array<Dynamic> = new Array<Dynamic>();  // One each of the possible cards for this zone  
@@ -2614,8 +2623,9 @@ If 11 and water, 13
                         b++;
                     }
                     
-                    for (kind in 0...kinds)
-                    
+                    var kind : Int = 0;
+                    var kinds : Int;
+                    while (kind < kinds)
                     { // Different kinds to do = 1
                         
                         {
@@ -2678,7 +2688,7 @@ If 11 and water, 13
                                 }
                                 else
                                 {
-                                    winner.iNeeded = (spotsforkinds * saturation * winner.nSatModifier) / kinds;
+                                    winner.iNeeded = Math.floor((spotsforkinds * saturation * winner.nSatModifier) / kinds);
                                     trace("Making " + Std.string(winner.iNeeded) + "x " + winner.strName + " given " + spotsforkinds + " slots");
                                 }
                                 
@@ -2697,6 +2707,8 @@ If 11 and water, 13
                     
                     return;
                 }
+
+                kind++;
             }
             
             
@@ -2795,6 +2807,8 @@ If 11 and water, 13
         
         
         var spawn : Int = 0;
+        var spawnx :  Int = 0;
+        var spawny :  Int = 0;
         while (spawn < arrayMonsterSpawns.length)
         {
             spawnx = arrayMonsterSpawns[spawn].x;
@@ -3162,7 +3176,7 @@ If 11 and water, 13
                 UnpausedUpdates();
                 UpdateCameraPan();
                 
-                if (hero.GetCurrentAnim() == "leaving" && hero.GetCurrentFrame() == 14)
+                if (hero.GetCurrentAnim() == "leaving" && hero.animation.frameIndex == 14)
                 {
                     xdiff = 0;
                     ydiff = 0;
@@ -3308,7 +3322,7 @@ If 11 and water, 13
                     if (command == "vent")
                     {
                         var ventname : String = contentpieces[0];
-                        var venttarget : Monster = Util.GetSpriteByName(arrayAllMonsters, ventname);
+                        var venttarget : Monster = cast(Util.GetSpriteByName(arrayAllMonsters, ventname), Monster);
                         
                         /*
 							if (venttarget == null)
@@ -3470,22 +3484,23 @@ If 11 and water, 13
                     }
                     else if (command == "ask" && hud.strState == "chatting")
                     {
-                        if (hud.chattext.text.length >= (Std.string(hud.arrayIntended[hud.iCurrentLine])).length)
+                        if (hud.chattext.text.length >= hud.arrayIntended[hud.iCurrentLine].toString().length)
                         {
                             hud.ChoiceVisible(true);
                             
                             hud.choicelefttext.text = contentpieces[1];
                             hud.choicerighttext.text = contentpieces[3];
                             
-                            if (FlxG.keys.justPressed.E))
+                            if (FlxG.keys.justPressed.LEFT)
                             {
                                 hud.SetChoice(true);
                             }
-                            else if (FlxG.keys.justPressed.IT))
+                            else if (FlxG.keys.justPressed.RIGHT)
                             {
                                 hud.SetChoice(false);
                             }
-                            else if (FlxG.keys.justPressed.NR) || FlxG.keys.justPressed.)                            {
+                            else if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.X)  // todo: what was this 2nd key?
+                            {
                                 hud.ChoiceVisible(false);
                                 
                                 if (hud.choicecursor.facing == FlxObject.LEFT)
@@ -3520,7 +3535,7 @@ If 11 and water, 13
             }
             case Content.PAUSEMENU:
             {
-                if (FlxG.keys.justPressed.)& (hud.strState == "" || hud.strState == "truepause"))
+                if (FlxG.keys.justPressed.P && (hud.strState == "" || hud.strState == "truepause"))
                 {
                     hud.SetBars(0);
                     bPaused = !bPaused;
@@ -3551,24 +3566,24 @@ If 11 and water, 13
                     
                     state = Content.ACTION;
                 }
-                else if (FlxG.keys.UP || FlxG.keys.DOWN || FlxG.keys.LEFT || FlxG.keys.RIGHT)
+                else if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN || FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.RIGHT)
                 {
-                    if (FlxG.keys.UP)
+                    if (FlxG.keys.justPressed.UP)
                     {
                         Content.stats.nCaveOffsetY += Content.nCaveMapSpeed * FlxG.elapsed;
                     }
                     
-                    if (FlxG.keys.DOWN)
+                    if (FlxG.keys.justPressed.DOWN)
                     {
                         Content.stats.nCaveOffsetY -= Content.nCaveMapSpeed * FlxG.elapsed;
                     }
                     
-                    if (FlxG.keys.LEFT)
+                    if (FlxG.keys.justPressed.LEFT)
                     {
                         Content.stats.nCaveOffsetX += Content.nCaveMapSpeed * FlxG.elapsed;
                     }
                     
-                    if (FlxG.keys.RIGHT)
+                    if (FlxG.keys.justPressed.RIGHT)
                     {
                         Content.stats.nCaveOffsetX -= Content.nCaveMapSpeed * FlxG.elapsed;
                     }
@@ -3670,7 +3685,7 @@ If 11 and water, 13
                         hud.SetCurrentPiece(hud.iCurrentPiece + 16);
                     }
                     
-                    if (FlxG.keys.justPressed.F))
+                    if (FlxG.keys.justPressed.F5)
                     {
                         MiracleManager.IntegrateZoneMiracles();
                         MiracleManager.SaveMiracles();
@@ -3691,12 +3706,12 @@ If 11 and water, 13
                         }
                     }
                     
-                    if (FlxG.keys.pressed("K") && FlxG.keys.pressed("L"))
+                    if (FlxG.keys.justPressed.K && FlxG.keys.justPressed.L)
                     {
                         hero.Hit(50000, 0);
                     }
                     
-                    if (FlxG.keys.justPressed.)& (hud.strState == "" || hud.strState == "truepause"))
+                    if (FlxG.keys.justPressed.P && (hud.strState == "" || hud.strState == "truepause"))
                     {
                         Content.stats.nCaveOffsetX = 0;
                         Content.stats.nCaveOffsetY = 0;
@@ -3804,7 +3819,7 @@ If 11 and water, 13
                     }
                     
                     
-                    if (FlxG.keys.justPressed.O) && hero.GetCurrentAnim() != "arriving")
+                    if (FlxG.keys.justPressed.DOWN && hero.GetCurrentAnim() != "arriving")
                     {
                         if (hud.strState == "")
                         {
@@ -3930,7 +3945,7 @@ If 11 and water, 13
                         }
                     }
                     
-                    if (FlxG.keys.justPressed.)                    
+                    if (FlxG.keys.justPressed.Q)                    
                     /*
 						
 						this.dump();
@@ -4302,7 +4317,7 @@ If 11 and water, 13
                     }
                 }
                 
-                groupParticles.recycle(Twinkle, null, true, true).Reuse(x, y);
+                groupParticles.recycle(Twinkle, null, true).Reuse(x, y);
                 i++;
             }
         }
@@ -4310,7 +4325,7 @@ If 11 and water, 13
 
     public function MakeBub(x : Int, y : Int, dir : Float, sp : Float) : Void
     {
-        groupParticles.recycle(Bub, null, true, true).Reuse(x, y, dir, sp);
+        groupParticles.recycle(Bub, null, true).Reuse(x, y, dir, sp);
     }
 
     public function UpdateBreathBubs() : Void
@@ -4462,7 +4477,7 @@ If 11 and water, 13
         var a : Int = 0;
         while (a < arrayPellets.length)
         {
-            if (arrayPellets[a].GetCurrentFrame() == 40)
+            if (arrayPellets[a].animation.frameIndex == 40)
             {
                 groupPellets.remove(arrayPellets[a]);
                 arrayPellets.splice(a, 1);
@@ -4512,11 +4527,11 @@ If 11 and water, 13
                     arrow.immovable = false;
                     arrow.allowCollisions = iCollisions;
                     
-                    if (arrow.GetCurrentFrame() == Math.floor(78 * 0.75))
+                    if (arrow.animation.frameIndex == Math.floor(78 * 0.75))
                     {
                         arrow.flicker(100);
                     }
-                    else if (arrow.GetCurrentFrame() == 78)
+                    else if (arrow.animation.frameIndex == 78)
                     {
                         groupArrows.remove(arrayArrows[a]);
                         arrayArrows.splice(a, 1);
@@ -4942,10 +4957,7 @@ If 11 and water, 13
         
         
         var colTrans : ColorTransform = new ColorTransform(1 + radj, 1 + gadj, 1 + badj, 1, 0, 0, 0);
-        level._tiles = FlxG.bitmap.add(Content.cFronts, false);
         level.colorTransform = colTrans;
-        
-        wall._tiles = FlxG.bitmap.add(Content.cWalls, false);
         wall.colorTransform = colTrans;
     }
     

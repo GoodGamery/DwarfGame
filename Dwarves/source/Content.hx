@@ -1,5 +1,6 @@
 import flash.utils.ByteArray;
 import flixel.system.FlxAssets;
+import map.Biome;
 
 @:final class Content
 {
@@ -287,7 +288,7 @@ import flixel.system.FlxAssets;
     
     @:meta(Embed(source="../content/lilcave.png"))
 
-    public static var cLilCave : FlxGraphicAsset;
+    public static var cLilCave : FlxTilemapGraphicAsset;
     
     @:meta(Embed(source="../content/arrow.png"))
 
@@ -353,7 +354,7 @@ import flixel.system.FlxAssets;
     
     public static inline var numbiomes : Int = 9;
     public static inline var iTotalBiomes : Int = 12;
-    public static var biomes : Array<Dynamic>;
+    public static var biomes : Array<Biome>;
     
     @:meta(Embed(source="../content/filter.png"))
 
@@ -369,11 +370,11 @@ import flixel.system.FlxAssets;
     
     @:meta(Embed(source="../content/walls2.png"))
 
-    public static var cWalls : FlxGraphicAsset;
+    public static var cWalls : FlxTilemapGraphicAsset;
     
     @:meta(Embed(source="../content/wallpaper.png"))
 
-    public static var cWallpaper : FlxGraphicAsset;
+    public static var cWallpaper : FlxTilemapGraphicAsset;
     public static var iWallpaperPieces : Int = 8 * 30;
     
     
@@ -393,11 +394,11 @@ import flixel.system.FlxAssets;
     
     @:meta(Embed(source="../content/fronts_thicker.png"))
 
-    public static var cFronts : FlxGraphicAsset;
+    public static var cFronts : FlxTilemapGraphicAsset;
     
     @:meta(Embed(source="../content/fronts_thicker.png"))
 
-    public static var cFacade : FlxGraphicAsset;
+    public static var cFacade : FlxTilemapGraphicAsset;
     public static var iFacadePieces : Int = 8 * 30;
     
     public static inline var iFrontSheetWidth : Int = 21;
@@ -440,147 +441,147 @@ import flixel.system.FlxAssets;
     
     @:meta(Embed(source="../sounds/arrow.mp3"))
 
-    public static var soundArrow : Class<Dynamic>;
+    public static var soundArrow : FlxSoundAsset;
     public static inline var volumeArrow : Float = 1.0;
     
     @:meta(Embed(source="../sounds/swim.mp3"))
 
-    public static var soundSwim : Class<Dynamic>;
+    public static var soundSwim : FlxSoundAsset;
     public static inline var volumeSwim : Float = 1.0;
     
     @:meta(Embed(source="../sounds/defeated.mp3"))
 
-    public static var soundDefeated : Class<Dynamic>;
+    public static var soundDefeated : FlxSoundAsset;
     public static inline var volumeDefeated : Float = 0.25;
     
     @:meta(Embed(source="../sounds/hurt.mp3"))
 
-    public static var soundHurt : Class<Dynamic>;
+    public static var soundHurt : FlxSoundAsset;
     public static inline var volumeHurt : Float = 1.0;
     
     @:meta(Embed(source="../sounds/jump.mp3"))
 
-    public static var soundJump : Class<Dynamic>;
+    public static var soundJump : FlxSoundAsset;
     public static inline var volumeJump : Float = 0.25;
     
     @:meta(Embed(source="../sounds/lytrat.mp3"))
 
-    public static var soundLytrat : Class<Dynamic>;
+    public static var soundLytrat : FlxSoundAsset;
     public static inline var volumeLytrat : Float = 1.0;
     
     @:meta(Embed(source="../sounds/offended.mp3"))
 
-    public static var soundOffended : Class<Dynamic>;
+    public static var soundOffended : FlxSoundAsset;
     public static inline var volumeOffended : Float = 1.0;
     
     @:meta(Embed(source="../sounds/pip.mp3"))
 
-    public static var soundPip : Class<Dynamic>;
+    public static var soundPip : FlxSoundAsset;
     public static inline var volumePip : Float = 1.0;
     
     @:meta(Embed(source="../sounds/reod.mp3"))
 
-    public static var soundReod : Class<Dynamic>;
+    public static var soundReod : FlxSoundAsset;
     public static inline var volumeReod : Float = 1.0;
     
     @:meta(Embed(source="../sounds/dreamcoin.mp3"))
 
-    public static var soundDreamCoin : Class<Dynamic>;
+    public static var soundDreamCoin : FlxSoundAsset;
     public static inline var volumeDreamCoin : Float = 1.0;
     
     @:meta(Embed(source="../sounds/splash.mp3"))
 
-    public static var soundSplash : Class<Dynamic>;
+    public static var soundSplash : FlxSoundAsset;
     public static inline var volumeSplash : Float = 0.3;
     
     @:meta(Embed(source="../sounds/twang2.mp3"))
 
-    public static var soundTwang : Class<Dynamic>;
+    public static var soundTwang : FlxSoundAsset;
     public static inline var volumeTwang : Float = 1.0;
     
     @:meta(Embed(source="../sounds/ting.mp3"))
 
-    public static var soundTing : Class<Dynamic>;
+    public static var soundTing : FlxSoundAsset;
     public static inline var volumeTing : Float = 1.0;
     
     
     
     @:meta(Embed(source="../sounds/chat.mp3"))
 
-    public static var soundChat : Class<Dynamic>;
+    public static var soundChat : FlxSoundAsset;
     public static inline var volumeChat : Float = 0.3;
     
     @:meta(Embed(source="../sounds/dead.mp3"))
 
-    public static var soundDead : Class<Dynamic>;
+    public static var soundDead : FlxSoundAsset;
     public static inline var volumeDead : Float = 1.0;
     
     @:meta(Embed(source="../sounds/enter.mp3"))
 
-    public static var soundEnter : Class<Dynamic>;
+    public static var soundEnter : FlxSoundAsset;
     public static inline var volumeEnter : Float = 1.0;
     
     @:meta(Embed(source="../sounds/leave.mp3"))
 
-    public static var soundLeave : Class<Dynamic>;
+    public static var soundLeave : FlxSoundAsset;
     public static inline var volumeLeave : Float = 1.0;
     
     @:meta(Embed(source="../sounds/refresh.mp3"))
 
-    public static var soundRefresh : Class<Dynamic>;
+    public static var soundRefresh : FlxSoundAsset;
     public static inline var volumeRefresh : Float = 1.0;
     
     @:meta(Embed(source="../sounds/cricket2.mp3"))
 
-    public static var soundCricket : Class<Dynamic>;
+    public static var soundCricket : FlxSoundAsset;
     public static inline var volumeCricket : Float = 0.4;
     
     @:meta(Embed(source="../sounds/goblin.mp3"))
 
-    public static var soundGoblin : Class<Dynamic>;
+    public static var soundGoblin : FlxSoundAsset;
     public static inline var volumeGoblin : Float = 0.4;
     
     @:meta(Embed(source="../sounds/spit.mp3"))
 
-    public static var soundSpit : Class<Dynamic>;
+    public static var soundSpit : FlxSoundAsset;
     public static inline var volumeSpit : Float = 1.0;
     
     @:meta(Embed(source="../sounds/song_rock.mp3"))
 
-    public static var soundSongRock : Class<Dynamic>;
+    public static var soundSongRock : FlxSoundAsset;
     public static inline var volumeSongRock : Float = 0.8;
     
     @:meta(Embed(source="../sounds/song_town.mp3"))
 
-    public static var soundSongTown : Class<Dynamic>;
+    public static var soundSongTown : FlxSoundAsset;
     public static inline var volumeSongTown : Float = 0.8;
     
     @:meta(Embed(source="../sounds/song_turtle.mp3"))
 
-    public static var soundSongTurtle : Class<Dynamic>;
+    public static var soundSongTurtle : FlxSoundAsset;
     public static inline var volumeSongTurtle : Float = 0.8;
     
     @:meta(Embed(source="../sounds/song_ice.mp3"))
 
-    public static var soundSongIce : Class<Dynamic>;
+    public static var soundSongIce : FlxSoundAsset;
     public static inline var volumeSongIce : Float = 0.8;
     
     @:meta(Embed(source="../sounds/song_happy.mp3"))
 
-    public static var soundSongHappy : Class<Dynamic>;
+    public static var soundSongHappy : FlxSoundAsset;
     public static inline var volumeSongHappy : Float = 0.8;
     
     @:meta(Embed(source="../sounds/song_skip.mp3"))
 
-    public static var soundSongSkip : Class<Dynamic>;
+    public static var soundSongSkip : FlxSoundAsset;
     public static inline var volumeSongSkip : Float = 0.8;
     
     @:meta(Embed(source="../sounds/song_desert_intro.mp3"))
 
-    public static var soundSongDesertIntro : Class<Dynamic>;
+    public static var soundSongDesertIntro : FlxSoundAsset;
     @:meta(Embed(source="../sounds/song_desert_main_full.mp3"))
 
-    public static var soundSongDesertMain : Class<Dynamic>;
+    public static var soundSongDesertMain : FlxSoundAsset;
     public static inline var volumeSongDesert : Float = 0.8;
     
     public static inline var nDefaultSkip : Float = 90;

@@ -35,9 +35,10 @@ class Puff extends Particle
         AngleToCartSpeed();
     }
 
-    public function setRow(var row : Int) {
-        // TODO: This doesn't work any more
-        // this._animations[0].frames = [0 + (row * 8), 1 + (row * 8), 2 + (row * 8), 3 + (row * 8), 4 + (row * 8), 5 + (row * 8), 6 + (row * 8), 7 + (row * 8)];
+    public function setRow(row : Int) {
+        animation.remove("exploding");
+        animation.add("exploding", [0 + (row * 8), 1 + (row * 8), 2 + (row * 8), 3 + (row * 8), 4 + (row * 8), 5 + (row * 8), 6 + (row * 8), 7 + (row * 8)], 15, false);
+        playDefaultAnimation();
     }
 
     override public function update(elapsed : Float) : Void
