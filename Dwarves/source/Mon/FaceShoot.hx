@@ -23,7 +23,7 @@ class FaceShoot extends Monster
         bOriginalMonsterCollision = false;
         
         
-        animation.add("spit", [32, 33, 34, 35, 34, 33, 32], as3hx.Compat.parseInt(6 * speedmod), false);
+        animation.add("spit", [32, 33, 34, 35, 34, 33, 32], Math.floor(6 * speedmod), false);
         animation.add("d", [32], 6, true);
         
         animation.play("d");
@@ -80,7 +80,7 @@ class FaceShoot extends Monster
             }
         }
         
-        if (this.GetCurrentAnim() == "spit" && this.GetCurrentFrame() == 3 && nSpitTimer < 0)
+        if (this.GetCurrentAnim() == "spit" && this.animation.frameIndex == 3 && nSpitTimer < 0)
         {
             nSpitTimer = nSpitTime;
             
@@ -139,7 +139,7 @@ class FaceShoot extends Monster
                 FlxG.play(Content.soundSpit, Content.volumeSpit * nCloseness, false, false);
             }
         }
-        else if (this.GetCurrentAnim() == "spit" && this.GetCurrentFrame() == 6)
+        else if (this.GetCurrentAnim() == "spit" && this.animation.frameIndex == 6)
         {
             this.play("d");
         }

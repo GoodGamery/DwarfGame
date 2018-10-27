@@ -12,7 +12,7 @@ import flixel.system.FlxSound;
 import components.DwarfText;
 import PlayState;
 
-class HUD extends FlxGroup
+class HUD extends FlxSpriteGroup
 {
     public var parent : PlayState;
     public var bg : FlxSprite;

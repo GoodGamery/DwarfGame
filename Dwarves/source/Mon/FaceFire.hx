@@ -43,7 +43,7 @@ class FaceFire extends Monster
         visible = true;
         doomed = false;
         health = 1;
-        cast((false), Pause);
+        Pause(false);
     }
     
     override public function update(elapsed : Float) : Void
@@ -74,11 +74,11 @@ class FaceFire extends Monster
     
     override public function UpdateWallBonk() : Void
     {
-        if (facing == Content.LEFT && isTouching(LEFT))
+        if (facing == Content.LEFT && isTouching(Content.LEFT))
         {
             Slay();
         }
-        else if (facing == Content.RIGHT && isTouching(RIGHT))
+        else if (facing == Content.RIGHT && isTouching(Content.RIGHT))
         {
             Slay();
         }
@@ -87,9 +87,7 @@ class FaceFire extends Monster
     override public function Slay() : Void
     {
         this.doomed = true;
-        parent.CauseExplosion(5, this.x - 10, this.y - 8, 
-                6
-        );  // <--- fiery smoke!  
+        parent.CauseExplosion(5, Math.floor(this.x - 10), this.y - 8, 6);  // <--- fiery smoke!  
         
         if (parent.nElapsedInZone > 2)
         {
@@ -100,7 +98,7 @@ class FaceFire extends Monster
             if (nCloseness > 0)
             {
                 nCloseness /= 10;
-                FlxG.play(Content.soundDefeated, Content.volumeDefeated * nCloseness, false, false, Content.nDefaultSkip);
+                FlxG.sound.play(Content.soundDefeated, Content.volumeDefeated * nCloseness, false, false, Content.nDefaultSkip);
             }
         }
     }

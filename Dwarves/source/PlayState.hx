@@ -64,7 +64,7 @@ class PlayState extends FlxState
     public var groupArrows : FlxSpriteGroup = null;
     public var arrayPellets : Array<Dynamic> = null;
     public var groupPellets : FlxSpriteGroup = null;
-    public var groupParticles : FlxTypedSpriteGroup<Particle> = null;
+    public var groupParticles : FlxSpriteGroup = null;
     public var groupMonsters : FlxSpriteGroup = null;
     public var groupFrontMonsters : FlxSpriteGroup = null;
     public var arrayGrunts : Array<Dynamic> = null;
@@ -363,7 +363,7 @@ class PlayState extends FlxState
         
         if (plats > 5)
         {
-            clumpsize = Math.floor(clumpSize / (plats - 5));
+            clumpsize = Math.floor(clumpsize / (plats - 5));
         }
         
         clumpsize = 15;
@@ -744,7 +744,7 @@ class PlayState extends FlxState
             {
                 Content.stats.arrayMapNodes.push(new MapNode(new Point(zone.description.coords.x, zone.description.coords.y), zone.description.style, zone.description.exits.north, zone.description.exits.south, zone.description.exits.west, zone.description.exits.east));
                 
-                hud.ZoneInMapHistory(zone.description.coords.x, zone.description.coords.y);
+                hud.ZoneInMapHistory(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y));
             }
             
             ReportBackupMap();
@@ -769,7 +769,7 @@ class PlayState extends FlxState
     }
 
     private function destroyAllInGroup(group : FlxSpriteGroup) {
-        group.forEach( function(s:FlxSprite) { s.destroy(); } );
+        group.forEach( function(s:FlxBasic) { s.destroy(); } );
         group.clear();
         group.destroy();
     }
@@ -859,7 +859,8 @@ class PlayState extends FlxState
         genustext = null;
         
         
-        this.destroymembers();
+        // TODO: No idea what this is
+        // this.destroymembers();
         
         if (arrayArrows != null)
         {
@@ -1015,7 +1016,7 @@ class PlayState extends FlxState
         
         colTransLevel = zone.description.levelColor;
         
-        level._tiles.colorTransform(new Rectangle(0, 0, level.widthInTiles, level.heightInTiles), colTransLevel);
+        level.colorTransform = colTransLevel;
         
         
         lillevel = new FlxTilemap();
@@ -1028,7 +1029,7 @@ class PlayState extends FlxState
         interim_wall = new FlxTilemap();
         interim_wall.loadMapFromCSV(blankstr, Content.cWalls, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.walltile);
         
-        wall._tiles.colorTransform(new Rectangle(0, 0, wall.widthInTiles, wall.heightInTiles), colTransLevel);
+        wall.colorTransform = colTransLevel;
         
         wallpaper = new FlxTilemap();
         wallpaper.loadMapFromCSV(tempstr, Content.cWallpaper, Content.twidth, Content.theight, FlxTilemap.OFF, 0, 0, Content.iTotalBiomes * Content.iFrontSheetWidth);
@@ -1042,9 +1043,10 @@ class PlayState extends FlxState
         
         
         var xx : Int = 0;
+        var yy : Int = 0;
         while (xx < level.widthInTiles)
         {
-            var yy : Int = 0;
+            yy = 0;
             while (yy < level.heightInTiles)
             {
                 if (xx == 143 && yy == 126)
@@ -1470,23 +1472,23 @@ class PlayState extends FlxState
         }
         
         bow = new FlxSprite(300, 0);
-        bow.loadGraphic(Content.cHero, true, true, 100, 100);
+        bow.loadGraphic(Content.cHero, true, 100, 100);
         bow.animation.add("rest", [63], 1, false);
         bow.animation.add("shoot", [63, 64, 65, 63], 18, false);
         bow.animation.add("restup", [66], 1, false);
         bow.animation.add("shootup", [66, 67, 68, 66], 18, false);
         bow.animation.add("restdn", [69], 1, false);
         bow.animation.add("shootdn", [69, 70, 71, 69], 18, false);
-        bow.animation.animation.play("rest");
+        bow.animation.play("rest");
         bow.visible = false;  // Set TRUE in Player.as when hero's "arrive" animation completes  
         this.add(bow);
         
-        groupArrows = new FlxGroup();
+        groupArrows = new FlxSpriteGroup();
         this.add(groupArrows);
         
         
         hover = new FlxSprite(30, 30);
-        hover.loadGraphic(Content.cHover, true, false, 30, 30, false);
+        hover.loadGraphic(Content.cHover, true, 30, 30, false);
         hover.animation.add("door", [0], 1, true);
         hover.animation.add("talk", [1], 1, true);
         hover.animation.add("look", [2], 1, true);
@@ -1501,8 +1503,8 @@ class PlayState extends FlxState
         
         
         
-        groupMonsters = new FlxGroup();
-        groupFrontMonsters = new FlxGroup();
+        groupMonsters = new FlxSpriteGroup();
+        groupFrontMonsters = new FlxSpriteGroup();
         if (bMonsters)
         {
             MakeMonsters(nSaturation);
@@ -2535,21 +2537,21 @@ If 11 and water, 13
         
         
         //COLOR -=-=-=-=-=-=-
-        var roff : Float = ran.integer(0, 500) - 250;
-        var goff : Float = ran.integer(0, 500) - 250;
-        var boff : Float = ran.integer(0, 500) - 250;
+        var roff : Float = ran.int(0, 500) - 250;
+        var goff : Float = ran.int(0, 500) - 250;
+        var boff : Float = ran.int(0, 500) - 250;
         var intensity : Float = Math.abs(roff) + Math.abs(goff) + Math.abs(boff);
         
         var min : Int = -250;
         var max : Int = 150;
         
-        var speedmod : Float = ran.integer(50, 200) / 100;
+        var speedmod : Float = ran.int(50, 200) / 100;
         
         while (intensity < 50 || intensity > 100)
         {
-            roff = ran.integer(0, max - min) + min;
-            goff = ran.integer(0, max - min) + min;
-            boff = ran.integer(0, max - min) + min;
+            roff = ran.int(0, max - min) + min;
+            goff = ran.int(0, max - min) + min;
+            boff = ran.int(0, max - min) + min;
             intensity = Math.abs(roff) + Math.abs(goff) + Math.abs(boff);
         }
         //COLOR -=-=-=-=-=-=-
@@ -2577,7 +2579,7 @@ If 11 and water, 13
             {
                 bPickMonsters = false;
                 
-                kinds = ran.integer(1, 4);
+                kinds = ran.int(1, 4);
                 
                 while (kinds > arrayBestiary.length)
                 {
@@ -2622,7 +2624,7 @@ If 11 and water, 13
                             which = 0;
                             var unique : Bool = true;
                             
-                            which = ran.integer(arrayBestiaryCards.length);
+                            which = ran.int(arrayBestiaryCards.length);
                             winner = arrayBestiaryCards[which];
                             
                             kindreport += winner.strName + " ";
@@ -2716,7 +2718,7 @@ If 11 and water, 13
                 
                 do
                 {
-                    mtype = ran.integer(0, arrayWinners.length);  // You, Mr. Monster, are the lucky winner!  
+                    mtype = ran.int(0, arrayWinners.length);  // You, Mr. Monster, are the lucky winner!  
                     winner = arrayWinners[mtype];
                 }
                 while ((winner.iNeeded == 0));
@@ -3070,7 +3072,6 @@ If 11 and water, 13
     
     public var bPaused : Bool = false;
     public var bAnyKeyJustPressed : Bool = false;
-    public var bLastAnyKeyState : Bool = false;
     override public function update(elapsed : Float) : Void
     {
         if (bUpdateBreak)
@@ -3085,23 +3086,15 @@ If 11 and water, 13
         var mousetileX : Int = Math.floor(mouseX / 30);
         var mousetileY : Int = Math.floor(mouseY / 30);
         var screenX : Float = FlxG.mouse.screenX;  //Get the X position of the mouse in screen space  
-        var pressed : Bool = FlxG.mouse.pressed();  //Check whether the mouse is currently pressed  
-        var justPressed : Bool = FlxG.mouse.justPressed();
-        var justReleased : Bool = FlxG.mouse.justReleased();
+        var pressed : Bool = FlxG.mouse.pressed;  //Check whether the mouse is currently pressed  
+        var justPressed : Bool = FlxG.mouse.justPressed;
+        var justReleased : Bool = FlxG.mouse.justReleased;
         var xdiff : Int = 0;
         var ydiff : Int = 0;
         var xdest : Int = 0;
         var ydest : Int = 0;
         
-        bAnyKeyJustPressed = false;
-        if (bLastAnyKeyState == false && FlxG.keys.any())
-        {
-            bAnyKeyJustPressed = true;
-        }
-        
-        bLastAnyKeyState = FlxG.keys.any();
-        
-        
+        bAnyKeyJustPressed = FlxG.keys.firstJustPressed() != -1;
         
         switch (state)
         {
@@ -3109,7 +3102,7 @@ If 11 and water, 13
             {
                 GenFire();
                 
-                hud.update();
+                hud.update(elapsed);
             }
             case Content.INITIALIZING:
             {
@@ -3382,7 +3375,6 @@ If 11 and water, 13
                         hud.strState = "";
                         hud.Chat(false);
                         this.GroupPause(false);
-                        bLastAnyKeyState = true;
                         hud.StartSlideOut(Content.nSlideOutTime);
                         hero.bJumpRecharged = false;
                         hero.nShootRecharged = 0;
@@ -3485,16 +3477,15 @@ If 11 and water, 13
                             hud.choicelefttext.text = contentpieces[1];
                             hud.choicerighttext.text = contentpieces[3];
                             
-                            if (FlxG.keys.justPressed("LEFT"))
+                            if (FlxG.keys.justPressed.E))
                             {
                                 hud.SetChoice(true);
                             }
-                            else if (FlxG.keys.justPressed("RIGHT"))
+                            else if (FlxG.keys.justPressed.IT))
                             {
                                 hud.SetChoice(false);
                             }
-                            else if (FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("X"))
-                            {
+                            else if (FlxG.keys.justPressed.NR) || FlxG.keys.justPressed.)                            {
                                 hud.ChoiceVisible(false);
                                 
                                 if (hud.choicecursor.facing == FlxObject.LEFT)
@@ -3529,7 +3520,7 @@ If 11 and water, 13
             }
             case Content.PAUSEMENU:
             {
-                if (FlxG.keys.justPressed("P") && (hud.strState == "" || hud.strState == "truepause"))
+                if (FlxG.keys.justPressed.)& (hud.strState == "" || hud.strState == "truepause"))
                 {
                     hud.SetBars(0);
                     bPaused = !bPaused;
@@ -3582,9 +3573,9 @@ If 11 and water, 13
                         Content.stats.nCaveOffsetX -= Content.nCaveMapSpeed * FlxG.elapsed;
                     }
                     
-                    Content.stats.cavemap.AddSpritesToHUD(hud.cavecanvas, zone.description.coords.x, zone.description.coords.y, 
-                            (268 / 2) - 6 + Math.floor(Content.stats.nCaveOffsetX), 
-                            (268 / 2) - 6 + Math.floor(Content.stats.nCaveOffsetY), 
+                    Content.stats.cavemap.AddSpritesToHUD(hud.cavecanvas, Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y), 
+                            Math.floor((268 / 2) - 6 + Content.stats.nCaveOffsetX),
+                            Math.floor((268 / 2) - 6 + Content.stats.nCaveOffsetY),
                             16, 
                             16, 
                             268, 
@@ -3606,7 +3597,7 @@ If 11 and water, 13
                         coordstext.text = "(" + Std.string(zone.description.coords.x) + "," + Std.string(zone.description.coords.y) + ")";
                     }
                     
-                    if (FlxG.keys.S)
+                    if (FlxG.keys.justPressed.S)
                     {
                         if (genus == "terrain")
                         {
@@ -3614,17 +3605,17 @@ If 11 and water, 13
                             zone.SetMap(mousetileX, mousetileY, 1);
                             ProperTiles(zone.description.style, mousetileX - Content.iProperTileRadius, mousetileY - Content.iProperTileRadius, mousetileX + Content.iProperTileRadius, mousetileY + Content.iProperTileRadius);
                             
-                            MiracleManager.SetOverride(new Miracle(zone.description.coords.x, zone.description.coords.y, mousetileX, mousetileY, Content.TERRAIN, "", 1));
+                            MiracleManager.SetOverride(new Miracle(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y), mousetileX, mousetileY, Content.TERRAIN, "", 1));
                         }
                         else if (genus == "wallpaper")
                         {
                             wallpaper.setTile(mousetileX, mousetileY, hud.iCurrentPiece, true);
                             ProperTiles(zone.description.style, mousetileX - Content.iProperTileRadius, mousetileY - Content.iProperTileRadius, mousetileX + Content.iProperTileRadius, mousetileY + Content.iProperTileRadius);
                             
-                            MiracleManager.SetOverride(new Miracle(zone.description.coords.x, zone.description.coords.y, mousetileX, mousetileY, Content.WALLPAPER, Std.string(hud.iCurrentPiece), 1));
+                            MiracleManager.SetOverride(new Miracle(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y), mousetileX, mousetileY, Content.WALLPAPER, Std.string(hud.iCurrentPiece), 1));
                         }
                     }
-                    else if (FlxG.keys.E)
+                    else if (FlxG.keys.justPressed.E)
                     {
                         if (genus == "terrain")
                         {
@@ -3632,23 +3623,23 @@ If 11 and water, 13
                             zone.SetMap(mousetileX, mousetileY, 0);
                             ProperTiles(zone.description.style, mousetileX - Content.iProperTileRadius, mousetileY - Content.iProperTileRadius, mousetileX + Content.iProperTileRadius, mousetileY + Content.iProperTileRadius);
                             
-                            MiracleManager.SetOverride(new Miracle(zone.description.coords.x, zone.description.coords.y, mousetileX, mousetileY, 0, "", 1));
+                            MiracleManager.SetOverride(new Miracle(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y), mousetileX, mousetileY, 0, "", 1));
                         }
                         else if (genus == "wallpaper")
                         {
                             wallpaper.setTile(mousetileX, mousetileY, 0, true);
                             ProperTiles(zone.description.style, mousetileX - Content.iProperTileRadius, mousetileY - Content.iProperTileRadius, mousetileX + Content.iProperTileRadius, mousetileY + Content.iProperTileRadius);
                             
-                            MiracleManager.SetOverride(new Miracle(zone.description.coords.x, zone.description.coords.y, mousetileX, mousetileY, Content.WALLPAPER, "", 1));
+                            MiracleManager.SetOverride(new Miracle(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y), mousetileX, mousetileY, Content.WALLPAPER, "", 1));
                         }
                     }
                     
-                    if (FlxG.keys.justPressed("R"))
+                    if (FlxG.keys.justPressed.R)
                     {
                         ProperTiles(zone.description.style, 0, 0, level.widthInTiles, level.heightInTiles);
                     }
                     
-                    if (FlxG.keys.justPressed("D"))
+                    if (FlxG.keys.justPressed.D)
                     {
                         if (genus == "terrain")
                         {
@@ -3662,31 +3653,31 @@ If 11 and water, 13
                         genustext.text = genus;
                     }
                     
-                    if (FlxG.keys.justPressed("F"))
+                    if (FlxG.keys.justPressed.F)
                     {
                         hud.SetCurrentPiece(hud.iCurrentPiece - 1);
                     }
-                    else if (FlxG.keys.justPressed("G"))
+                    else if (FlxG.keys.justPressed.G)
                     {
                         hud.SetCurrentPiece(hud.iCurrentPiece + 1);
                     }
-                    else if (FlxG.keys.justPressed("V"))
+                    else if (FlxG.keys.justPressed.V)
                     {
                         hud.SetCurrentPiece(hud.iCurrentPiece - 16);
                     }
-                    else if (FlxG.keys.justPressed("B"))
+                    else if (FlxG.keys.justPressed.B)
                     {
                         hud.SetCurrentPiece(hud.iCurrentPiece + 16);
                     }
                     
-                    if (FlxG.keys.justPressed("F5"))
+                    if (FlxG.keys.justPressed.F))
                     {
                         MiracleManager.IntegrateZoneMiracles();
                         MiracleManager.SaveMiracles();
-                        MiracleManager.PopulateZoneMiracles(zone.description.coords.x, zone.description.coords.y);
+                        MiracleManager.PopulateZoneMiracles(Math.floor(zone.description.coords.x), Math.floor(zone.description.coords.y));
                     }
                     
-                    if (FlxG.keys.justPressed("M") && (hud.strState == "" || hud.strState == "map"))
+                    if (FlxG.keys.justPressed.M && (hud.strState == "" || hud.strState == "map"))
                     {
                         lillevel.visible = !lillevel.visible;
                         
@@ -3705,7 +3696,7 @@ If 11 and water, 13
                         hero.Hit(50000, 0);
                     }
                     
-                    if (FlxG.keys.justPressed("P") && (hud.strState == "" || hud.strState == "truepause"))
+                    if (FlxG.keys.justPressed.)& (hud.strState == "" || hud.strState == "truepause"))
                     {
                         Content.stats.nCaveOffsetX = 0;
                         Content.stats.nCaveOffsetY = 0;
@@ -3813,7 +3804,7 @@ If 11 and water, 13
                     }
                     
                     
-                    if (FlxG.keys.justPressed("DOWN") && hero.GetCurrentAnim() != "arriving")
+                    if (FlxG.keys.justPressed.O) && hero.GetCurrentAnim() != "arriving")
                     {
                         if (hud.strState == "")
                         {
@@ -3939,8 +3930,7 @@ If 11 and water, 13
                         }
                     }
                     
-                    if (FlxG.keys.justPressed("Q"))
-                    
+                    if (FlxG.keys.justPressed.)                    
                     /*
 						
 						this.dump();
@@ -4031,13 +4021,13 @@ If 11 and water, 13
             if (arrayNearMonsters[m].bLevelCollision && !arrayNearMonsters[m].bBlockade && !arrayNearMonsters[m].bForceImmovable)
             {
                 collidetests++;
-                MonsterMonsterCollide(FlxG.collidearrayNearMonsters[m], level);
+                FlxG.collide(arrayNearMonsters[m], level, MonsterMonsterCollide);
             }
             
             if (arrayNearMonsters[m].bHeroCollision)
             {
                 collidetests++;
-                MonsterMonsterCollide(FlxG.collidearrayNearMonsters[m], hero);
+                FlxG.collide(arrayNearMonsters[m], hero, MonsterMonsterCollide);
             }
             
             if (arrayNearMonsters[m].bMonsterCollision || arrayNearMonsters[m].bBlockade)
@@ -4058,7 +4048,7 @@ If 11 and water, 13
                             (arrayNearMonsters[n].bBlockade ||
                             arrayNearMonsters[m].bBlockade))
                         {
-                            MonsterMonsterCollide(FlxG.collidearrayNearMonsters[n], arrayNearMonsters[m]);
+                            FlxG.collide(arrayNearMonsters[n], arrayNearMonsters[m], MonsterMonsterCollide);
                             collidetests++;
                         }
                     }
@@ -4414,32 +4404,32 @@ If 11 and water, 13
                 
                 if (name == "+1 Pip")
                 {
-                    FlxG.sound.play(AssetPaths.pip__mp3, Content.volumePip, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(AssetPaths.pip__mp3, Content.volumePip);
                     Content.stats.ChangeItem("pip", 1);
                 }
                 else if (name == "+3 Pips")
                 {
-                    FlxG.sound.play(Content.soundPip, Content.volumePip, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(AssetPaths.pip__mp3, Content.volumePip);
                     Content.stats.ChangeItem("pip", 5);
                 }
                 else if (name == "+1 Reod")
                 {
-                    FlxG.sound.play(Content.soundReod, Content.volumeReod, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(AssetPaths.reod__mp3, Content.volumeReod);
                     Content.stats.ChangeItem("reod", 1);
                 }
                 else if (name == "+3 Reods")
                 {
-                    FlxG.sound.play(Content.soundReod, Content.volumeReod, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(AssetPaths.reod__mp3, Content.volumeReod);
                     Content.stats.ChangeItem("reod", 5);
                 }
                 else if (name == "+1 Lytrat")
                 {
-                    FlxG.sound.play(Content.soundLytrat, Content.volumeLytrat, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(AssetPaths.lytrat__mp3, Content.volumeLytrat);
                     Content.stats.ChangeItem("lytrat", 1);
                 }
                 else if (name == "+3 Lytrats")
                 {
-                    FlxG.sound.play(Content.soundLytrat, Content.volumeLytrat, false, false, Content.nDefaultSkip);
+                    FlxG.sound.play(AssetPaths.lytrat__mp3, Content.volumeLytrat);
                     Content.stats.ChangeItem("lytrat", 5);
                 }
                 
@@ -4480,7 +4470,7 @@ If 11 and water, 13
             }
             else
             {
-                MonsterMonsterCollide(FlxG.collidearrayPellets[a], level);
+                FlxG.collide(arrayPellets[a], level, MonsterMonsterCollide);
             }
             a++;
         }
@@ -4935,7 +4925,9 @@ If 11 and water, 13
         for (i in 0...splode)
         {
             var spd : Float = Util.Random(40, 100);
-            groupParticles.recycle(Puff, null, true, true).Reuse(x, y, ((360 / splode) * i) + rot, spd, row);
+            var puff : Puff = groupParticles.recycle(Puff, null, true);
+            puff.Reuse(x, y, ((360 / splode) * i) + rot, spd);
+            puff.setRow(row);
         }
     }
     
@@ -4950,11 +4942,11 @@ If 11 and water, 13
         
         
         var colTrans : ColorTransform = new ColorTransform(1 + radj, 1 + gadj, 1 + badj, 1, 0, 0, 0);
-        level._tiles = FlxG.bitmap.add(Content.cFronts, false, true);
-        level._tiles.colorTransform(new Rectangle(0, 0, level.widthInTiles, level.heightInTiles), colTrans);
+        level._tiles = FlxG.bitmap.add(Content.cFronts, false);
+        level.colorTransform = colTrans;
         
-        wall._tiles = FlxG.bitmap.add(Content.cWalls, false, true);
-        wall._tiles.colorTransform(new Rectangle(0, 0, wall.widthInTiles, wall.heightInTiles), colTrans);
+        wall._tiles = FlxG.bitmap.add(Content.cWalls, false);
+        wall.colorTransform = colTrans;
     }
     
     public var bRefreshed : Bool = true;

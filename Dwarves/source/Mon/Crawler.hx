@@ -68,8 +68,8 @@ class Crawler extends Monster
     
     override public function UpdateMovement() : Void
     {
-        var curx : Int = as3hx.Compat.parseInt(x / 30);
-        var cury : Int = as3hx.Compat.parseInt(y / 30);
+        var curx : Int = Math.floor(x / 30);
+        var cury : Int = Math.floor(y / 30);
         var newx : Int = 0;
         var newy : Int = 0;
         
@@ -80,8 +80,8 @@ class Crawler extends Monster
                 Util.IsBarrier(parent.level.getTile(curx + 1, cury - 1)) == true ||
                 Util.IsBarrier(parent.level.getTile(curx - 1, cury - 1)) == true)
             {
-                x = as3hx.Compat.parseInt(x / 30) * 30;
-                y = as3hx.Compat.parseInt(y / 30) * 30;
+                x = Math.floor(x / 30) * 30;
+                y = Math.floor(y / 30) * 30;
                 
                 bLevelCollision = false;
             }
@@ -108,10 +108,10 @@ class Crawler extends Monster
             
             { // Test front edge
                 
-                curx = as3hx.Compat.parseInt((x + iWidth) / 30);
-                cury = as3hx.Compat.parseInt(y / 30);
-                newx = as3hx.Compat.parseInt((x + iWidth + ((this.velocity.x * nPredict) / 60)) / 30);
-                newy = as3hx.Compat.parseInt(y / 30);
+                curx = Math.floor((x + iWidth) / 30);
+                cury = Math.floor(y / 30);
+                newx = Math.floor((x + iWidth + ((this.velocity.x * nPredict) / 60)) / 30);
+                newy = Math.floor(y / 30);
                 
                 y = (cury * 30) + iMagnet;  // Make sure we're attached to surface  
                 
@@ -132,8 +132,8 @@ class Crawler extends Monster
                 else
                 {
                     
-                    curx = as3hx.Compat.parseInt((x) / 30);
-                    newx = as3hx.Compat.parseInt((x + ((this.velocity.x * nPredict) / 60)) / 30);
+                    curx = Math.floor((x) / 30);
+                    newx = Math.floor((x + ((this.velocity.x * nPredict) / 60)) / 30);
                     
                     if (newx != curx)
                     {
@@ -154,10 +154,10 @@ class Crawler extends Monster
             
             { // Test front edge
                 
-                curx = as3hx.Compat.parseInt((x) / 30);
-                cury = as3hx.Compat.parseInt(y / 30);
-                newx = as3hx.Compat.parseInt((x + ((this.velocity.x * nPredict) / 60)) / 30);
-                newy = as3hx.Compat.parseInt(y / 30);
+                curx = Math.floor((x) / 30);
+                cury = Math.floor(y / 30);
+                newx = Math.floor((x + ((this.velocity.x * nPredict) / 60)) / 30);
+                newy = Math.floor(y / 30);
                 
                 y = (cury * 30) + 0;  // Make sure we're attached to surface  
                 
@@ -178,8 +178,8 @@ class Crawler extends Monster
                 else
                 {
                     
-                    curx = as3hx.Compat.parseInt((x + iWidth) / 30);
-                    newx = as3hx.Compat.parseInt((x + iWidth + ((this.velocity.x * nPredict) / 60)) / 30);
+                    curx = Math.floor((x + iWidth) / 30);
+                    newx = Math.floor((x + iWidth + ((this.velocity.x * nPredict) / 60)) / 30);
                     
                     if (newx != curx)
                     {
@@ -200,10 +200,10 @@ class Crawler extends Monster
             
             { // Test front edge
                 
-                curx = as3hx.Compat.parseInt(x / 30);
-                cury = as3hx.Compat.parseInt((y + iWidth) / 30);
-                newx = as3hx.Compat.parseInt(x / 30);
-                newy = as3hx.Compat.parseInt((y + iWidth + ((this.velocity.y * nPredict) / 60)) / 30);
+                curx = Math.floor(x / 30);
+                cury = Math.floor((y + iWidth) / 30);
+                newx = Math.floor(x / 30);
+                newy = Math.floor((y + iWidth + ((this.velocity.y * nPredict) / 60)) / 30);
                 
                 x = (curx * 30) + 0;  // Make sure we're attached to surface  
                 
@@ -224,8 +224,8 @@ class Crawler extends Monster
                 else
                 {
                     
-                    cury = as3hx.Compat.parseInt((y) / 30);
-                    newy = as3hx.Compat.parseInt((y + ((this.velocity.y * nPredict) / 60)) / 30);
+                    cury = Math.floor((y) / 30);
+                    newy = Math.floor((y + ((this.velocity.y * nPredict) / 60)) / 30);
                     
                     if (newy != cury)
                     {
@@ -246,10 +246,10 @@ class Crawler extends Monster
             
             { // Test front edge
                 
-                curx = as3hx.Compat.parseInt(x / 30);
-                cury = as3hx.Compat.parseInt((y) / 30);
-                newx = as3hx.Compat.parseInt(x / 30);
-                newy = as3hx.Compat.parseInt((y + ((this.velocity.y * nPredict) / 60)) / 30);
+                curx = Math.floor(x / 30);
+                cury = Math.floor((y) / 30);
+                newx = Math.floor(x / 30);
+                newy = Math.floor((y + ((this.velocity.y * nPredict) / 60)) / 30);
                 
                 x = (curx * 30) + iMagnet;  // Make sure we're attached to surface  
                 
@@ -270,8 +270,8 @@ class Crawler extends Monster
                 else
                 {
                     
-                    cury = as3hx.Compat.parseInt((y + iWidth) / 30);
-                    newy = as3hx.Compat.parseInt((y + iWidth + ((this.velocity.y * nPredict) / 60)) / 30);
+                    cury = Math.floor((y + iWidth) / 30);
+                    newy = Math.floor((y + iWidth + ((this.velocity.y * nPredict) / 60)) / 30);
                     
                     if (newy != cury)
                     {

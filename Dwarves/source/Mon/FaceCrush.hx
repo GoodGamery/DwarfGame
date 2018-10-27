@@ -81,7 +81,7 @@ class FaceCrush extends Monster
             }
         }
         
-        if (this.GetCurrentAnim() == "spit" && this.GetCurrentFrame() == 3 && nSpitTimer < 0)
+        if (this.GetCurrentAnim() == "spit" && this.animation.frameIndex == 3 && nSpitTimer < 0)
         {
             nSpitTimer = nSpitTime;
             
@@ -140,7 +140,7 @@ class FaceCrush extends Monster
                 FlxG.play(Content.soundSpit, Content.volumeSpit * nCloseness, false, false);
             }
         }
-        else if (this.GetCurrentAnim() == "spit" && this.GetCurrentFrame() == 6)
+        else if (this.GetCurrentAnim() == "spit" && this.animation.frameIndex == 6)
         {
             this.play("d");
         }
